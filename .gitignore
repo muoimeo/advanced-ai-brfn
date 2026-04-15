@@ -1,1 +1,69 @@
-.venv
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+logs/
+outputs/logs/
+
+# Local data - do not commit large datasets
+data/raw/
+data/processed/
+data/splits/
+
+# Model artifacts - keep only final selected artifact if wanted
+models/*.h5
+models/*.keras
+models/*.pt
+models/*.pth
+models/checkpoints/
+models/tmp/
+
+# Keep these tracked if you want them versioned
+!models/best_model.keras
+!models/class_names.json
+!models/model_metadata.json
+
+# Generated outputs
+outputs/figures/
+outputs/confusion_matrices/
+outputs/xai_examples/
+
+# Keep folder structure if needed
+!outputs/figures/.gitkeep
+!outputs/confusion_matrices/.gitkeep
+!outputs/xai_examples/.gitkeep
+
+# Environment files
+.env
+.env.*
+
+#agents
+AGENTS.md
