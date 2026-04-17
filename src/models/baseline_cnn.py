@@ -6,10 +6,15 @@ from tensorflow.keras import layers
 from src.config import IMAGE_SIZE, NUM_CLASSES
 
 
-def build_baseline_cnn(num_classes: int = NUM_CLASSES) -> keras.Model:
+def build_baseline_cnn(
+    num_classes: int = NUM_CLASSES,
+    augmentation: keras.Model | None = None,
+) -> keras.Model:
     inputs = keras.Input(shape=(IMAGE_SIZE[0], IMAGE_SIZE[1], 3))
 
-    x = layers.Conv2D(32, 3, activation="relu", padding="same")(inputs)
+    x = augmentation(inputs) if augmentation is not None else inputs
+
+    x = layers.Conv2D(32, 3, activation="relu", padding="same")(x)
     x = layers.MaxPooling2D()(x)
 
     x = layers.Conv2D(64, 3, activation="relu", padding="same")(x)

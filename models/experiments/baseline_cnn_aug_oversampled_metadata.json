@@ -1,0 +1,36 @@
+{
+  "model_name": "baseline_cnn_aug_oversampled",
+  "base_model_family": "custom_baseline_cnn",
+  "dataset": "muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten",
+  "num_classes": 28,
+  "image_size": [
+    224,
+    224
+  ],
+  "epochs_requested": 12,
+  "learning_rate": 0.001,
+  "augmentation": true,
+  "class_weighting": null,
+  "oversampling": {
+    "enabled": true,
+    "strategy": "targeted_min_count_with_replacement",
+    "target_min_count": 500,
+    "original_train_rows": 20493,
+    "oversampled_train_rows": 24174
+  },
+  "trained_at": "2026-04-17T23:42:00",
+  "metrics": {
+    "test_accuracy": 0.7561475409836066,
+    "macro_f1": 0.721685671949272,
+    "weighted_f1": 0.7569128553061722
+  },
+  "artifacts": {
+    "model": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_oversampled.keras",
+    "checkpoint": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_oversampled_best.keras",
+    "metadata": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_oversampled_metadata.json",
+    "classification_report": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\baseline_cnn_aug_oversampled_classification_report.csv",
+    "oversampling_summary": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_oversampled_oversampling_summary.csv",
+    "training_curves": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\baseline_cnn_aug_oversampled_training_curves.png",
+    "confusion_matrix": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\confusion_matrices\\baseline_cnn_aug_oversampled_confusion_matrix.png"
+  }
+}

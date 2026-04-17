@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import re
+from pathlib import Path
+
 import pandas as pd
 import tensorflow as tf
 
@@ -10,6 +13,30 @@ def build_class_name_mapping(df: pd.DataFrame) -> tuple[list[str], dict[str, int
     class_names = sorted(df["class_name"].unique().tolist())
     class_to_index = {name: idx for idx, name in enumerate(class_names)}
     return class_names, class_to_index
+
+
+def running_under_wsl() -> bool:
+    proc_version = Path("/proc/version")
+    if not proc_version.exists():
+        return False
+    version_text = proc_version.read_text(encoding="utf-8", errors="ignore").lower()
+    return "microsoft" in version_text or "wsl" in version_text
+
+
+def windows_path_to_wsl_path(path: str) -> str:
+    match = re.match(r"^([A-Za-z]):[\\/](.*)$", path)
+    if not match:
+        return path
+
+    drive = match.group(1).lower()
+    rest = match.group(2).replace("\\", "/")
+    return f"/mnt/{drive}/{rest}"
+
+
+def normalize_image_paths_for_runtime(image_paths: list[str]) -> list[str]:
+    if not running_under_wsl():
+        return image_paths
+    return [windows_path_to_wsl_path(path) for path in image_paths]
 
 
 def decode_and_resize_image(image_path: tf.Tensor) -> tf.Tensor:
@@ -27,7 +54,7 @@ def make_dataset_from_dataframe(
     training: bool = False,
     shuffle_buffer_size: int = 512,
 ) -> tf.data.Dataset:
-    image_paths = df["image_path"].tolist()
+    image_paths = normalize_image_paths_for_runtime(df["image_path"].tolist())
     labels = [class_to_index[name] for name in df["class_name"].tolist()]
 
     ds = tf.data.Dataset.from_tensor_slices((image_paths, labels))

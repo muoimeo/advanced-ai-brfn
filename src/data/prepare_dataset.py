@@ -111,6 +111,34 @@ def stratified_split_dataframe(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataF
     return train_df.reset_index(drop=True), val_df.reset_index(drop=True), test_df.reset_index(drop=True)
 
 
+def targeted_oversample_dataframe(
+    df: pd.DataFrame,
+    target_min_count: int,
+    class_column: str = "class_name",
+    random_state: int = RANDOM_SEED,
+) -> pd.DataFrame:
+    """Oversample only classes below target_min_count by duplicating rows."""
+    if target_min_count <= 0:
+        raise ValueError("target_min_count must be positive")
+
+    sampled_parts = []
+    for class_name, class_df in df.groupby(class_column, sort=True):
+        sampled_parts.append(class_df)
+
+        needed = target_min_count - len(class_df)
+        if needed > 0:
+            sampled_parts.append(
+                class_df.sample(
+                    n=needed,
+                    replace=True,
+                    random_state=random_state,
+                )
+            )
+
+    oversampled_df = pd.concat(sampled_parts, ignore_index=True)
+    return oversampled_df.sample(frac=1.0, random_state=random_state).reset_index(drop=True)
+
+
 def save_split_csvs(
     train_df: pd.DataFrame,
     val_df: pd.DataFrame,

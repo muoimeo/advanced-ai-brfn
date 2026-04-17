@@ -20,6 +20,7 @@ def train_model(
     val_ds,
     epochs: int = 10,
     checkpoint_path: Path | str | None = None,
+    class_weight: dict[int, float] | None = None,
 ):
     callbacks = [
         keras.callbacks.EarlyStopping(
@@ -51,5 +52,6 @@ def train_model(
         validation_data=val_ds,
         epochs=epochs,
         callbacks=callbacks,
+        class_weight=class_weight,
     )
     return history

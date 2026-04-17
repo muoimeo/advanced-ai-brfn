@@ -1,0 +1,42 @@
+{
+  "model_name": "mobilenetv2_aug_oversampled",
+  "base_model_family": "MobileNetV2",
+  "pretrained_weights": "imagenet",
+  "dataset": "muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten",
+  "num_classes": 28,
+  "image_size": [
+    224,
+    224
+  ],
+  "head_epochs_requested": 8,
+  "head_learning_rate": 0.001,
+  "fine_tuning_enabled": false,
+  "fine_tune_epochs_requested": 0,
+  "fine_tune_learning_rate": null,
+  "fine_tune_layers": 0,
+  "augmentation": true,
+  "class_weighting": null,
+  "oversampling": {
+    "enabled": true,
+    "strategy": "targeted_min_count_with_replacement",
+    "target_min_count": 500,
+    "original_train_rows": 20493,
+    "oversampled_train_rows": 24174
+  },
+  "trained_at": "2026-04-18T01:59:03",
+  "metrics": {
+    "test_accuracy": 0.9524134790528234,
+    "macro_f1": 0.9252318879427252,
+    "weighted_f1": 0.9525054942716301
+  },
+  "artifacts": {
+    "model": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\mobilenetv2_aug_oversampled.keras",
+    "head_checkpoint": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\mobilenetv2_aug_oversampled_head_best.keras",
+    "fine_tune_checkpoint": null,
+    "metadata": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\mobilenetv2_aug_oversampled_metadata.json",
+    "classification_report": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\mobilenetv2_aug_oversampled_classification_report.csv",
+    "oversampling_summary": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\mobilenetv2_aug_oversampled_oversampling_summary.csv",
+    "training_curves": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\mobilenetv2_aug_oversampled_training_curves.png",
+    "confusion_matrix": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\confusion_matrices\\mobilenetv2_aug_oversampled_confusion_matrix.png"
+  }
+}

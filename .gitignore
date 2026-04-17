@@ -8,6 +8,7 @@ __pycache__/
 .venv/
 venv/
 env/
+.venv-wsl/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -44,6 +45,10 @@ models/*.h5
 models/*.keras
 models/*.pt
 models/*.pth
+models/experiments/*.h5
+models/experiments/*.keras
+models/experiments/*.pt
+models/experiments/*.pth
 models/checkpoints/
 models/tmp/
 
@@ -51,6 +56,7 @@ models/tmp/
 !models/best_model.keras
 !models/class_names.json
 !models/model_metadata.json
+!models/experiments/.gitkeep
 
 # Generated outputs
 outputs/figures/
