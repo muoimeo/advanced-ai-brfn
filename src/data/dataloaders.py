@@ -15,6 +15,7 @@ def build_class_name_mapping(df: pd.DataFrame) -> tuple[list[str], dict[str, int
 def decode_and_resize_image(image_path: tf.Tensor) -> tf.Tensor:
     image_bytes = tf.io.read_file(image_path)
     image = tf.image.decode_image(image_bytes, channels=3, expand_animations=False)
+    image.set_shape([None, None, 3])  # giúp shape rõ hơn
     image = tf.image.resize(image, IMAGE_SIZE)
     image = tf.cast(image, tf.float32) / 255.0
     return image
@@ -24,6 +25,7 @@ def make_dataset_from_dataframe(
     df: pd.DataFrame,
     class_to_index: dict[str, int],
     training: bool = False,
+    shuffle_buffer_size: int = 512,
 ) -> tf.data.Dataset:
     image_paths = df["image_path"].tolist()
     labels = [class_to_index[name] for name in df["class_name"].tolist()]
@@ -37,7 +39,11 @@ def make_dataset_from_dataframe(
     ds = ds.map(_load_example, num_parallel_calls=tf.data.AUTOTUNE)
 
     if training:
-        ds = ds.shuffle(buffer_size=len(df), reshuffle_each_iteration=True)
+        ds = ds.shuffle(
+            buffer_size=min(len(df), shuffle_buffer_size),
+            reshuffle_each_iteration=True,
+        )
 
-    ds = ds.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
+    ds = ds.batch(BATCH_SIZE)
+    ds = ds.prefetch(tf.data.AUTOTUNE)
     return ds

@@ -8,6 +8,7 @@ IMAGE_SIZE = (224, 224)
 BATCH_SIZE = 32
 
 # Dataset
+DATASET_SLUG = "muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten"
 NUM_CLASSES = 28
 VALID_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 
@@ -24,6 +25,8 @@ PROCESSED_DATA_DIR = DATA_DIR / "processed"
 SPLITS_DIR = DATA_DIR / "splits"
 
 MODELS_DIR = PROJECT_ROOT / "models"
+CLASS_NAMES_PATH = MODELS_DIR / "class_names.json"
+MODEL_METADATA_PATH = MODELS_DIR / "model_metadata.json"
 OUTPUTS_DIR = PROJECT_ROOT / "outputs"
 FIGURES_DIR = OUTPUTS_DIR / "figures"
 CM_DIR = OUTPUTS_DIR / "confusion_matrices"

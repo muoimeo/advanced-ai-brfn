@@ -1,0 +1,22 @@
+{
+  "model_name": "baseline_cnn",
+  "dataset": "muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten",
+  "num_classes": 28,
+  "image_size": [
+    224,
+    224
+  ],
+  "epochs_requested": 10,
+  "learning_rate": 0.001,
+  "trained_at": "2026-04-16T01:01:26",
+  "metrics": {
+    "test_accuracy": 0.755464480874317,
+    "macro_f1": 0.7008386879911058
+  },
+  "artifacts": {
+    "final_model": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\best_model.keras",
+    "checkpoint": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\baseline_cnn_best.keras",
+    "training_curves": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\baseline_cnn_training_curves.png",
+    "confusion_matrix": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\confusion_matrices\\baseline_cnn_confusion_matrix.png"
+  }
+}

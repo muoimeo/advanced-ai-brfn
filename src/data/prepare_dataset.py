@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
-from typing import Iterable
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -13,6 +13,42 @@ from src.config import (
     TEST_RATIO,
     VALID_IMAGE_EXTENSIONS,
 )
+
+
+def count_direct_image_files(directory: Path) -> int:
+    count = 0
+    for ext in VALID_IMAGE_EXTENSIONS:
+        count += len(list(directory.glob(f"*{ext}")))
+        count += len(list(directory.glob(f"*{ext.upper()}")))
+    return count
+
+
+def find_dataset_root(start_path: Path, expected_classes: int | None = None) -> Path:
+    """Find the directory whose direct children are class folders."""
+    start_path = Path(start_path)
+    candidates: list[tuple[Path, int]] = []
+
+    directories = [start_path, *[p for p in start_path.rglob("*") if p.is_dir()]]
+    for directory in directories:
+        class_like_dirs = [
+            p for p in directory.iterdir()
+            if p.is_dir() and count_direct_image_files(p) > 0
+        ]
+        if class_like_dirs:
+            candidates.append((directory, len(class_like_dirs)))
+
+    if not candidates:
+        raise ValueError(f"Could not find class folders under: {start_path}")
+
+    if expected_classes is not None:
+        exact_matches = [
+            path for path, class_count in candidates
+            if class_count == expected_classes
+        ]
+        if exact_matches:
+            return exact_matches[0]
+
+    return max(candidates, key=lambda item: item[1])[0]
 
 
 def list_class_directories(dataset_path: Path) -> list[Path]:
@@ -29,6 +65,7 @@ def list_image_files(class_dir: Path) -> list[Path]:
 
 def build_image_dataframe(dataset_path: Path) -> pd.DataFrame:
     rows = []
+    dataset_path = Path(dataset_path)
 
     for class_dir in list_class_directories(dataset_path):
         class_name = class_dir.name
@@ -38,6 +75,7 @@ def build_image_dataframe(dataset_path: Path) -> pd.DataFrame:
             rows.append(
                 {
                     "image_path": str(image_path),
+                    "relative_path": str(image_path.relative_to(dataset_path)),
                     "class_name": class_name,
                 }
             )
@@ -84,3 +122,9 @@ def save_split_csvs(
     train_df.to_csv(output_dir / "train.csv", index=False)
     val_df.to_csv(output_dir / "val.csv", index=False)
     test_df.to_csv(output_dir / "test.csv", index=False)
+
+
+def save_class_names(class_names: list[str], output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(class_names, f, indent=2)

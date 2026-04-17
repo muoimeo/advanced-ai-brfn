@@ -36,7 +36,8 @@ outputs/logs/
 # Local data - do not commit large datasets
 data/raw/
 data/processed/
-data/splits/
+data/splits/*.tmp
+data/splits/*.bak
 
 # Model artifacts - keep only final selected artifact if wanted
 models/*.h5
@@ -55,6 +56,7 @@ models/tmp/
 outputs/figures/
 outputs/confusion_matrices/
 outputs/xai_examples/
+outputs/eda/
 
 # Keep folder structure if needed
 !outputs/figures/.gitkeep
