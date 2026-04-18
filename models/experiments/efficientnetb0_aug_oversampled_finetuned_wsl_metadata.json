@@ -1,0 +1,37 @@
+{
+  "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+  "source_model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled.keras",
+  "base_model_family": "EfficientNetB0",
+  "num_classes": 28,
+  "image_size": [
+    224,
+    224
+  ],
+  "fine_tune_epochs_requested": 3,
+  "fine_tune_learning_rate": 1e-05,
+  "fine_tune_layers": 30,
+  "augmentation": true,
+  "class_weighting": null,
+  "oversampling": {
+    "enabled": true,
+    "strategy": "targeted_min_count_with_replacement",
+    "target_min_count": 500,
+    "original_train_rows": 20493,
+    "oversampled_train_rows": 24174
+  },
+  "trained_at": "2026-04-18T17:28:50",
+  "metrics": {
+    "test_accuracy": 0.9774590163934426,
+    "macro_f1": 0.9664085340983425,
+    "weighted_f1": 0.9772625862735769
+  },
+  "artifacts": {
+    "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl.keras",
+    "checkpoint": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl_best.keras",
+    "metadata": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl_metadata.json",
+    "classification_report": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_aug_oversampled_finetuned_wsl_classification_report.csv",
+    "oversampling_summary": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl_oversampling_summary.csv",
+    "training_curves": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_aug_oversampled_finetuned_wsl_training_curves.png",
+    "confusion_matrix": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/confusion_matrices/efficientnetb0_aug_oversampled_finetuned_wsl_confusion_matrix.png"
+  }
+}
