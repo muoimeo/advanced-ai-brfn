@@ -1,0 +1,37 @@
+{
+  "model_name": "resnet50_aug_oversampled",
+  "base_model_family": "ResNet50",
+  "pretrained_weights": "imagenet",
+  "dataset": "muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten",
+  "num_classes": 28,
+  "image_size": [
+    224,
+    224
+  ],
+  "head_epochs_requested": 8,
+  "head_learning_rate": 0.001,
+  "augmentation": true,
+  "class_weighting": null,
+  "oversampling": {
+    "enabled": true,
+    "strategy": "targeted_min_count_with_replacement",
+    "target_min_count": 500,
+    "original_train_rows": 20493,
+    "oversampled_train_rows": 24174
+  },
+  "trained_at": "2026-04-20T16:36:18",
+  "metrics": {
+    "test_accuracy": 0.9699453551912568,
+    "macro_f1": 0.9533914074866453,
+    "weighted_f1": 0.9700020100327943
+  },
+  "artifacts": {
+    "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/resnet50_aug_oversampled.keras",
+    "head_checkpoint": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/resnet50_aug_oversampled_head_best.keras",
+    "metadata": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/resnet50_aug_oversampled_metadata.json",
+    "classification_report": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/resnet50_aug_oversampled_classification_report.csv",
+    "oversampling_summary": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/resnet50_aug_oversampled_oversampling_summary.csv",
+    "training_curves": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/resnet50_aug_oversampled_training_curves.png",
+    "confusion_matrix": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/confusion_matrices/resnet50_aug_oversampled_confusion_matrix.png"
+  }
+}
