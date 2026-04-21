@@ -1,22 +1,40 @@
 {
-  "model_name": "baseline_cnn",
-  "dataset": "muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten",
-  "num_classes": 28,
-  "image_size": [
-    224,
-    224
-  ],
-  "epochs_requested": 10,
-  "learning_rate": 0.001,
-  "trained_at": "2026-04-16T01:01:26",
-  "metrics": {
-    "test_accuracy": 0.755464480874317,
-    "macro_f1": 0.7008386879911058
-  },
-  "artifacts": {
-    "final_model": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\best_model.keras",
-    "checkpoint": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\baseline_cnn_best.keras",
-    "training_curves": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\baseline_cnn_training_curves.png",
-    "confusion_matrix": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\confusion_matrices\\baseline_cnn_confusion_matrix.png"
-  }
+    "model_name":  "resnet50_aug_oversampled_finetuned_wsl",
+    "selected_as_final":  true,
+    "selection_reason":  "Highest test performance among completed experiments; outperformed frozen EfficientNetB0 and frozen ResNet50 on accuracy, macro F1, and weighted F1.",
+    "base_model_family":  "ResNet50",
+    "dataset":  "muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten",
+    "num_classes":  28,
+    "image_size":  [
+                       224,
+                       224
+                   ],
+    "augmentation":  true,
+    "class_weighting":  null,
+    "oversampling":  {
+                         "enabled":  true,
+                         "strategy":  "targeted_min_count_with_replacement",
+                         "target_min_count":  500,
+                         "original_train_rows":  20493,
+                         "oversampled_train_rows":  24174
+                     },
+    "fine_tune_epochs_requested":  3,
+    "fine_tune_learning_rate":  1E-05,
+    "fine_tune_layers":  30,
+    "trained_at":  "2026-04-20T17:02:24",
+    "selected_at":  "2026-04-21T14:48:11",
+    "metrics":  {
+                    "test_accuracy":  0.9785974499089253,
+                    "macro_f1":  0.9686147396589201,
+                    "weighted_f1":  0.9784130970567556
+                },
+    "source_experiment_model":  "models/experiments/resnet50_aug_oversampled_finetuned_wsl.keras",
+    "artifacts":  {
+                      "final_model":  "models/best_model.keras",
+                      "class_names":  "models/class_names.json",
+                      "metadata":  "models/model_metadata.json",
+                      "experiment_model":  "models/experiments/resnet50_aug_oversampled_finetuned_wsl.keras",
+                      "classification_report":  "outputs/figures/resnet50_aug_oversampled_finetuned_wsl_classification_report.csv",
+                      "confusion_matrix":  "outputs/confusion_matrices/resnet50_aug_oversampled_finetuned_wsl_confusion_matrix.png"
+                  }
 }

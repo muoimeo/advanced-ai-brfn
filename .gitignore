@@ -40,7 +40,7 @@ data/processed/
 data/splits/*.tmp
 data/splits/*.bak
 
-# Model artifacts - keep only final selected artifact if wanted
+# Model artifacts - keep model binaries local; commit metadata only
 models/*.h5
 models/*.keras
 models/*.pt
@@ -53,7 +53,6 @@ models/checkpoints/
 models/tmp/
 
 # Keep these tracked if you want them versioned
-!models/best_model.keras
 !models/class_names.json
 !models/model_metadata.json
 !models/experiments/.gitkeep
