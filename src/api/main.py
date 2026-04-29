@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import json
 from datetime import datetime
+from uuid import uuid4
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, HTTPException, UploadFile, status
 
 from src.config import LOGS_DIR
 from src.inference.predictor import get_metadata, get_model, predict_image_bytes
@@ -16,10 +17,37 @@ from src.inference.schemas import (
 )
 
 
+ALLOWED_IMAGE_CONTENT_TYPES = {"image/jpeg", "image/png"}
+
+
 app = FastAPI(
     title="BRFN Freshness Classification API",
     version="0.1.0",
 )
+
+
+def _json_safe_prediction_record(prediction: dict, content_type: str | None) -> dict:
+    return {
+        "prediction_id": prediction.get("prediction_id"),
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "model_name": prediction.get("model_name"),
+        "model_version": prediction.get("model_version"),
+        "predicted_class": prediction.get("predicted_class"),
+        "freshness_status": prediction.get("freshness_status"),
+        "confidence": prediction.get("confidence"),
+        "quality_grade": prediction.get("quality_grade"),
+        "recommended_action": prediction.get("recommended_action"),
+        "reason_codes": prediction.get("reason_codes", []),
+        "manual_review_required": prediction.get("manual_review_required"),
+        "content_type": content_type,
+    }
+
+
+def _append_jsonl(filename: str, record: dict) -> None:
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    log_path = LOGS_DIR / filename
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(record) + "\n")
 
 
 @app.get("/health", response_model=HealthResponse)
@@ -48,19 +76,39 @@ def model_info() -> ModelInfoResponse:
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(file: UploadFile = File(...)) -> PredictionResponse:
+    if file.content_type not in ALLOWED_IMAGE_CONTENT_TYPES:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Unsupported file type. Upload a JPEG or PNG image.",
+        )
+
     image_bytes = await file.read()
-    prediction = predict_image_bytes(image_bytes)
+    if not image_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Uploaded image is empty.",
+        )
+
+    try:
+        prediction = predict_image_bytes(image_bytes)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Could not decode or classify the uploaded image.",
+        ) from exc
+
+    prediction["prediction_id"] = str(uuid4())
+    _append_jsonl(
+        "predictions.jsonl",
+        _json_safe_prediction_record(prediction, file.content_type),
+    )
     return PredictionResponse(**prediction)
 
 
 @app.post("/feedback", response_model=FeedbackResponse)
 def feedback(request: FeedbackRequest) -> FeedbackResponse:
-    LOGS_DIR.mkdir(parents=True, exist_ok=True)
-    log_path = LOGS_DIR / "feedback.jsonl"
     record = request.model_dump() if hasattr(request, "model_dump") else request.dict()
     record["created_at"] = datetime.now().isoformat(timespec="seconds")
-
-    with open(log_path, "a", encoding="utf-8") as f:
-        f.write(json.dumps(record) + "\n")
+    _append_jsonl("feedback.jsonl", record)
 
     return FeedbackResponse(status="logged")

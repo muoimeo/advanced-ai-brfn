@@ -23,6 +23,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 SPLITS_DIR = DATA_DIR / "splits"
+GROUPED_SPLITS_DIR = DATA_DIR / "splits_grouped"
 
 MODELS_DIR = PROJECT_ROOT / "models"
 CLASS_NAMES_PATH = MODELS_DIR / "class_names.json"

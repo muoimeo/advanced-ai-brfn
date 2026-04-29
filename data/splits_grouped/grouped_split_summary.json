@@ -1,0 +1,11 @@
+{
+  "source": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\data\\splits",
+  "output": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\data\\splits_grouped",
+  "total_rows": 29277,
+  "train_rows": 19674,
+  "val_rows": 4788,
+  "test_rows": 4815,
+  "overlapping_source_image_ids": 0,
+  "rows_involved": 0,
+  "affected_classes": 0
+}

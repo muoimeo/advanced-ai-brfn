@@ -11,12 +11,19 @@ class TopPrediction(BaseModel):
 
 
 class PredictionResponse(BaseModel):
+    prediction_id: str | None = None
+    model_name: str | None = None
+    model_version: str | None = None
     produce_type: str
     predicted_class: str
     freshness_status: str
     confidence: float
+    confidence_score: float
+    freshness_score: float
     quality_grade: str
     recommended_action: str
+    reason_codes: list[str] = Field(default_factory=list)
+    manual_review_required: bool
     top_predictions: list[TopPrediction] = Field(default_factory=list)
 
 
@@ -35,9 +42,11 @@ class ModelInfoResponse(BaseModel):
 
 
 class FeedbackRequest(BaseModel):
+    prediction_id: str | None = None
     image_id: str | None = None
     predicted_class: str | None = None
     corrected_class: str | None = None
+    model_name: str | None = None
     user_note: str | None = None
 
 

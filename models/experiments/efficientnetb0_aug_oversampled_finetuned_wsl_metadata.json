@@ -16,14 +16,14 @@
     "enabled": true,
     "strategy": "targeted_min_count_with_replacement",
     "target_min_count": 500,
-    "original_train_rows": 20493,
-    "oversampled_train_rows": 24174
+    "original_train_rows": 19674,
+    "oversampled_train_rows": 23590
   },
-  "trained_at": "2026-04-18T17:28:50",
+  "trained_at": "2026-04-29T15:45:22",
   "metrics": {
-    "test_accuracy": 0.9774590163934426,
-    "macro_f1": 0.9664085340983425,
-    "weighted_f1": 0.9772625862735769
+    "test_accuracy": 0.9719626168224299,
+    "macro_f1": 0.9612978974472393,
+    "weighted_f1": 0.9718550099623252
   },
   "artifacts": {
     "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl.keras",
@@ -33,5 +33,12 @@
     "oversampling_summary": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl_oversampling_summary.csv",
     "training_curves": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_aug_oversampled_finetuned_wsl_training_curves.png",
     "confusion_matrix": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/confusion_matrices/efficientnetb0_aug_oversampled_finetuned_wsl_confusion_matrix.png"
+  },
+  "split_strategy": "grouped_source_image_split",
+  "split_dir": "data/splits_grouped",
+  "leakage_prevention": {
+    "group_column": "source_image_id",
+    "offline_augmented_variants_cross_splits": false,
+    "audit_summary": "data/splits_grouped/grouped_split_summary.json"
   }
 }

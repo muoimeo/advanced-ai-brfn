@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedGroupKFold, train_test_split
 
 from src.config import (
     RANDOM_SEED,
@@ -109,6 +110,136 @@ def stratified_split_dataframe(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataF
     )
 
     return train_df.reset_index(drop=True), val_df.reset_index(drop=True), test_df.reset_index(drop=True)
+
+
+AUGMENTATION_PREFIX_PATTERNS = (
+    re.compile(r"^rotated_by_\d+_", flags=re.IGNORECASE),
+    re.compile(r"^vertical_flip_", flags=re.IGNORECASE),
+    re.compile(r"^horizontal_flip_", flags=re.IGNORECASE),
+    re.compile(r"^translation_", flags=re.IGNORECASE),
+    re.compile(r"^saltandpepper_", flags=re.IGNORECASE),
+    re.compile(r"^noise_", flags=re.IGNORECASE),
+    re.compile(r"^brightness_", flags=re.IGNORECASE),
+    re.compile(r"^contrast_", flags=re.IGNORECASE),
+)
+AUGMENTATION_SUFFIX_PATTERNS = (
+    re.compile(r"_augmented_\d+(?=\.)", flags=re.IGNORECASE),
+)
+
+
+def source_image_id_from_relative_path(relative_path: str) -> str:
+    """Normalize known offline-augmentation filenames to a source-image id."""
+    path_text = str(relative_path).replace("\\", "/")
+    if "/" not in path_text:
+        class_name = ""
+        filename = path_text
+    else:
+        class_name, filename = path_text.split("/", maxsplit=1)
+
+    normalized_filename = filename
+    for pattern in AUGMENTATION_PREFIX_PATTERNS:
+        normalized_filename = pattern.sub("", normalized_filename)
+    for pattern in AUGMENTATION_SUFFIX_PATTERNS:
+        normalized_filename = pattern.sub("", normalized_filename)
+
+    return f"{class_name}/{normalized_filename}" if class_name else normalized_filename
+
+
+def add_source_image_id(
+    df: pd.DataFrame,
+    relative_path_column: str = "relative_path",
+) -> pd.DataFrame:
+    """Return a copy with source_image_id for leakage auditing/grouped splitting."""
+    if relative_path_column not in df.columns:
+        raise KeyError(f"Missing required column: {relative_path_column}")
+
+    output_df = df.copy()
+    output_df["source_image_id"] = output_df[relative_path_column].map(
+        source_image_id_from_relative_path
+    )
+    return output_df
+
+
+def audit_source_image_overlap(
+    split_frames: dict[str, pd.DataFrame],
+    relative_path_column: str = "relative_path",
+) -> pd.DataFrame:
+    """Find normalized source-image identities that appear in more than one split."""
+    rows = []
+    for split_name, split_df in split_frames.items():
+        audited_df = add_source_image_id(split_df, relative_path_column=relative_path_column)
+        for _, row in audited_df.iterrows():
+            rows.append(
+                {
+                    "split": split_name,
+                    "class_name": row.get("class_name"),
+                    "relative_path": row.get(relative_path_column),
+                    "source_image_id": row["source_image_id"],
+                }
+            )
+
+    combined = pd.DataFrame(rows)
+    if combined.empty:
+        return combined
+
+    split_counts = (
+        combined.groupby("source_image_id")["split"]
+        .nunique()
+        .rename("split_count")
+        .reset_index()
+    )
+    overlapping_ids = split_counts.loc[split_counts["split_count"] > 1, "source_image_id"]
+    return (
+        combined[combined["source_image_id"].isin(overlapping_ids)]
+        .sort_values(["source_image_id", "split", "relative_path"])
+        .reset_index(drop=True)
+    )
+
+
+def grouped_stratified_split_dataframe(
+    df: pd.DataFrame,
+    group_column: str = "source_image_id",
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Create train/validation/test splits while keeping source-image groups together.
+
+    This is intended for datasets that already include offline augmented variants.
+    """
+    if group_column not in df.columns:
+        df = add_source_image_id(df)
+
+    if abs(TRAIN_RATIO + VAL_RATIO + TEST_RATIO - 1.0) > 1e-9:
+        raise ValueError("TRAIN_RATIO + VAL_RATIO + TEST_RATIO must equal 1.0")
+
+    df = df.reset_index(drop=True)
+    n_splits = max(2, round(1.0 / (VAL_RATIO + TEST_RATIO)))
+    outer_splitter = StratifiedGroupKFold(
+        n_splits=n_splits,
+        shuffle=True,
+        random_state=RANDOM_SEED,
+    )
+    train_index, temp_index = next(
+        outer_splitter.split(df, y=df["class_name"], groups=df[group_column])
+    )
+
+    train_df = df.iloc[train_index].reset_index(drop=True)
+    temp_df = df.iloc[temp_index].reset_index(drop=True)
+
+    inner_splitter = StratifiedGroupKFold(
+        n_splits=2,
+        shuffle=True,
+        random_state=RANDOM_SEED,
+    )
+    val_index, test_index = next(
+        inner_splitter.split(
+            temp_df,
+            y=temp_df["class_name"],
+            groups=temp_df[group_column],
+        )
+    )
+
+    val_df = temp_df.iloc[val_index].reset_index(drop=True)
+    test_df = temp_df.iloc[test_index].reset_index(drop=True)
+    return train_df, val_df, test_df
 
 
 def targeted_oversample_dataframe(

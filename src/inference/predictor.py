@@ -59,9 +59,11 @@ def image_bytes_to_tensor(image_bytes: bytes) -> tf.Tensor:
 def predict_image_bytes(image_bytes: bytes, top_k: int = 3) -> dict:
     model = get_model()
     class_names = get_class_names()
+    metadata = get_metadata()
     image_tensor = image_bytes_to_tensor(image_bytes)
 
     probabilities = model.predict(image_tensor, verbose=0)[0]
+    top_k = max(1, min(top_k, len(class_names)))
     top_indices = np.argsort(probabilities)[::-1][:top_k]
 
     predicted_index = int(top_indices[0])
@@ -75,8 +77,11 @@ def predict_image_bytes(image_bytes: bytes, top_k: int = 3) -> dict:
         for index in top_indices
     ]
 
-    return build_business_prediction(
+    prediction = build_business_prediction(
         predicted_class=predicted_class,
         confidence=confidence,
         top_predictions=top_predictions,
     )
+    prediction["model_name"] = metadata.get("model_name")
+    prediction["model_version"] = metadata.get("trained_at") or metadata.get("selected_at")
+    return prediction

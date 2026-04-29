@@ -16,14 +16,14 @@
     "enabled": true,
     "strategy": "targeted_min_count_with_replacement",
     "target_min_count": 500,
-    "original_train_rows": 20493,
-    "oversampled_train_rows": 24174
+    "original_train_rows": 19674,
+    "oversampled_train_rows": 23590
   },
-  "trained_at": "2026-04-20T16:36:18",
+  "trained_at": "2026-04-29T16:14:31",
   "metrics": {
-    "test_accuracy": 0.9699453551912568,
-    "macro_f1": 0.9533914074866453,
-    "weighted_f1": 0.9700020100327943
+    "test_accuracy": 0.9694704049844237,
+    "macro_f1": 0.9615004602619911,
+    "weighted_f1": 0.9693765273110583
   },
   "artifacts": {
     "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/resnet50_aug_oversampled.keras",
@@ -33,5 +33,12 @@
     "oversampling_summary": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/resnet50_aug_oversampled_oversampling_summary.csv",
     "training_curves": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/resnet50_aug_oversampled_training_curves.png",
     "confusion_matrix": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/confusion_matrices/resnet50_aug_oversampled_confusion_matrix.png"
+  },
+  "split_strategy": "grouped_source_image_split",
+  "split_dir": "data/splits_grouped",
+  "leakage_prevention": {
+    "group_column": "source_image_id",
+    "offline_augmented_variants_cross_splits": false,
+    "audit_summary": "data/splits_grouped/grouped_split_summary.json"
   }
 }

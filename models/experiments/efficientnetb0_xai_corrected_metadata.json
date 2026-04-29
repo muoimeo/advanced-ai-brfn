@@ -1,0 +1,54 @@
+{
+  "model_name": "efficientnetb0_xai_corrected",
+  "base_model_family": "EfficientNetB0",
+  "experiment_type": "xai_guided_corrected_training",
+  "hypotheses": [
+    "background_bias",
+    "texture_bias",
+    "class_confusion",
+    "unstable_attention"
+  ],
+  "targeted_fixes": [
+    "stronger_geometric_augmentation",
+    "brightness_contrast_jitter",
+    "gaussian_noise",
+    "deeper_fine_tuning"
+  ],
+  "num_classes": 28,
+  "image_size": [
+    224,
+    224
+  ],
+  "head_epochs_requested": 8,
+  "head_learning_rate": 0.001,
+  "fine_tune_epochs_requested": 4,
+  "fine_tune_learning_rate": 1e-05,
+  "fine_tune_layers": 40,
+  "augmentation": "xai_corrected_augmentation",
+  "class_weighting": null,
+  "oversampling": {
+    "enabled": true,
+    "strategy": "targeted_min_count_with_replacement",
+    "target_min_count": 500,
+    "original_train_rows": 20493,
+    "oversampled_train_rows": 24174
+  },
+  "trained_at": "2026-04-22T12:24:42",
+  "metrics": {
+    "test_accuracy": 0.9715391621129326,
+    "macro_f1": 0.9614564747728406,
+    "weighted_f1": 0.9714933577664193,
+    "errors": 125,
+    "high_confidence_errors": 15
+  },
+  "artifacts": {
+    "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_xai_corrected.keras",
+    "head_checkpoint": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_xai_corrected_head_best.keras",
+    "fine_tune_checkpoint": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_xai_corrected_finetuned_best.keras",
+    "classification_report": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_xai_corrected_classification_report.csv",
+    "history": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_xai_corrected_history.csv",
+    "audit": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_xai_corrected_audit.csv",
+    "confusion_matrix": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/confusion_matrices/efficientnetb0_xai_corrected_confusion_matrix.png",
+    "training_curves": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_xai_corrected_training_curves.png"
+  }
+}

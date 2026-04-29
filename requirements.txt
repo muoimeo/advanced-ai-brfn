@@ -5,7 +5,9 @@ numpy
 pandas
 pillow
 python-multipart
+pytest
 scikit-learn
 seaborn
 tensorflow
 uvicorn
+httpx
