@@ -60,13 +60,38 @@ def test_predict_returns_schema_and_logs_prediction(monkeypatch, tmp_path):
             "predicted_class": "Banana__Rotten",
             "freshness_status": "rotten",
             "confidence": 0.98,
+            "top1_top2_margin": 0.91,
             "confidence_score": 0.98,
             "freshness_score": 0.02,
-            "quality_grade": "Reject",
-            "recommended_action": "Reject from sale and route for disposal or supplier review.",
-            "reason_codes": ["ROTTEN_PREDICTION", "HIGH_CONFIDENCE"],
+            "quality_grade": "C",
+            "recommended_action": "manual_review_or_discard",
+            "reason_codes": ["ROTTEN_PREDICTION", "high_confidence_rotten_prediction"],
             "manual_review_required": False,
             "top_predictions": [{"class_name": "Banana__Rotten", "confidence": 0.98}],
+            "prediction": {
+                "predicted_class": "Banana__Rotten",
+                "product_type": "Banana",
+                "condition": "rotten",
+                "confidence": 0.98,
+                "top_k": [{"class_name": "Banana__Rotten", "probability": 0.98}],
+                "top1_top2_margin": 0.91,
+            },
+            "quality": {
+                "grade": "C",
+                "overall_quality_score": 12.0,
+                "component_scores": {"model_condition": 2.0},
+                "action": "manual_review_or_discard",
+                "inventory_status": "blocked_pending_review",
+                "discount_percentage": None,
+                "manual_review": False,
+                "reason_codes": ["high_confidence_rotten_prediction"],
+                "warnings": ["quality_grade_is_rule_based_not_supervised_model_output"],
+            },
+            "xai": {"method": "Grad-CAM", "available": False, "heatmap_path": None},
+            "model_info": {
+                "model_name": "demo_model",
+                "model_version": "2026-04-29T10:00:00",
+            },
         },
     )
     client = TestClient(main.app)
@@ -80,6 +105,9 @@ def test_predict_returns_schema_and_logs_prediction(monkeypatch, tmp_path):
     body = response.json()
     assert body["prediction_id"]
     assert body["predicted_class"] == "Banana__Rotten"
+    assert body["top1_top2_margin"] == 0.91
+    assert body["quality"]["grade"] == "C"
+    assert body["prediction"]["condition"] == "rotten"
     assert body["manual_review_required"] is False
 
     log_records = (tmp_path / "predictions.jsonl").read_text(encoding="utf-8").splitlines()
@@ -87,6 +115,8 @@ def test_predict_returns_schema_and_logs_prediction(monkeypatch, tmp_path):
     logged = json.loads(log_records[0])
     assert logged["prediction_id"] == body["prediction_id"]
     assert logged["predicted_class"] == "Banana__Rotten"
+    assert logged["top1_top2_margin"] == 0.91
+    assert logged["quality"]["grade"] == "C"
 
 
 def test_feedback_logs_record(monkeypatch, tmp_path):
@@ -99,6 +129,15 @@ def test_feedback_logs_record(monkeypatch, tmp_path):
             "prediction_id": "pred-1",
             "predicted_class": "Banana__Rotten",
             "corrected_class": "Banana__Healthy",
+            "predicted_grade": "C",
+            "producer_override_grade": "Review",
+            "override_reason": "visible quality needs manual inspection",
+            "accepted_ai_recommendation": False,
+            "quality_decision_snapshot": {
+                "overall_quality_score": 12.0,
+                "component_scores": {"model_condition": 2.0},
+                "reason_codes": ["high_confidence_rotten_prediction"],
+            },
             "model_name": "demo_model",
             "user_note": "manual override",
         },
@@ -109,3 +148,4 @@ def test_feedback_logs_record(monkeypatch, tmp_path):
     log_records = (tmp_path / "feedback.jsonl").read_text(encoding="utf-8").splitlines()
     assert len(log_records) == 1
     assert json.loads(log_records[0])["prediction_id"] == "pred-1"
+    assert json.loads(log_records[0])["producer_override_grade"] == "Review"

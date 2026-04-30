@@ -1,0 +1,10 @@
+model,recommended_action,count
+EfficientNetB0 final,manual_review_before_listing,3
+EfficientNetB0 final,manual_review_or_discard,1
+EfficientNetB0 final,normal_sale,4
+MobileNetV2 fine-tuned,manual_review_before_listing,3
+MobileNetV2 fine-tuned,manual_review_or_discard,1
+MobileNetV2 fine-tuned,normal_sale,4
+ResNet50 fine-tuned,manual_review_before_listing,3
+ResNet50 fine-tuned,manual_review_or_discard,1
+ResNet50 fine-tuned,normal_sale,4

@@ -10,6 +10,34 @@ class TopPrediction(BaseModel):
     confidence: float
 
 
+class PredictionEvidence(BaseModel):
+    predicted_class: str
+    product_type: str
+    condition: str
+    confidence: float
+    top_k: list[dict[str, Any]] = Field(default_factory=list)
+    top1_top2_margin: float | None = None
+
+
+class QualityDecisionResponse(BaseModel):
+    grade: str
+    overall_quality_score: float
+    component_scores: dict[str, float] = Field(default_factory=dict)
+    action: str
+    inventory_status: str
+    discount_percentage: int | None = None
+    manual_review: bool
+    reason_codes: list[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
+
+
+class XAIReference(BaseModel):
+    method: str | None = None
+    available: bool = False
+    heatmap_path: str | None = None
+    note: str | None = None
+
+
 class PredictionResponse(BaseModel):
     prediction_id: str | None = None
     model_name: str | None = None
@@ -18,6 +46,7 @@ class PredictionResponse(BaseModel):
     predicted_class: str
     freshness_status: str
     confidence: float
+    top1_top2_margin: float | None = None
     confidence_score: float
     freshness_score: float
     quality_grade: str
@@ -25,6 +54,11 @@ class PredictionResponse(BaseModel):
     reason_codes: list[str] = Field(default_factory=list)
     manual_review_required: bool
     top_predictions: list[TopPrediction] = Field(default_factory=list)
+    prediction: PredictionEvidence | None = None
+    quality: QualityDecisionResponse | None = None
+    xai: XAIReference | None = None
+    model_info: dict[str, Any] | None = None
+    image_features: dict[str, Any] | None = None
 
 
 class HealthResponse(BaseModel):
@@ -45,7 +79,13 @@ class FeedbackRequest(BaseModel):
     prediction_id: str | None = None
     image_id: str | None = None
     predicted_class: str | None = None
+    predicted_grade: str | None = None
     corrected_class: str | None = None
+    producer_override_class: str | None = None
+    producer_override_grade: str | None = None
+    override_reason: str | None = None
+    accepted_ai_recommendation: bool | None = None
+    quality_decision_snapshot: dict[str, Any] | None = None
     model_name: str | None = None
     user_note: str | None = None
 

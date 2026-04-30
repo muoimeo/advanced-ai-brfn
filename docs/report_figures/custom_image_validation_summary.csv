@@ -1,0 +1,4 @@
+model,labeled_predictions,full_class_accuracy,produce_accuracy,freshness_accuracy,manual_review_rate,mean_confidence
+EfficientNetB0 final,8,1.0,1.0,1.0,0.875,0.972889132797718
+MobileNetV2 fine-tuned,8,1.0,1.0,1.0,0.875,0.9842332080006599
+ResNet50 fine-tuned,8,1.0,1.0,1.0,0.875,0.9869111850857735

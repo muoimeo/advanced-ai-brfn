@@ -1,12 +1,9 @@
 image_path,expected_class,produce_type,freshness_status,source,notes
-data/raw/custom_test_images/402418916.jpg,Banana__Rotten,Banana,rotten,local_custom_test,Existing external smoke-test image; useful for API/XAI demo but not enough for robustness claims.
-data/raw/custom_test_images/pngtree-old-rotten-banana-with-dark-spots-png-image_14614543.png,Banana__Rotten,Banana,rotten,local_custom_test,Existing external smoke-test image; white/isolated background.
-data/raw/custom_test_images/rotten-banana-old-banana-banana-bark-brown-rot-rotten-fruit-on-white-background-fruit-weight-control-P6Y5GY.jpg,Banana__Rotten,Banana,rotten,local_custom_test,Existing external smoke-test image; high-confidence banana rotten agreement across top models.
-data/raw/custom_test_images/apple_healthy_external_01.jpg,Apple__Healthy,Apple,healthy,to_collect,Add a real user-collected or clearly licensed external image; avoid dataset-derived augmented screenshots.
-data/raw/custom_test_images/apple_rotten_external_01.jpg,Apple__Rotten,Apple,rotten,to_collect,Add a real image with visible decay; useful because XAI failure analysis includes rotten-to-healthy apple errors.
-data/raw/custom_test_images/tomato_healthy_external_01.jpg,Tomato__Healthy,Tomato,healthy,to_collect,Add a real image with normal lighting/background variation.
-data/raw/custom_test_images/tomato_rotten_external_01.jpg,Tomato__Rotten,Tomato,rotten,to_collect,Add a real image with visible spoilage; useful because tomato/orange confusion appears in failure examples.
-data/raw/custom_test_images/potato_healthy_external_01.jpg,Potato__Healthy,Potato,healthy,to_collect,Add a real image for a historically weak produce type.
-data/raw/custom_test_images/potato_rotten_external_01.jpg,Potato__Rotten,Potato,rotten,to_collect,Add a real image for weak rotten-class validation.
-data/raw/custom_test_images/bellpepper_healthy_external_01.jpg,Bellpepper__Healthy,Bellpepper,healthy,to_collect,Add a real image because bellpepper rotten/healthy confusion remains important.
-data/raw/custom_test_images/bellpepper_rotten_external_01.jpg,Bellpepper__Rotten,Bellpepper,rotten,to_collect,Add a real image with clear decay; useful for high-confidence error discussion.
+data/raw/custom_test_images/hea-app.jpg,Apple__Healthy,Apple,healthy,local_custom_test,
+data/raw/custom_test_images/hea-ban.png,Banana__Healthy,Banana,healthy,local_custom_test,
+data/raw/custom_test_images/hea-pot.jpg,Potato__Healthy,Potato,healthy,local_custom_test,
+data/raw/custom_test_images/hea-tom.jpg,Tomato__Healthy,Tomato,healthy,to_collect,
+data/raw/custom_test_images/rot-ban1.jpg,Banana__Rotten,Banana,rotten,to_collect,
+data/raw/custom_test_images/rot-ban5.jpg,Banana__Rotten,Banana,rotten,to_collect,
+data/raw/custom_test_images/rot-pot.jpg,Potato__Rotten,Potato,rotten,to_collect,
+data/raw/custom_test_images/rot-tom.jpg,Tomato__Rotten,Tomato,rotten,to_collect,

@@ -36,6 +36,35 @@
     "deployment_position": "The model should support producer/admin review, not autonomous quality approval.",
     "external_validation": "Current custom-image set is small and banana-heavy; broaden it before making robustness claims."
   },
+  "inference_safeguards": {
+    "low_confidence_threshold": 0.75,
+    "ambiguous_top1_top2_margin_threshold": 0.15,
+    "high_confidence_threshold": 0.95,
+    "runtime_reason_codes": [
+      "LOW_CONFIDENCE",
+      "AMBIGUOUS_PREDICTION",
+      "ROTTEN_PREDICTION",
+      "HIGH_CONFIDENCE_PREDICTION",
+      "MANUAL_REVIEW_REQUIRED"
+    ],
+    "note": "Runtime API cannot know whether a prediction is wrong. High-confidence error analysis is only used in evaluation where ground truth exists."
+  },
+  "quality_grading_layer": {
+    "enabled": true,
+    "implementation": "src/quality",
+    "type": "transparent_rule_based_layer",
+    "classifier_responsibility": "EfficientNetB0 predicts produce type and healthy/rotten condition only.",
+    "grading_responsibility": "Rule layer combines model evidence with interpretable image proxy features.",
+    "not_supervised_grade_model": true,
+    "uses_gradcam_for_grading": false,
+    "default_weights": {
+      "model_condition": 0.45,
+      "color": 0.25,
+      "defect_absence": 0.15,
+      "image_quality": 0.1,
+      "size_proxy": 0.05
+    }
+  },
   "metrics": {
     "test_accuracy": 0.9719626168224299,
     "macro_f1": 0.9612978974472393,

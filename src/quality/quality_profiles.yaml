@@ -1,0 +1,209 @@
+default:
+  accepted_hue_ranges:
+    red:
+      - [0, 20]
+      - [340, 360]
+    orange:
+      - [20, 45]
+    yellow:
+      - [35, 80]
+    green:
+      - [70, 165]
+  dark_ratio_warn: 0.18
+  dark_ratio_fail: 0.32
+  min_saturation: 0.18
+  min_value: 0.12
+  max_value: 0.97
+
+apple:
+  accepted_hue_ranges:
+    red:
+      - [0, 18]
+      - [340, 360]
+    green:
+      - [70, 160]
+    yellow:
+      - [35, 70]
+  dark_ratio_warn: 0.18
+  dark_ratio_fail: 0.32
+  min_saturation: 0.20
+  min_value: 0.12
+  max_value: 0.97
+
+banana:
+  accepted_hue_ranges:
+    yellow:
+      - [35, 75]
+    green:
+      - [75, 140]
+  dark_ratio_warn: 0.12
+  dark_ratio_fail: 0.25
+  min_saturation: 0.18
+  min_value: 0.12
+  max_value: 0.97
+
+tomato:
+  accepted_hue_ranges:
+    red:
+      - [0, 20]
+      - [340, 360]
+    orange:
+      - [20, 38]
+  dark_ratio_warn: 0.15
+  dark_ratio_fail: 0.30
+  min_saturation: 0.22
+  min_value: 0.12
+  max_value: 0.97
+
+potato:
+  accepted_hue_ranges:
+    yellow:
+      - [35, 80]
+    brown:
+      - [20, 55]
+  dark_ratio_warn: 0.20
+  dark_ratio_fail: 0.35
+  min_saturation: 0.12
+  min_value: 0.12
+  max_value: 0.97
+
+bellpepper:
+  accepted_hue_ranges:
+    red:
+      - [0, 20]
+      - [340, 360]
+    yellow:
+      - [35, 75]
+    green:
+      - [70, 165]
+  dark_ratio_warn: 0.16
+  dark_ratio_fail: 0.30
+  min_saturation: 0.20
+  min_value: 0.12
+  max_value: 0.97
+
+carrot:
+  accepted_hue_ranges:
+    orange:
+      - [18, 45]
+    yellow:
+      - [35, 70]
+  dark_ratio_warn: 0.16
+  dark_ratio_fail: 0.30
+  min_saturation: 0.20
+  min_value: 0.12
+  max_value: 0.97
+
+cucumber:
+  accepted_hue_ranges:
+    green:
+      - [70, 165]
+    yellow:
+      - [35, 75]
+  dark_ratio_warn: 0.16
+  dark_ratio_fail: 0.30
+  min_saturation: 0.18
+  min_value: 0.12
+  max_value: 0.97
+
+grape:
+  accepted_hue_ranges:
+    green:
+      - [70, 165]
+    red:
+      - [0, 20]
+      - [340, 360]
+    purple:
+      - [250, 330]
+  dark_ratio_warn: 0.22
+  dark_ratio_fail: 0.40
+  min_saturation: 0.16
+  min_value: 0.10
+  max_value: 0.97
+
+guava:
+  accepted_hue_ranges:
+    green:
+      - [70, 165]
+    yellow:
+      - [35, 80]
+    pink:
+      - [330, 360]
+      - [0, 15]
+  dark_ratio_warn: 0.18
+  dark_ratio_fail: 0.32
+  min_saturation: 0.16
+  min_value: 0.12
+  max_value: 0.97
+
+jujube:
+  accepted_hue_ranges:
+    green:
+      - [70, 165]
+    yellow:
+      - [35, 80]
+    brown:
+      - [15, 55]
+    red:
+      - [0, 20]
+      - [340, 360]
+  dark_ratio_warn: 0.22
+  dark_ratio_fail: 0.38
+  min_saturation: 0.14
+  min_value: 0.10
+  max_value: 0.97
+
+mango:
+  accepted_hue_ranges:
+    green:
+      - [70, 165]
+    yellow:
+      - [35, 80]
+    orange:
+      - [20, 45]
+    red:
+      - [0, 18]
+      - [340, 360]
+  dark_ratio_warn: 0.18
+  dark_ratio_fail: 0.32
+  min_saturation: 0.18
+  min_value: 0.12
+  max_value: 0.97
+
+orange:
+  accepted_hue_ranges:
+    orange:
+      - [18, 45]
+    yellow:
+      - [35, 70]
+  dark_ratio_warn: 0.16
+  dark_ratio_fail: 0.30
+  min_saturation: 0.18
+  min_value: 0.12
+  max_value: 0.97
+
+pomegranate:
+  accepted_hue_ranges:
+    red:
+      - [0, 25]
+      - [335, 360]
+    yellow:
+      - [35, 75]
+  dark_ratio_warn: 0.20
+  dark_ratio_fail: 0.35
+  min_saturation: 0.18
+  min_value: 0.10
+  max_value: 0.97
+
+strawberry:
+  accepted_hue_ranges:
+    red:
+      - [0, 25]
+      - [335, 360]
+    green:
+      - [75, 160]
+  dark_ratio_warn: 0.16
+  dark_ratio_fail: 0.30
+  min_saturation: 0.20
+  min_value: 0.12
+  max_value: 0.97

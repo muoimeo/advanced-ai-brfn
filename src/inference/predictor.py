@@ -10,6 +10,15 @@ import tensorflow as tf
 from src.config import CLASS_NAMES_PATH, IMAGE_SIZE, MODELS_DIR, MODEL_METADATA_PATH
 from src.inference.postprocess import build_business_prediction
 from src.models.resnet50_model import ResNet50Preprocess
+from src.quality.image_features import extract_image_features
+from src.quality.rules import (
+    build_quality_decision,
+    image_features_to_dict,
+    model_prediction_to_dict,
+    quality_decision_to_dict,
+    top_k_from_dicts,
+)
+from src.quality.schemas import ModelPrediction
 
 
 BEST_MODEL_PATH = MODELS_DIR / "best_model.keras"
@@ -76,12 +85,57 @@ def predict_image_bytes(image_bytes: bytes, top_k: int = 3) -> dict:
         }
         for index in top_indices
     ]
+    top1_top2_margin = None
+    if len(top_predictions) >= 2:
+        top1_top2_margin = (
+            top_predictions[0]["confidence"] - top_predictions[1]["confidence"]
+        )
 
     prediction = build_business_prediction(
         predicted_class=predicted_class,
         confidence=confidence,
         top_predictions=top_predictions,
+        top1_top2_margin=top1_top2_margin,
     )
     prediction["model_name"] = metadata.get("model_name")
     prediction["model_version"] = metadata.get("trained_at") or metadata.get("selected_at")
+    model_prediction = ModelPrediction(
+        predicted_class=predicted_class,
+        product_type=prediction["produce_type"],
+        condition=prediction["freshness_status"],
+        confidence=confidence,
+        top_k=top_k_from_dicts(top_predictions),
+        top1_top2_margin=top1_top2_margin,
+    )
+    image_features = extract_image_features(
+        image_bytes=image_bytes,
+        product_type=prediction["produce_type"],
+    )
+    quality_decision = build_quality_decision(model_prediction, image_features)
+    quality = quality_decision_to_dict(quality_decision)
+    prediction_object = model_prediction_to_dict(model_prediction)
+
+    prediction["quality"] = quality
+    prediction["prediction"] = prediction_object
+    prediction["image_features"] = image_features_to_dict(image_features)
+    prediction["xai"] = {
+        "method": "Grad-CAM",
+        "available": False,
+        "heatmap_path": None,
+        "note": "Grad-CAM is report-facing attention evidence and is not used for quality grading.",
+    }
+    prediction["model_info"] = {
+        "model_name": prediction["model_name"],
+        "model_version": prediction["model_version"],
+    }
+
+    # Legacy flat fields are retained for current demo/tests while quality becomes authoritative.
+    prediction["quality_grade"] = quality["grade"]
+    prediction["recommended_action"] = quality["action"]
+    prediction["manual_review_required"] = (
+        prediction["manual_review_required"] or quality["manual_review"]
+    )
+    prediction["reason_codes"] = list(
+        dict.fromkeys([*prediction["reason_codes"], *quality["reason_codes"]])
+    )
     return prediction

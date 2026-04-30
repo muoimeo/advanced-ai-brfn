@@ -1,0 +1,4 @@
+model,manual_review_rate
+EfficientNetB0 final,0.875
+MobileNetV2 fine-tuned,0.875
+ResNet50 fine-tuned,0.875

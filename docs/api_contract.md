@@ -1,0 +1,197 @@
+# AI Service API Contract
+
+This repository exposes the produce freshness model as a standalone FastAPI
+service. DESD should integrate with it over HTTP rather than merging the
+repositories.
+
+## Base URL
+
+Local development:
+
+```text
+http://localhost:8001
+```
+
+Docker network example:
+
+```text
+http://ai-service:8001
+```
+
+## Endpoints
+
+### GET /health
+
+Checks that the API is running and whether the model can be loaded.
+
+Example response:
+
+```json
+{
+  "status": "ok",
+  "model_loaded": true
+}
+```
+
+### GET /model-info
+
+Returns metadata for the selected final model.
+
+Important fields:
+
+```json
+{
+  "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+  "base_model_family": "EfficientNetB0",
+  "num_classes": 28,
+  "image_size": [224, 224],
+  "metrics": {
+    "test_accuracy": 0.9719626168224299,
+    "macro_f1": 0.9612978974472393,
+    "weighted_f1": 0.9718550099623252
+  }
+}
+```
+
+### POST /predict
+
+Accepts one JPEG or PNG image using `multipart/form-data`.
+
+Request field:
+
+```text
+file
+```
+
+Example response:
+
+```json
+{
+  "prediction_id": "uuid",
+  "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+  "model_version": "2026-04-29T15:45:22",
+  "produce_type": "Banana",
+  "predicted_class": "Banana__Rotten",
+  "freshness_status": "rotten",
+  "confidence": 0.91,
+  "top1_top2_margin": 0.86,
+  "confidence_score": 0.91,
+  "freshness_score": 0.09,
+  "quality_grade": "C",
+  "recommended_action": "manual_review_or_discard",
+  "reason_codes": ["ROTTEN_PREDICTION", "high_confidence_rotten_prediction"],
+  "manual_review_required": false,
+  "top_predictions": [
+    {
+      "class_name": "Banana__Rotten",
+      "confidence": 0.91
+    },
+    {
+      "class_name": "Mango__Rotten",
+      "confidence": 0.05
+    }
+  ],
+  "prediction": {
+    "predicted_class": "Banana__Rotten",
+    "product_type": "Banana",
+    "condition": "rotten",
+    "confidence": 0.91,
+    "top_k": [],
+    "top1_top2_margin": 0.86
+  },
+  "quality": {
+    "grade": "C",
+    "overall_quality_score": 18.72,
+    "component_scores": {
+      "model_condition": 9.0,
+      "color": 72.1,
+      "defect_absence": 9.0,
+      "image_quality": 84.7,
+      "size_proxy": 75.0,
+      "ripeness": 31.1
+    },
+    "action": "manual_review_or_discard",
+    "inventory_status": "blocked_pending_review",
+    "discount_percentage": null,
+    "manual_review": false,
+    "reason_codes": ["classified_as_rotten", "high_confidence_rotten_prediction"],
+    "warnings": [
+      "size_proxy_is_relative_to_image_area_not_physical_size",
+      "colour_score_is_lighting_sensitive_proxy",
+      "quality_grade_is_rule_based_not_supervised_model_output"
+    ]
+  },
+  "xai": {
+    "method": "Grad-CAM",
+    "available": false,
+    "heatmap_path": null,
+    "note": "Grad-CAM is report-facing attention evidence and is not used for quality grading."
+  },
+  "model_info": {
+    "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+    "model_version": "2026-04-29T15:45:22"
+  }
+}
+```
+
+Runtime safeguards:
+
+- classifier confidence below `0.60` maps the quality decision to `Review`
+- top-1/top-2 margin below `0.15` triggers manual review
+- same-produce healthy/rotten conflict triggers manual review
+- high-confidence rotten predictions map to Grade `C`
+
+The runtime API cannot know whether a prediction is wrong. High-confidence
+error labels are only valid in evaluation notebooks where ground truth exists.
+The quality grade is rule-based and must not be described as a supervised
+EfficientNetB0 grade prediction.
+
+### POST /feedback
+
+Logs user corrections or overrides for monitoring and future retraining.
+
+Example request:
+
+```json
+{
+  "prediction_id": "uuid",
+  "image_id": "optional-client-image-id",
+  "predicted_class": "Banana__Rotten",
+  "predicted_grade": "C",
+  "corrected_class": "Banana__Healthy",
+  "producer_override_class": "Banana__Healthy",
+  "producer_override_grade": "Review",
+  "override_reason": "Producer requested manual inspection after visual check.",
+  "accepted_ai_recommendation": false,
+  "quality_decision_snapshot": {
+    "overall_quality_score": 18.72,
+    "component_scores": {
+      "model_condition": 9.0
+    },
+    "reason_codes": ["high_confidence_rotten_prediction"]
+  },
+  "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+  "user_note": "Producer corrected the freshness status after inspection."
+}
+```
+
+Example response:
+
+```json
+{
+  "status": "logged"
+}
+```
+
+## DESD Integration Pattern
+
+DESD should:
+
+1. receive an image upload from a producer or admin;
+2. send the image to `POST /predict`;
+3. display prediction, confidence, grade, action, reason codes, and manual-review flag;
+4. store the returned `prediction_id` with the DESD record;
+5. call `POST /feedback` if a human overrides the prediction.
+
+The model must be presented as decision support, not autonomous quality
+approval.

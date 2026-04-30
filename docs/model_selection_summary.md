@@ -28,8 +28,15 @@ Risk caveat
 The original split leakage audit found offline-augmented variants crossing
 splits. The current top-model comparison now uses `data/splits_grouped`, whose
 audit reports zero overlapping source-image IDs across train/validation/test.
-External validation is still limited because the current custom-image set is
-small and banana-heavy.
+External validation is exported through `custom_image_test.ipynb` to
+`docs/report_figures/custom_image_validation.csv` and
+`docs/report_figures/custom_image_validation_summary.csv`.
+
+The current labeled custom-image subset is still small and banana-heavy, so it
+should be framed as deployment-risk evidence rather than a full robustness
+benchmark. Additional household photos without manifest labels are useful for
+qualitative domain-shift discussion, but they should not be counted as accuracy
+evidence until their `expected_class` values are added to the manifest.
 
 Assessment framing
 ------------------
@@ -41,5 +48,6 @@ classification and decision-support pipeline with known limitations:
 - business mapping to grade and action
 - XAI used for model-selection risk analysis
 - confidence and reason-code safeguards
+- top-1/top-2 margin safeguard for ambiguous predictions
 - feedback logging for accountability
 - no claim of autonomous quality approval
