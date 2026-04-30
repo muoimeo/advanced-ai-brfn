@@ -30,16 +30,16 @@
     "enabled": true,
     "strategy": "targeted_min_count_with_replacement",
     "target_min_count": 500,
-    "original_train_rows": 20493,
-    "oversampled_train_rows": 24174
+    "original_train_rows": 19674,
+    "oversampled_train_rows": 23590
   },
-  "trained_at": "2026-04-22T12:24:42",
+  "trained_at": "2026-05-01T00:46:18",
   "metrics": {
-    "test_accuracy": 0.9715391621129326,
-    "macro_f1": 0.9614564747728406,
-    "weighted_f1": 0.9714933577664193,
-    "errors": 125,
-    "high_confidence_errors": 15
+    "test_accuracy": 0.9640706126687435,
+    "macro_f1": 0.9523334111288506,
+    "weighted_f1": 0.9639435171654702,
+    "errors": 173,
+    "high_confidence_errors": 17
   },
   "artifacts": {
     "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_xai_corrected.keras",

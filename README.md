@@ -82,6 +82,7 @@ outputs/xai_examples/
 outputs/quality_rule_eval/
 docs/report_figures/custom_image_validation.csv
 docs/report_figures/custom_image_validation_summary.csv
+docs/xai_quality_decision_notes.md
 ```
 
 ## Experiment Scope
@@ -111,3 +112,6 @@ The preferred response contract is nested:
 - `quality`: rule-based grade/action decision
 - `xai`: optional attention reference, not used for grading
 - `model_info`: selected model metadata
+
+See `docs/xai_quality_decision_notes.md` for the boundary between Grad-CAM
+attention evidence and the external quality grading layer.

@@ -7,3 +7,6 @@ data/raw/custom_test_images/rot-ban1.jpg,Banana__Rotten,Banana,rotten,to_collect
 data/raw/custom_test_images/rot-ban5.jpg,Banana__Rotten,Banana,rotten,to_collect,
 data/raw/custom_test_images/rot-pot.jpg,Potato__Rotten,Potato,rotten,to_collect,
 data/raw/custom_test_images/rot-tom.jpg,Tomato__Rotten,Tomato,rotten,to_collect,
+data/raw/custom_test_images/mid_banana.jpg,Banana__Healthy,Banana,healthy,to_collect,
+data/raw/custom_test_images/mid_orange.jpg,Orange__Healthy,Orange,healthy,to_collect,
+data/raw/custom_test_images/mid-car.jpg,Carrot__Healthy,Carrot,healthy,to_collect,

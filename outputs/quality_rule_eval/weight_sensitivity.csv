@@ -1,1 +1,4 @@
 weight_set,grade_a_count,grade_b_count,grade_c_count,review_count,manual_review_rate,rotten_to_c_or_review_rate,risky_a_b_decisions,note
+default_balanced,13,3,16,1,0.7272727272727273,1.0,0,No supervised grade labels; compare consistency and risk controls only.
+more_visual_colour,13,3,16,1,0.7272727272727273,1.0,0,No supervised grade labels; compare consistency and risk controls only.
+safer_model_led,12,4,16,1,0.7272727272727273,1.0,0,No supervised grade labels; compare consistency and risk controls only.

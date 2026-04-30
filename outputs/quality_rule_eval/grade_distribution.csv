@@ -1,7 +1,11 @@
 model,quality_grade,count
 EfficientNetB0 final,A,4
-EfficientNetB0 final,C,4
-MobileNetV2 fine-tuned,A,4
-MobileNetV2 fine-tuned,C,4
+EfficientNetB0 final,B,1
+EfficientNetB0 final,C,5
+EfficientNetB0 final,Review,1
+MobileNetV2 fine-tuned,A,5
+MobileNetV2 fine-tuned,B,1
+MobileNetV2 fine-tuned,C,5
 ResNet50 fine-tuned,A,4
-ResNet50 fine-tuned,C,4
+ResNet50 fine-tuned,B,1
+ResNet50 fine-tuned,C,6

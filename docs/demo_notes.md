@@ -86,10 +86,18 @@ and ambiguous predictions for manual review where appropriate.
 
 Current inference safeguards:
 
-- confidence below 0.75 triggers `LOW_CONFIDENCE` and manual review
-- top-1/top-2 margin below 0.15 triggers `AMBIGUOUS_PREDICTION` and manual review
-- rotten predictions expose `ROTTEN_PREDICTION`
-- confidence at or above 0.95 exposes `HIGH_CONFIDENCE_PREDICTION`
+- classifier confidence below 0.60 maps the quality decision to `Review`
+- top-1/top-2 margin below 0.15 triggers manual review
+- same-produce healthy/rotten conflict triggers manual review
+- rotten predictions map to Grade `C`; medium-confidence rotten predictions
+  require manual review before listing
+- image quality warnings do not automatically downgrade strong healthy
+  predictions, but they do trigger manual-review recommendation
+
+The quality grade is produced by the external rule-based layer in
+`src/quality/`, not by EfficientNetB0. EfficientNetB0 provides the 28-class
+produce/freshness evidence; the rule layer combines it with image proxy
+features and transparent thresholds.
 
 Privacy/data governance position: prediction logs should store metadata and
 model outputs, not unnecessary personal data or raw images.
