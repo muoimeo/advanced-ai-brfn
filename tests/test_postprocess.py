@@ -22,7 +22,7 @@ def test_rotten_high_confidence_maps_to_reject_with_reason_codes():
 
 
 def test_low_confidence_prediction_requires_manual_review():
-    prediction = build_business_prediction("Apple__Healthy", 0.74)
+    prediction = build_business_prediction("Apple__Healthy", 0.59)
 
     assert prediction["quality_grade"] == "Review"
     assert prediction["manual_review_required"] is True
@@ -48,7 +48,7 @@ def test_small_top1_top2_margin_requires_manual_review():
 def test_quality_grade_thresholds():
     assert quality_grade_from_prediction("healthy", 0.91) == "A"
     assert quality_grade_from_prediction("healthy", 0.75) == "B"
-    assert quality_grade_from_prediction("healthy", 0.70) == "Review"
+    assert quality_grade_from_prediction("healthy", 0.59) == "Review"
     assert quality_grade_from_prediction("rotten", 0.91) == "Reject"
     assert quality_grade_from_prediction("rotten", 0.75) == "Likely reject"
-    assert quality_grade_from_prediction("rotten", 0.70) == "Review"
+    assert quality_grade_from_prediction("rotten", 0.59) == "Review"

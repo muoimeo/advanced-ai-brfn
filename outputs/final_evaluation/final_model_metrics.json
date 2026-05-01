@@ -1,0 +1,72 @@
+{
+  "final_model": "efficientnetb0_aug_oversampled_finetuned_wsl",
+  "selected_as_final": true,
+  "base_model_family": "EfficientNetB0",
+  "split_strategy": "grouped_source_image_split",
+  "split_dir": "data/splits_grouped",
+  "metrics": {
+    "test_accuracy": 0.9719626168224299,
+    "macro_f1": 0.9612978974472393,
+    "weighted_f1": 0.9718550099623252
+  },
+  "risk_audit": {
+    "total_errors": 135,
+    "high_confidence_errors": 11,
+    "mean_confidence_on_errors": 0.729367196559906,
+    "comparison_artifact": "outputs/xai_examples/xai_model_audit_summary.csv",
+    "competitor": {
+      "model_name": "resnet50_aug_oversampled_finetuned_wsl",
+      "test_accuracy": 0.9715472481827622,
+      "macro_f1": 0.964980066938213,
+      "weighted_f1": 0.9715233695799814,
+      "total_errors": 137,
+      "high_confidence_errors": 19,
+      "mean_confidence_on_errors": 0.746513843536377
+    }
+  },
+  "quality_grading_layer": {
+    "enabled": true,
+    "implementation": "src/quality",
+    "type": "transparent_rule_based_layer",
+    "classifier_responsibility": "EfficientNetB0 predicts produce type and healthy/rotten condition only.",
+    "grading_responsibility": "Rule layer combines model evidence with interpretable image proxy features.",
+    "not_supervised_grade_model": true,
+    "uses_gradcam_for_grading": false,
+    "default_weights": {
+      "model_condition": 0.45,
+      "color": 0.25,
+      "defect_absence": 0.15,
+      "image_quality": 0.1,
+      "size_proxy": 0.05
+    }
+  },
+  "inference_safeguards": {
+    "low_confidence_threshold": 0.6,
+    "ambiguous_top1_top2_margin_threshold": 0.15,
+    "high_confidence_threshold": 0.95,
+    "runtime_reason_codes": [
+      "LOW_CONFIDENCE",
+      "AMBIGUOUS_PREDICTION",
+      "ROTTEN_PREDICTION",
+      "HIGH_CONFIDENCE_PREDICTION",
+      "MANUAL_REVIEW_REQUIRED"
+    ],
+    "note": "Runtime API cannot know whether a prediction is wrong. High-confidence error analysis is only used in evaluation where ground truth exists."
+  },
+  "selection_reason": "Selected as the final deployment candidate after grouped source-image split retraining and XAI risk review. EfficientNetB0 fine-tuned has marginally higher accuracy/weighted F1 than ResNet50 fine-tuned and fewer high-confidence errors in the grouped XAI audit. ResNet50 remains an important comparison model because it has stronger macro F1 and weak rotten-class F1.",
+  "selection_caveats": {
+    "model_selection_tradeoff": "EfficientNetB0 is selected for deployment-risk posture: slightly higher accuracy/weighted F1 and fewer high-confidence errors. ResNet50 has higher macro F1 and stronger weak rotten-class F1, so this tradeoff must be explained explicitly.",
+    "xai_risk": "Grad-CAM found high-confidence errors in both top models; Grad-CAM is decision-support evidence, not segmentation-quality localization.",
+    "deployment_position": "The model should support producer/admin review, not autonomous quality approval.",
+    "external_validation": "Current custom-image set is small and banana-heavy; broaden it before making robustness claims."
+  },
+  "artifacts": {
+    "final_model": "models/best_model.keras",
+    "class_names": "models/class_names.json",
+    "metadata": "models/model_metadata.json",
+    "experiment_model": "models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl.keras",
+    "classification_report": "outputs/figures/efficientnetb0_aug_oversampled_finetuned_wsl_classification_report.csv",
+    "confusion_matrix": "outputs/confusion_matrices/efficientnetb0_aug_oversampled_finetuned_wsl_confusion_matrix.png",
+    "xai_audit": "outputs/xai_examples/xai_model_audit_summary.csv"
+  }
+}

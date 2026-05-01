@@ -1,0 +1,104 @@
+{
+  "base_url": "http://localhost:8001",
+  "notes": [
+    "Exact confidence values can change if model artifacts or preprocessing change.",
+    "Use nested prediction and quality objects as the authoritative demo contract.",
+    "Grad-CAM is an optional report-facing attention reference and is not used for grading."
+  ],
+  "health": {
+    "status": "ok",
+    "model_loaded": true
+  },
+  "model_info": {
+    "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+    "base_model_family": "EfficientNetB0",
+    "num_classes": 28,
+    "split_strategy": "grouped_source_image_split"
+  },
+  "predict_examples": [
+    {
+      "image": "data/raw/custom_test_images/hea-app.jpg",
+      "expected_demo_case": "healthy Grade A with image-quality review warning",
+      "expected_prediction": {
+        "predicted_class": "Apple__Healthy",
+        "produce_type": "Apple",
+        "freshness_status": "healthy"
+      },
+      "expected_quality": {
+        "grade": "A",
+        "action": "normal_sale",
+        "inventory_status": "available",
+        "manual_review": true,
+        "reason_codes_include": [
+          "classified_as_healthy",
+          "all_grade_a_thresholds_met",
+          "image_quality_warning"
+        ]
+      }
+    },
+    {
+      "image": "data/raw/custom_test_images/mid_banana.jpg",
+      "expected_demo_case": "healthy Grade B because colour/size proxy do not meet all Grade A thresholds",
+      "expected_prediction": {
+        "predicted_class": "Banana__Healthy",
+        "produce_type": "Banana",
+        "freshness_status": "healthy"
+      },
+      "expected_quality": {
+        "grade": "B",
+        "action": "discount_or_quick_sale",
+        "inventory_status": "surplus_or_lower_grade",
+        "manual_review": true,
+        "reason_codes_include": [
+          "classified_as_healthy",
+          "acceptable_quality_but_not_grade_a",
+          "image_quality_warning"
+        ]
+      }
+    },
+    {
+      "image": "data/raw/custom_test_images/mid_orange.jpg",
+      "expected_demo_case": "healthy Grade B because foreground/size proxy is below Grade A threshold",
+      "expected_prediction": {
+        "predicted_class": "Orange__Healthy",
+        "produce_type": "Orange",
+        "freshness_status": "healthy"
+      },
+      "expected_quality": {
+        "grade": "B",
+        "action": "discount_or_quick_sale",
+        "inventory_status": "surplus_or_lower_grade",
+        "manual_review": false,
+        "reason_codes_include": [
+          "classified_as_healthy",
+          "acceptable_quality_but_not_grade_a"
+        ]
+      }
+    },
+    {
+      "image": "data/raw/custom_test_images/rot-ban1.jpg",
+      "expected_demo_case": "rotten Grade C blocked from listing",
+      "expected_prediction": {
+        "predicted_class": "Banana__Rotten",
+        "produce_type": "Banana",
+        "freshness_status": "rotten"
+      },
+      "expected_quality": {
+        "grade": "C",
+        "action": "manual_review_or_discard",
+        "inventory_status": "blocked_pending_review",
+        "manual_review": false,
+        "reason_codes_include": [
+          "classified_as_rotten",
+          "high_confidence_rotten_prediction"
+        ]
+      }
+    }
+  ],
+  "feedback": {
+    "expected_response": {
+      "status": "logged"
+    },
+    "log_file": "outputs/logs/feedback.jsonl"
+  }
+}

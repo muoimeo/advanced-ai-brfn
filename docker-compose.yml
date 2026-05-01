@@ -1,0 +1,16 @@
+services:
+  ai-service:
+    build: .
+    image: brfn-ai-service:latest
+    ports:
+      - "8001:8001"
+    environment:
+      PORT: 8001
+    volumes:
+      - ./outputs/logs:/app/outputs/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health', timeout=10)"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 60s

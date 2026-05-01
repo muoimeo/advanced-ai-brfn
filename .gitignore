@@ -71,6 +71,7 @@ outputs/eda/
 # Environment files
 .env
 .env.*
+!.env.example
 
 #agents
 AGENTS.md

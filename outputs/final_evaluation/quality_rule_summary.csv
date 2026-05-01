@@ -1,0 +1,4 @@
+model,grade_distribution,action_distribution,manual_review_rate,interpretation
+EfficientNetB0 final,A:4; B:1; C:5; Review:1,discount_or_quick_sale:1; manual_review_before_listing:3; manual_review_or_discard:2; manual_review_required:1; normal_sale:4,0.7272727272727273,Rule-layer behaviour only; no supervised grade accuracy claim.
+MobileNetV2 fine-tuned,A:5; B:1; C:5,discount_or_quick_sale:1; manual_review_before_listing:3; manual_review_or_discard:2; normal_sale:5,0.7272727272727273,Rule-layer behaviour only; no supervised grade accuracy claim.
+ResNet50 fine-tuned,A:4; B:1; C:6,discount_or_quick_sale:1; manual_review_before_listing:4; manual_review_or_discard:2; normal_sale:4,0.7272727272727273,Rule-layer behaviour only; no supervised grade accuracy claim.

@@ -37,7 +37,7 @@
     "external_validation": "Current custom-image set is small and banana-heavy; broaden it before making robustness claims."
   },
   "inference_safeguards": {
-    "low_confidence_threshold": 0.75,
+    "low_confidence_threshold": 0.6,
     "ambiguous_top1_top2_margin_threshold": 0.15,
     "high_confidence_threshold": 0.95,
     "runtime_reason_codes": [

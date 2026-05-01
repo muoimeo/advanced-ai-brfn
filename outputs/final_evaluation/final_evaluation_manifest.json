@@ -1,0 +1,15 @@
+{
+  "generated_files": {
+    "model_comparison_summary.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\model_comparison_summary.csv",
+    "final_model_metrics.json": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\final_model_metrics.json",
+    "weak_class_summary.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\weak_class_summary.csv",
+    "grade_distribution.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\grade_distribution.csv",
+    "manual_review_rate.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\manual_review_rate.csv",
+    "weight_sensitivity_summary.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\weight_sensitivity_summary.csv",
+    "action_distribution.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\action_distribution.csv",
+    "quality_rule_summary.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\quality_rule_summary.csv",
+    "external_image_validation.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\external_image_validation.csv",
+    "risky_case_examples.csv": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\risky_case_examples.csv",
+    "adoption_recommendation.md": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\adoption_recommendation.md"
+  }
+}

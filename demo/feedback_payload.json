@@ -1,0 +1,33 @@
+{
+  "prediction_id": "replace-with-prediction-id",
+  "predicted_class": "Banana__Healthy",
+  "predicted_grade": "B",
+  "producer_override_class": "Banana__Healthy",
+  "producer_override_grade": "B",
+  "override_reason": "Producer reviewed the image and accepted the AI Grade B recommendation.",
+  "accepted_ai_recommendation": true,
+  "quality_decision_snapshot": {
+    "overall_quality_score": 85.77,
+    "component_scores": {
+      "model_condition": 98.73,
+      "color": 83.01,
+      "defect_absence": 100.0,
+      "image_quality": 18.43,
+      "size_proxy": 75.0,
+      "ripeness": 93.42
+    },
+    "reason_codes": [
+      "classified_as_healthy",
+      "acceptable_quality_but_not_grade_a",
+      "image_quality_warning",
+      "manual_review_recommended"
+    ],
+    "warnings": [
+      "size_proxy_is_relative_to_image_area_not_physical_size",
+      "colour_score_is_lighting_sensitive_proxy",
+      "quality_grade_is_rule_based_not_supervised_model_output"
+    ],
+    "action": "discount_or_quick_sale"
+  },
+  "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl"
+}

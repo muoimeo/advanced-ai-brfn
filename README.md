@@ -80,6 +80,7 @@ outputs/figures/
 outputs/confusion_matrices/
 outputs/xai_examples/
 outputs/quality_rule_eval/
+outputs/final_evaluation/
 docs/report_figures/custom_image_validation.csv
 docs/report_figures/custom_image_validation_summary.csv
 docs/xai_quality_decision_notes.md
@@ -115,3 +116,64 @@ The preferred response contract is nested:
 
 See `docs/xai_quality_decision_notes.md` for the boundary between Grad-CAM
 attention evidence and the external quality grading layer.
+
+## Run API Locally
+
+```bash
+pip install -r requirements.txt
+uvicorn src.api.main:app --host 0.0.0.0 --port 8001
+```
+
+Useful checks:
+
+```bash
+curl http://localhost:8001/health
+curl http://localhost:8001/model-info
+pytest
+```
+
+Demo request examples are in `demo/demo_requests.http` and
+`demo/curl_examples.md`.
+
+## Run API With Docker
+
+The Docker image is for CPU inference and expects the final local artifacts:
+
+```text
+models/best_model.keras
+models/class_names.json
+models/model_metadata.json
+```
+
+Build and run:
+
+```bash
+docker build -t brfn-ai-service .
+docker run --rm -p 8001:8001 brfn-ai-service
+```
+
+With Compose:
+
+```bash
+docker compose up --build
+```
+
+Then open:
+
+```text
+http://localhost:8001/health
+http://localhost:8001/model-info
+```
+
+## Final Evaluation Pack
+
+After rerunning the final custom-image and quality-rule notebooks, generate the
+report-ready evidence pack with:
+
+```bash
+python -m src.evaluation.build_final_evaluation_pack
+```
+
+The output is written to `outputs/final_evaluation/` and includes final model
+metrics, model comparison, weak-class summary, external-image validation,
+quality-rule summaries, risky cases, and an adoption recommendation.

@@ -1,0 +1,90 @@
+@baseUrl = http://localhost:8001
+
+### Health check
+GET {{baseUrl}}/health
+
+### Model metadata
+GET {{baseUrl}}/model-info
+
+### Predict healthy apple: likely Grade A with image-quality review warning
+POST {{baseUrl}}/predict
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="hea-app.jpg"
+Content-Type: image/jpeg
+
+< ../data/raw/custom_test_images/hea-app.jpg
+--boundary--
+
+### Predict middle-quality banana: expected Grade B / discount-or-quick-sale
+POST {{baseUrl}}/predict
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="mid_banana.jpg"
+Content-Type: image/jpeg
+
+< ../data/raw/custom_test_images/mid_banana.jpg
+--boundary--
+
+### Predict middle-quality orange: expected Grade B / discount-or-quick-sale
+POST {{baseUrl}}/predict
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="mid_orange.jpg"
+Content-Type: image/jpeg
+
+< ../data/raw/custom_test_images/mid_orange.jpg
+--boundary--
+
+### Predict rotten banana: expected Grade C / blocked pending review
+POST {{baseUrl}}/predict
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="rot-ban1.jpg"
+Content-Type: image/jpeg
+
+< ../data/raw/custom_test_images/rot-ban1.jpg
+--boundary--
+
+### Feedback example after a human override
+POST {{baseUrl}}/feedback
+Content-Type: application/json
+
+{
+  "prediction_id": "replace-with-prediction-id-from-predict",
+  "image_id": "demo-mid-banana",
+  "predicted_class": "Banana__Healthy",
+  "predicted_grade": "B",
+  "producer_override_class": "Banana__Healthy",
+  "producer_override_grade": "Review",
+  "override_reason": "Producer requested manual inspection because the image quality warning was shown.",
+  "accepted_ai_recommendation": false,
+  "quality_decision_snapshot": {
+    "overall_quality_score": 85.77,
+    "component_scores": {
+      "model_condition": 98.73,
+      "color": 83.01,
+      "defect_absence": 100.0,
+      "image_quality": 18.43,
+      "size_proxy": 75.0,
+      "ripeness": 93.42
+    },
+    "reason_codes": [
+      "classified_as_healthy",
+      "acceptable_quality_but_not_grade_a",
+      "image_quality_warning",
+      "manual_review_recommended"
+    ],
+    "warnings": [
+      "colour_score_is_lighting_sensitive_proxy",
+      "quality_grade_is_rule_based_not_supervised_model_output"
+    ],
+    "action": "discount_or_quick_sale"
+  },
+  "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+  "user_note": "Demo override showing accountability and monitoring support."
+}
