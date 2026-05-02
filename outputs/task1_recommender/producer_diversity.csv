@@ -1,0 +1,4 @@
+method,unique_recommended_producers,total_producers,producer_diversity
+global_popularity,2,12,0.16666666666666666
+user_frequency,12,12,1.0
+frequency_recency,12,12,1.0

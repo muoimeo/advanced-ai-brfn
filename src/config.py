@@ -33,3 +33,7 @@ FIGURES_DIR = OUTPUTS_DIR / "figures"
 CM_DIR = OUTPUTS_DIR / "confusion_matrices"
 LOGS_DIR = OUTPUTS_DIR / "logs"
 XAI_DIR = OUTPUTS_DIR / "xai_examples"
+
+# Task 1 quick-reorder recommender
+TASK1_DATA_DIR = DATA_DIR / "task1" / "desd_seed_export"
+TASK1_OUTPUT_DIR = OUTPUTS_DIR / "task1_recommender"

@@ -92,3 +92,25 @@ class FeedbackRequest(BaseModel):
 
 class FeedbackResponse(BaseModel):
     status: str
+
+
+class ReorderRecommendationResponse(BaseModel):
+    customer_id: str
+    customer_type: str | None = None
+    method: str
+    rank: int
+    product_id: str
+    product_name: str
+    producer_id: str
+    score: float
+    reason_codes: list[str] = Field(default_factory=list)
+    reason_text: str | None = None
+
+
+class ReorderResponse(BaseModel):
+    customer_id: str
+    recommendation_date: str
+    method: str
+    top_k: int
+    recommendations: list[ReorderRecommendationResponse] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)

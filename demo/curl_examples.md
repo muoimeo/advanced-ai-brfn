@@ -341,6 +341,62 @@ curl.exe -i "http://localhost:8001/feedback" `
 
 ## 7. Troubleshooting
 
+## 7. Quick reorder recommendation example
+
+The `/recommend/reorder` endpoint is for Task 1. It uses fake/synthetic DESD seed export data and returns quick-reorder suggestions with reason codes.
+
+Use an existing customer ID from `data\task1\desd_seed_export\customers.csv`, for example:
+
+```powershell
+curl.exe -s "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3" `
+  | python -m json.tool
+```
+
+Optional method comparison:
+
+```powershell
+curl.exe -s "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3&method=global_popularity" `
+  | python -m json.tool
+```
+
+```powershell
+curl.exe -s "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3&method=user_frequency" `
+  | python -m json.tool
+```
+
+```powershell
+curl.exe -s "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3&method=frequency_recency" `
+  | python -m json.tool
+```
+
+Expected response fields:
+
+```json
+{
+  "customer_id": "C000003",
+  "recommendation_date": "2026-05-02",
+  "method": "frequency_recency",
+  "top_k": 3,
+  "recommendations": [
+    {
+      "product_id": "P000113",
+      "product_name": "Autumn Raspberries",
+      "producer_id": "PR000008",
+      "score": 0.801946,
+      "reason_codes": ["frequently_ordered_by_customer", "ordered_recently"]
+    }
+  ],
+  "limitations": [
+    "recommendations_based_on_synthetic_seed_data",
+    "not_production_customer_behaviour"
+  ]
+}
+```
+
+---
+
+## 8. Troubleshooting
+
 ### PowerShell says: `A parameter cannot be found that matches parameter name 'X'`
 
 You used `curl` instead of `curl.exe`. Use:
@@ -387,7 +443,7 @@ Check the terminal running `uvicorn`. Common causes:
 
 ---
 
-## 8. Demo checklist
+## 9. Demo checklist
 
 Before the live demo, verify:
 
@@ -403,6 +459,7 @@ GET  /health
 GET  /model-info
 POST /predict
 POST /feedback
+GET  /recommend/reorder
 ```
 
 Recommended demo cases:
@@ -420,6 +477,7 @@ Evidence to capture:
 - /model-info response
 - /predict response for Grade A/B/C or Review cases
 - /feedback response {"status":"logged"}
+- /recommend/reorder response with product, producer, score, and reason codes
 - outputs/logs/feedback.jsonl showing logged feedback
 - pytest result showing all tests passed
 ```

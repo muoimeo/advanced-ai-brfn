@@ -1,6 +1,13 @@
-# Advanced AI Produce Freshness Classifier
+# Advanced AI BRFN AI Service
 
-This repository contains the Advanced AI coursework project for fruit and vegetable freshness / rotten image classification.
+This repository contains the Advanced AI coursework project for the BRFN case study. It is an independent AI service that stays separate from the DESD Django marketplace repository.
+
+It covers two AI workstreams:
+
+- Task 1: transparent quick-reorder recommendations from DESD-style seed transaction CSVs.
+- Tasks 2-4: fruit/vegetable computer-vision classification, quality grading, XAI evidence, and deployment API.
+
+The same FastAPI/Docker service exposes both workstreams. DESD should call this repository over HTTP; it should not import AI code or model files.
 
 The project uses the Kaggle dataset:
 
@@ -18,6 +25,8 @@ The project must not claim the model learned supervised Grade A/B/C labels.
 
 ## Current Status
 
+Task 1 quick reorder is implemented as a proof-of-concept recommender using fake/synthetic DESD seed export data in `data/task1/desd_seed_export/`. It compares global popularity, user-frequency, and frequency+recency methods, then exports report-ready evaluation files to `outputs/task1_recommender/`.
+
 The final selected deployment candidate is:
 
 ```text
@@ -29,6 +38,30 @@ offline-augmented variants of the same source image crossing train,
 validation, and test sets. ResNet50 fine-tuned remains the main macro-F1
 challenger, but EfficientNetB0 is selected for the final demo because it has a
 better deployment-risk tradeoff in the grouped XAI audit.
+
+## Repository Boundary
+
+Keep the Advanced AI and DESD repositories separate.
+
+```text
+DESD repo:
+  owns Django marketplace, fake operational data, UI, cart/order flows.
+  exports anonymised Task 1 CSVs.
+  calls this AI service over HTTP.
+
+Advanced AI repo:
+  owns recommender algorithms, CV model inference, quality grading, evaluation, FastAPI, Docker.
+```
+
+DESD integration points:
+
+```text
+GET  /recommend/reorder?customer_id=C000003&top_k=3
+POST /predict
+POST /feedback
+GET  /health
+GET  /model-info
+```
 
 ## Local Workflow
 
@@ -69,6 +102,7 @@ Do not commit the full raw dataset.
 Generated locally:
 
 ```text
+data/task1/desd_seed_export/
 data/splits_grouped/train.csv
 data/splits_grouped/val.csv
 data/splits_grouped/test.csv
@@ -81,12 +115,124 @@ outputs/confusion_matrices/
 outputs/xai_examples/
 outputs/quality_rule_eval/
 outputs/final_evaluation/
+outputs/task1_recommender/
 docs/report_figures/custom_image_validation.csv
 docs/report_figures/custom_image_validation_summary.csv
 docs/xai_quality_decision_notes.md
 ```
 
-## Experiment Scope
+## Task 1 Quick Reorder
+
+Task 1 supports the DESD customer-facing quick reorder feature.
+
+It answers:
+
+```text
+For this customer, which products should DESD suggest for fast reordering?
+```
+
+Task 1 consumes normalized CSVs exported from DESD:
+
+```text
+data/task1/desd_seed_export/customers.csv
+data/task1/desd_seed_export/producers.csv
+data/task1/desd_seed_export/products.csv
+data/task1/desd_seed_export/orders.csv
+data/task1/desd_seed_export/order_items.csv
+```
+
+Current seed export scale:
+
+```text
+customers: 80
+producers: 12
+products: 60
+orders: 483
+order lines: 1,794
+date range: 2026-01-10 to 2026-05-01
+```
+
+Implemented methods:
+
+```text
+global_popularity
+user_frequency
+frequency_recency
+```
+
+The selected default method is `frequency_recency`, which combines customer frequency, recency, customer-type affinity, and seasonality. Each recommendation includes reason codes such as:
+
+```text
+frequently_ordered_by_customer
+ordered_recently
+common_for_customer_type
+seasonally_available
+cold_start_fallback
+globally_popular_product
+```
+
+Run the Task 1 pipeline:
+
+```bash
+python -m src.recommender.pipeline
+```
+
+Or run the orchestration notebook:
+
+```text
+notebooks/task1_quick_reorder/11_quick_reorder_task1.ipynb
+```
+
+Report-ready outputs:
+
+```text
+outputs/task1_recommender/recommender_metrics.csv
+outputs/task1_recommender/recommendation_examples.csv
+outputs/task1_recommender/product_coverage.csv
+outputs/task1_recommender/producer_diversity.csv
+outputs/task1_recommender/recommendation_share_by_producer.csv
+outputs/task1_recommender/producer_demand_trends.csv
+outputs/task1_recommender/producer_next_week_forecast.csv
+outputs/task1_recommender/task1_summary.json
+```
+
+These metrics are proof-of-concept evidence only. The data is fake/synthetic, not real BRFN customer behaviour.
+
+Task 1 API example:
+
+```bash
+curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3"
+```
+
+DESD should display the returned product name, producer, score, reason codes, and limitation note. DESD should not calculate these recommendations itself.
+
+## Tasks 2-4 Computer Vision
+
+Tasks 2-4 support produce quality inspection and explainable decision support.
+
+They answer:
+
+```text
+What produce is shown in the image, is it healthy/rotten, and what quality action should DESD show?
+```
+
+The CV pipeline uses the Kaggle healthy-vs-rotten fruit/vegetable dataset as a 28-class image classification task. The final model is EfficientNetB0 fine-tuned, selected using grouped-split metrics, model comparison, high-confidence error review, XAI audit, and deployment risk.
+
+The external quality grading layer in `src/quality/` maps model evidence and image proxy features into:
+
+```text
+Grade A / B / C / Review
+recommended action
+inventory status
+discount suggestion
+manual review flag
+reason codes
+warnings
+```
+
+Important limitation: the dataset has healthy/rotten labels, not supervised Grade A/B/C labels. The CNN must not be described as learning grade.
+
+## CV Experiment Scope
 
 Preferred comparison set:
 
@@ -95,7 +241,7 @@ Preferred comparison set:
 3. ResNet50
 4. EfficientNetB0
 
-## API Goal
+## API Contract
 
 The service exposes:
 
@@ -103,8 +249,9 @@ The service exposes:
 - `POST /predict`
 - `POST /feedback`
 - `GET /model-info`
+- `GET /recommend/reorder?customer_id=C000012&top_k=3`
 
-The DESD system can later call this API for image inference. See
+The DESD system can later call this API for image inference and quick reorder suggestions. See
 `docs/api_contract.md` for the response schema and integration pattern.
 
 The preferred response contract is nested:
@@ -116,6 +263,19 @@ The preferred response contract is nested:
 
 See `docs/xai_quality_decision_notes.md` for the boundary between Grad-CAM
 attention evidence and the external quality grading layer.
+
+DESD usage by task:
+
+```text
+Task 1:
+  DESD sends customer_id to /recommend/reorder.
+  AI returns ranked product suggestions with producer IDs, scores, reason codes, and limitations.
+
+Tasks 2-4:
+  DESD uploads produce image to /predict.
+  AI returns class prediction, healthy/rotten status, quality decision, action, warnings, and manual-review flag.
+  DESD sends producer/admin overrides to /feedback.
+```
 
 ## Run API Locally
 
@@ -129,6 +289,7 @@ Useful checks:
 ```bash
 curl http://localhost:8001/health
 curl http://localhost:8001/model-info
+curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3"
 pytest
 ```
 
@@ -137,12 +298,13 @@ Demo request examples are in `demo/demo_requests.http` and
 
 ## Run API With Docker
 
-The Docker image is for CPU inference and expects the final local artifacts:
+The Docker image is for CPU inference and includes the Task 1 CSV folder when present. It expects the final CV model artifacts:
 
 ```text
 models/best_model.keras
 models/class_names.json
 models/model_metadata.json
+data/task1/desd_seed_export/
 ```
 
 Build and run:
@@ -163,6 +325,7 @@ Then open:
 ```text
 http://localhost:8001/health
 http://localhost:8001/model-info
+http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3
 ```
 
 ## Final Evaluation Pack
@@ -177,3 +340,11 @@ python -m src.evaluation.build_final_evaluation_pack
 The output is written to `outputs/final_evaluation/` and includes final model
 metrics, model comparison, weak-class summary, external-image validation,
 quality-rule summaries, risky cases, and an adoption recommendation.
+
+For Task 1, run:
+
+```bash
+python -m src.recommender.pipeline
+```
+
+This writes the recommender evaluation pack to `outputs/task1_recommender/`.

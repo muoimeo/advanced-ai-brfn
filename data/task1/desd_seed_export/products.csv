@@ -1,0 +1,61 @@
+product_id,product_name,description,category,producer_id,seasonal_start_month,seasonal_end_month,base_price,unit,allergen_info,stock_quantity,availability_status
+P000083,Somerset Discovery Apples,"Crisp early-season apples from Easton Community Orchard, good for lunch boxes and baking.",fruit,PR000002,5,10,2.80,kg,,500,available
+P000084,Heritage Rainbow Carrots,"Mixed purple, yellow and orange carrots grown in sandy Mendip soil.",vegetables,PR000003,4,11,2.40,kg,,500,available
+P000085,Grass-Fed Whole Milk,"Pasteurised whole milk from Redcliffe Dairy Cooperative, bottled the morning after collection.",dairy,PR000004,1,12,1.95,1L bottle,milk,500,available
+P000086,Slow-Fermented Sourdough Loaf,Naturally leavened loaf baked with organic wheat flour and a 24-hour fermentation.,bakery,PR000005,1,12,4.20,loaf,gluten,500,available
+P000087,Bramley Apple Chutney,"Small-batch chutney with local Bramley apples, cider vinegar and warming spices.",preserves,PR000006,1,12,4.50,280g jar,mustard,500,available
+P000088,Wye Valley Asparagus Bunch,"Tender spring asparagus spears, harvested by hand and bundled the same day.",seasonal_specialities,PR000007,6,12,4.80,250g bunch,,500,available
+P000089,Conference Pears,Firm Conference pears selected for school snacks and catering fruit bowls.,fruit,PR000008,5,10,2.65,kg,,500,available
+P000090,Vine-Ripened Salad Tomatoes,"Sweet greenhouse tomatoes picked ripe for salads, sauces and sandwich service.",vegetables,PR000009,4,11,3.70,kg,,500,available
+P000091,Live Natural Yoghurt,Thick live yoghurt made with whole milk and no added sugar.,dairy,PR000010,1,12,2.75,500g tub,milk,500,available
+P000092,Seeded Wholemeal Rolls,"Soft wholemeal rolls topped with sunflower, sesame and pumpkin seeds.",bakery,PR000011,1,12,3.60,pack of 6,"gluten, sesame",500,available
+P000093,Strawberry and Rhubarb Jam,Bright jam made with late-spring strawberries and forced rhubarb.,preserves,PR000012,1,12,4.75,280g jar,,500,available
+P000094,Wild Garlic Leaves,"Foraged-style cultivated wild garlic leaves for pesto, soups and restaurant prep.",seasonal_specialities,PR000013,6,12,3.25,100g bag,,500,available
+P000095,Midsummer Strawberries,"Sweet strawberries from covered beds, packed for same-week delivery.",fruit,PR000002,5,10,3.95,400g punnet,,500,available
+P000096,New Season Potatoes,"Washed new potatoes with thin skins, suitable for boiling or roasting.",vegetables,PR000003,4,11,2.20,kg,,500,available
+P000097,Aged Farmhouse Cheddar,"Mature cheddar with a rounded sharpness, cut and wrapped by the dairy.",dairy,PR000004,1,12,4.10,250g block,milk,500,available
+P000098,Rosemary Focaccia Slab,"Olive-oil focaccia with rosemary and sea salt, suitable for sharing boards.",bakery,PR000005,1,12,5.50,slab,gluten,500,available
+P000099,Pickled Beetroot Slices,Earthy beetroot slices pickled in spiced vinegar for sandwiches and salads.,preserves,PR000006,1,12,3.95,300g jar,sulphites,500,available
+P000100,Purple Sprouting Broccoli,Tender stems of purple sprouting broccoli harvested during the cool season.,seasonal_specialities,PR000007,6,12,3.80,kg,,500,available
+P000101,Forced Rhubarb Stems,Pink rhubarb stems with a clean tart flavour for compotes and desserts.,fruit,PR000008,5,10,3.40,kg,,500,available
+P000102,Curly Green Kale,"Washed bunches of curly kale, robust enough for soups, sides and catering trays.",vegetables,PR000009,4,11,1.90,bunch,,500,available
+P000103,Soft Goat Cheese,"Fresh soft goat cheese with a mild tang, made in small batches.",dairy,PR000010,1,12,3.85,150g tub,milk,500,available
+P000104,Morning Breakfast Buns,Lightly sweet enriched buns with cinnamon and citrus glaze.,bakery,PR000011,1,12,4.40,pack of 4,"gluten, milk, egg",500,available
+P000105,Tomato and Chilli Relish,Slow-cooked tomato relish with a gentle chilli heat for burgers and sandwiches.,preserves,PR000012,1,12,4.25,280g jar,sulphites,500,available
+P000106,Crown Prince Squash,"Dense blue-skinned squash with sweet orange flesh, suitable for roasting.",seasonal_specialities,PR000013,6,12,3.60,each,,500,available
+P000107,Victoria Plums,Juicy late-summer plums selected for fresh eating and preserves.,fruit,PR000002,5,10,3.20,kg,,500,available
+P000108,Baby Spinach Leaves,"Tender spinach leaves washed and bagged for salads, smoothies and cooked sides.",vegetables,PR000003,4,11,2.50,250g bag,,500,available
+P000109,Salted Farm Butter,Creamy salted butter churned from local cream.,dairy,PR000004,1,12,3.10,250g block,milk,500,available
+P000110,Stoneground Flatbreads,Flexible flatbreads made with stoneground flour for wraps and mezze plates.,bakery,PR000005,1,12,3.70,pack of 5,gluten,500,available
+P000111,Pear and Ginger Preserve,"Soft pear preserve balanced with fresh ginger, suitable for toast or cheese boards.",preserves,PR000006,1,12,4.60,280g jar,,500,available
+P000112,Fresh Heritage Beans,Mixed heritage beans supplied in pods for restaurant specials and community meals.,seasonal_specialities,PR000007,6,12,4.30,kg,,500,available
+P000113,Autumn Raspberries,Late-cropping raspberries packed carefully to reduce bruising.,fruit,PR000008,5,10,4.10,300g punnet,,500,available
+P000114,Chestnut Mushrooms,Chestnut mushrooms grown indoors with consistent size for kitchen prep.,vegetables,PR000009,4,11,3.50,kg,,500,available
+P000115,Pouring Cream,"Single cream for soups, desserts and cafe service.",dairy,PR000010,1,12,2.90,500ml bottle,milk,500,available
+P000116,Oat and Honey Tin Loaf,"Sliced tin loaf with oats and local honey, baked for everyday sandwiches.",bakery,PR000011,1,12,3.80,loaf,gluten,500,available
+P000117,Red Onion Marmalade,Slow-cooked red onions with balsamic vinegar for cheese boards and hot sandwiches.,preserves,PR000012,1,12,4.35,280g jar,sulphites,500,available
+P000118,New Season Broad Beans,"Fresh broad beans in pods, best for spring menus and light salads.",seasonal_specialities,PR000013,6,12,3.90,kg,,500,available
+P000119,Blackcurrant Punnets,"Sharp blackcurrants for desserts, sauces and community preserving sessions.",fruit,PR000002,5,10,3.75,300g punnet,,500,available
+P000120,Golden Beetroot,Mild golden beetroot that keeps colour well when roasted or grated raw.,vegetables,PR000003,4,11,2.60,kg,,500,available
+P000121,Kefir Drinking Yoghurt,Cultured milk drink with a clean tang and no added flavourings.,dairy,PR000004,1,12,3.20,500ml bottle,milk,500,available
+P000122,Rye and Caraway Boule,"Dense rye boule with caraway seed, suited to soup service and smoked fish plates.",bakery,PR000005,1,12,4.65,loaf,gluten,500,available
+P000123,Gooseberry Compote,Tart gooseberry compote cooked in small batches for yoghurt bowls and desserts.,preserves,PR000006,1,12,4.20,280g jar,,500,available
+P000124,Early Season Pea Shoots,"Fresh pea shoots cut young for salads, sandwiches and restaurant garnish.",seasonal_specialities,PR000007,6,12,2.85,100g bag,,500,available
+P000125,Bristol Orchard Apple Juice,"Pressed apple juice from mixed local orchard varieties, gently pasteurised.",fruit,PR000008,5,10,3.50,750ml bottle,,500,available
+P000126,Mixed Salad Leaves,Washed mixed salad leaves with peppery and mild varieties for quick service.,vegetables,PR000009,4,11,2.70,250g bag,,500,available
+P000127,Smoked Farmhouse Cheese,Lightly smoked semi-hard cheese suitable for sandwiches and grazing boards.,dairy,PR000010,1,12,4.40,200g block,milk,500,available
+P000128,Multiseed Bagels,"Boiled and baked bagels topped with sesame, poppy and sunflower seeds.",bakery,PR000011,1,12,3.95,pack of 4,"gluten, sesame",500,available
+P000129,Runner Bean Piccalilli,Crunchy runner beans in a mustard pickle sauce for ploughman's lunches.,preserves,PR000012,1,12,4.10,280g jar,"mustard, sulphites",500,available
+P000130,Nettle and Spinach Soup Mix,"Seasonal greens mix prepared for soups, sauces and community kitchens.",seasonal_specialities,PR000013,6,12,3.30,500g bag,,500,available
+P000131,Damson Plums,"Deep purple damsons for jams, sauces and baked desserts.",fruit,PR000002,5,10,3.45,kg,,500,available
+P000132,Leek and Onion Box,"A kitchen-prep box of leeks and onions for soups, stocks and casseroles.",vegetables,PR000003,4,11,4.80,2kg box,,500,available
+P000133,Buttermilk,"Cultured buttermilk for pancakes, baking and marinades.",dairy,PR000004,1,12,2.20,500ml bottle,milk,500,available
+P000134,Olive and Herb Ciabatta,"Open-crumb ciabatta with olives and dried herbs, baked for deli service.",bakery,PR000005,1,12,4.25,loaf,gluten,500,available
+P000135,Spiced Pumpkin Preserve,Autumn pumpkin preserve with cinnamon and nutmeg for toast and desserts.,preserves,PR000006,1,12,4.55,280g jar,,500,available
+P000136,Baby Turnips with Greens,Small turnips supplied with greens attached for roasting or braising.,seasonal_specialities,PR000007,6,12,2.95,bunch,,500,available
+P000137,Red Gooseberries,Sharp red gooseberries packed for preserves and restaurant dessert menus.,fruit,PR000008,5,10,3.80,300g punnet,,500,available
+P000138,Romanesco Cauliflower,Geometric Romanesco heads with a nutty flavour and firm bite.,vegetables,PR000009,4,11,2.90,each,,500,available
+P000139,Farmhouse Halloumi,Grilling cheese made in small batches for cafes and restaurant specials.,dairy,PR000010,1,12,4.75,200g pack,milk,500,available
+P000140,Apple and Oat Traybake,Traybake portions made with local apples and rolled oats.,bakery,PR000011,1,12,12.00,tray of 12,"gluten, milk, egg",500,available
+P000141,Fermented Red Cabbage,"Live fermented red cabbage with caraway, packed for chilled delivery.",preserves,PR000012,1,12,4.30,350g jar,,500,available
+P000142,Fresh Horseradish Root,"Strong fresh horseradish root for sauces, roast dinners and preserves.",seasonal_specialities,PR000013,6,12,2.75,each,,500,available

@@ -14,6 +14,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src ./src
+COPY data/task1 ./data/task1
 COPY models/best_model.keras ./models/best_model.keras
 COPY models/class_names.json ./models/class_names.json
 COPY models/model_metadata.json ./models/model_metadata.json

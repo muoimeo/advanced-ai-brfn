@@ -1,0 +1,61 @@
+{
+  "dataset_type": "synthetic_desd_seed_export",
+  "customers": 80,
+  "producers": 12,
+  "products": 60,
+  "orders": 483,
+  "order_lines": 1794,
+  "date_range": {
+    "start": "2026-01-10",
+    "end": "2026-05-01"
+  },
+  "source_folder": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\data\\task1\\desd_seed_export",
+  "limitations": [
+    "synthetic_seed_data_not_real_customer_behaviour",
+    "metrics_are_proof_of_concept_not_production_accuracy"
+  ],
+  "selected_method": "frequency_recency",
+  "reason": "best balance between personalisation, transparency, and producer-diversity evidence on synthetic DESD-style data",
+  "top_k": 3,
+  "method_metrics": {
+    "global_popularity": {
+      "precision_at_3": 0.11666666666666664,
+      "recall_at_3": 0.05894078144078145,
+      "hit_rate_at_3": 0.3,
+      "product_coverage": 0.05,
+      "producer_diversity": 0.16666666666666666,
+      "unique_recommended_producers": 2,
+      "total_producers": 12,
+      "largest_producer_recommendation_share": 0.6666666666666666,
+      "cold_start_fallback_count": 0,
+      "evaluated_customers": 60,
+      "notes": "Synthetic DESD seed data; proof-of-concept metrics only."
+    },
+    "user_frequency": {
+      "precision_at_3": 0.12777777777777774,
+      "recall_at_3": 0.05890933140933141,
+      "hit_rate_at_3": 0.3333333333333333,
+      "product_coverage": 0.9333333333333333,
+      "producer_diversity": 1.0,
+      "unique_recommended_producers": 12,
+      "total_producers": 12,
+      "largest_producer_recommendation_share": 0.12777777777777777,
+      "cold_start_fallback_count": 0,
+      "evaluated_customers": 60,
+      "notes": "Synthetic DESD seed data; proof-of-concept metrics only."
+    },
+    "frequency_recency": {
+      "precision_at_3": 0.12222222222222219,
+      "recall_at_3": 0.05507936507936508,
+      "hit_rate_at_3": 0.3,
+      "product_coverage": 0.9333333333333333,
+      "producer_diversity": 1.0,
+      "unique_recommended_producers": 12,
+      "total_producers": 12,
+      "largest_producer_recommendation_share": 0.15,
+      "cold_start_fallback_count": 0,
+      "evaluated_customers": 60,
+      "notes": "Synthetic DESD seed data; proof-of-concept metrics only."
+    }
+  }
+}

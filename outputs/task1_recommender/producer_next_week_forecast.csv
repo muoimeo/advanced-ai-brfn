@@ -1,0 +1,61 @@
+producer_id,product_id,product_name,forecast_week_start,predicted_quantity_next_week,basis,trend_direction,forecast_note
+PR000002,P000119,Blackcurrant Punnets,2026-04-27,18.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000002,P000083,Somerset Discovery Apples,2026-05-04,16.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000002,P000095,Midsummer Strawberries,2026-05-04,12.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000002,P000107,Victoria Plums,2026-04-27,8.33,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000002,P000131,Damson Plums,2026-05-04,6.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000003,P000084,Heritage Rainbow Carrots,2026-05-04,29.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000003,P000108,Baby Spinach Leaves,2026-05-04,27.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000003,P000096,New Season Potatoes,2026-05-04,17.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000003,P000120,Golden Beetroot,2026-05-04,17.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000003,P000132,Leek and Onion Box,2026-05-04,8.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000004,P000085,Grass-Fed Whole Milk,2026-05-04,21.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000004,P000133,Buttermilk,2026-04-27,19.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000004,P000109,Salted Farm Butter,2026-05-04,14.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000004,P000097,Aged Farmhouse Cheddar,2026-04-27,13.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000004,P000121,Kefir Drinking Yoghurt,2026-05-04,7.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000005,P000134,Olive and Herb Ciabatta,2026-05-04,21.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000005,P000098,Rosemary Focaccia Slab,2026-05-04,20.67,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000005,P000086,Slow-Fermented Sourdough Loaf,2026-04-27,12.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000005,P000122,Rye and Caraway Boule,2026-05-04,12.33,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000005,P000110,Stoneground Flatbreads,2026-05-04,12.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000006,P000099,Pickled Beetroot Slices,2026-04-27,16.33,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000006,P000087,Bramley Apple Chutney,2026-05-04,13.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000006,P000123,Gooseberry Compote,2026-05-04,10.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000006,P000135,Spiced Pumpkin Preserve,2026-05-04,8.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000006,P000111,Pear and Ginger Preserve,2026-05-04,7.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000007,P000136,Baby Turnips with Greens,2026-05-04,25.67,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000007,P000124,Early Season Pea Shoots,2026-05-04,21.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000007,P000100,Purple Sprouting Broccoli,2026-05-04,20.67,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000007,P000112,Fresh Heritage Beans,2026-05-04,19.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000007,P000088,Wye Valley Asparagus Bunch,2026-05-04,19.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000008,P000113,Autumn Raspberries,2026-05-04,28.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000008,P000101,Forced Rhubarb Stems,2026-05-04,23.67,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000008,P000089,Conference Pears,2026-05-04,13.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000008,P000125,Bristol Orchard Apple Juice,2026-05-04,10.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000008,P000137,Red Gooseberries,2026-05-04,9.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000009,P000138,Romanesco Cauliflower,2026-05-04,21.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000009,P000126,Mixed Salad Leaves,2026-05-04,21.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000009,P000102,Curly Green Kale,2026-05-04,11.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000009,P000114,Chestnut Mushrooms,2026-05-04,11.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000009,P000090,Vine-Ripened Salad Tomatoes,2026-04-27,9.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000010,P000139,Farmhouse Halloumi,2026-05-04,21.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000010,P000127,Smoked Farmhouse Cheese,2026-05-04,19.67,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000010,P000091,Live Natural Yoghurt,2026-05-04,16.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000010,P000115,Pouring Cream,2026-05-04,16.33,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000010,P000103,Soft Goat Cheese,2026-04-27,15.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000011,P000092,Seeded Wholemeal Rolls,2026-05-04,32.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000011,P000140,Apple and Oat Traybake,2026-05-04,25.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000011,P000116,Oat and Honey Tin Loaf,2026-05-04,19.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000011,P000128,Multiseed Bagels,2026-05-04,18.0,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000011,P000104,Morning Breakfast Buns,2026-05-04,11.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000012,P000129,Runner Bean Piccalilli,2026-05-04,14.0,latest_3_week_moving_average,stable,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000012,P000117,Red Onion Marmalade,2026-05-04,10.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000012,P000141,Fermented Red Cabbage,2026-05-04,10.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000012,P000093,Strawberry and Rhubarb Jam,2026-05-04,8.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000012,P000105,Tomato and Chilli Relish,2026-04-27,8.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000013,P000130,Nettle and Spinach Soup Mix,2026-05-04,23.33,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000013,P000094,Wild Garlic Leaves,2026-05-04,17.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000013,P000106,Crown Prince Squash,2026-05-04,15.0,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000013,P000142,Fresh Horseradish Root,2026-04-27,14.67,latest_3_week_moving_average,down,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.
+PR000013,P000118,New Season Broad Beans,2026-04-27,11.67,latest_3_week_moving_average,up,Descriptive proof-of-concept forecast from synthetic seed data; not a production demand forecasting model.

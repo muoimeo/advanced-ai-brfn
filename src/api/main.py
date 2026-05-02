@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 from uuid import uuid4
 
-from fastapi import FastAPI, File, HTTPException, UploadFile, status
+from fastapi import FastAPI, File, HTTPException, Query, UploadFile, status
 
 from src.config import LOGS_DIR
 from src.inference.predictor import get_metadata, get_model, predict_image_bytes
@@ -14,7 +14,11 @@ from src.inference.schemas import (
     HealthResponse,
     ModelInfoResponse,
     PredictionResponse,
+    ReorderResponse,
 )
+from src.recommender.data_loader import Task1DataError
+from src.recommender.pipeline import get_reorder_recommendations
+from src.recommender.quick_reorder import METHOD_FREQUENCY_RECENCY, SUPPORTED_METHODS
 
 
 ALLOWED_IMAGE_CONTENT_TYPES = {"image/jpeg", "image/png"}
@@ -114,3 +118,30 @@ def feedback(request: FeedbackRequest) -> FeedbackResponse:
     _append_jsonl("feedback.jsonl", record)
 
     return FeedbackResponse(status="logged")
+
+
+@app.get("/recommend/reorder", response_model=ReorderResponse)
+def recommend_reorder(
+    customer_id: str,
+    top_k: int = Query(3, ge=1, le=20),
+    method: str = METHOD_FREQUENCY_RECENCY,
+) -> ReorderResponse:
+    if method not in SUPPORTED_METHODS:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unsupported recommender method: {method}",
+        )
+
+    try:
+        response = get_reorder_recommendations(
+            customer_id=customer_id,
+            top_k=top_k,
+            method=method,
+        )
+    except Task1DataError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(exc),
+        ) from exc
+
+    return ReorderResponse(**response)

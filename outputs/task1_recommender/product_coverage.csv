@@ -1,0 +1,4 @@
+method,unique_recommended_products,total_products,product_coverage
+global_popularity,3,60,0.05
+user_frequency,56,60,0.9333333333333333
+frequency_recency,56,60,0.9333333333333333

@@ -183,6 +183,58 @@ Example response:
 }
 ```
 
+### GET /recommend/reorder
+
+Returns Task 1 quick-reorder recommendations for a DESD customer ID.
+
+Example request:
+
+```text
+GET /recommend/reorder?customer_id=C000003&top_k=3
+```
+
+Optional query parameter:
+
+```text
+method=global_popularity|user_frequency|frequency_recency
+```
+
+Example response:
+
+```json
+{
+  "customer_id": "C000003",
+  "recommendation_date": "2026-05-02",
+  "method": "frequency_recency",
+  "top_k": 3,
+  "recommendations": [
+    {
+      "customer_id": "C000003",
+      "customer_type": "young_professional",
+      "method": "frequency_recency",
+      "rank": 1,
+      "product_id": "P000113",
+      "product_name": "Autumn Raspberries",
+      "producer_id": "PR000008",
+      "score": 0.801946,
+      "reason_codes": [
+        "frequently_ordered_by_customer",
+        "ordered_recently"
+      ],
+      "reason_text": "Recommended because it is ordered repeatedly by this customer, ordered recently by this customer."
+    }
+  ],
+  "limitations": [
+    "recommendations_based_on_synthetic_seed_data",
+    "not_production_customer_behaviour"
+  ]
+}
+```
+
+This endpoint is powered by fake/synthetic DESD seed data. It is suitable for
+demo integration and proof-of-concept evaluation, not production customer
+behaviour claims.
+
 ## DESD Integration Pattern
 
 DESD should:
@@ -192,6 +244,7 @@ DESD should:
 3. display prediction, confidence, grade, action, reason codes, and manual-review flag;
 4. store the returned `prediction_id` with the DESD record;
 5. call `POST /feedback` if a human overrides the prediction.
+6. call `GET /recommend/reorder` to display quick-reorder suggestions for customers.
 
 The model must be presented as decision support, not autonomous quality
 approval.
