@@ -107,10 +107,27 @@ class ReorderRecommendationResponse(BaseModel):
     reason_text: str | None = None
 
 
+class DiscoveryRecommendationResponse(BaseModel):
+    customer_id: str
+    customer_type: str | None = None
+    method: str
+    rank: int
+    product_id: str
+    product_name: str
+    producer_id: str
+    score: float
+    score_components: dict[str, float] = Field(default_factory=dict)
+    based_on_product_ids: list[str] = Field(default_factory=list)
+    reason_codes: list[str] = Field(default_factory=list)
+    reason_text: str | None = None
+
+
 class ReorderResponse(BaseModel):
     customer_id: str
     recommendation_date: str
     method: str
     top_k: int
     recommendations: list[ReorderRecommendationResponse] = Field(default_factory=list)
+    quick_reorder: list[ReorderRecommendationResponse] | None = None
+    you_may_also_like: list[DiscoveryRecommendationResponse] | None = None
     limitations: list[str] = Field(default_factory=list)

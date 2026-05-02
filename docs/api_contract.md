@@ -199,6 +199,12 @@ Optional query parameter:
 method=global_popularity|user_frequency|frequency_recency
 ```
 
+Set `include_discovery=true` to include the optional "You may also like" branch:
+
+```text
+GET /recommend/reorder?customer_id=C000003&top_k=3&include_discovery=true
+```
+
 Example response:
 
 ```json
@@ -227,6 +233,36 @@ Example response:
   "limitations": [
     "recommendations_based_on_synthetic_seed_data",
     "not_production_customer_behaviour"
+  ]
+}
+```
+
+Hybrid response includes:
+
+```json
+{
+  "recommendations": [],
+  "quick_reorder": [],
+  "you_may_also_like": [
+    {
+      "rank": 1,
+      "product_id": "P000096",
+      "product_name": "New Season Potatoes",
+      "producer_id": "PR000003",
+      "score": 0.973333,
+      "score_components": {
+        "cooccurrence": 0.82,
+        "seasonality": 0.08,
+        "segment_popularity": 0.073333,
+        "diversity_adjustment": 0.0
+      },
+      "based_on_product_ids": ["P000106", "P000119", "P000097"],
+      "reason_codes": [
+        "commonly_bought_together",
+        "similar_basket_pattern",
+        "new_to_customer"
+      ]
+    }
   ]
 }
 ```

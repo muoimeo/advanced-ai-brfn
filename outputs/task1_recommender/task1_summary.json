@@ -57,5 +57,50 @@
       "evaluated_customers": 60,
       "notes": "Synthetic DESD seed data; proof-of-concept metrics only."
     }
+  },
+  "discovery_selected_method": "co_occurrence_discovery",
+  "discovery_method_metrics": {
+    "co_occurrence_discovery": {
+      "discovery_precision_at_3": 0.13888888888888884,
+      "discovery_recall_at_3": 0.11714285714285716,
+      "discovery_hit_rate_at_3": 0.38333333333333336,
+      "eligible_customer_count": 60,
+      "novelty_rate": 1.0,
+      "product_coverage": 0.43333333333333335,
+      "producer_diversity": 0.8333333333333334,
+      "unique_recommended_producers": 10,
+      "total_producers": 12,
+      "largest_producer_recommendation_share": 0.29444444444444445,
+      "fallback_count": 0,
+      "notes": "Target is future unseen products in synthetic DESD seed data."
+    },
+    "segment_popularity_discovery": {
+      "discovery_precision_at_3": 0.1222222222222222,
+      "discovery_recall_at_3": 0.08558982683982683,
+      "discovery_hit_rate_at_3": 0.3333333333333333,
+      "eligible_customer_count": 60,
+      "novelty_rate": 1.0,
+      "product_coverage": 0.48333333333333334,
+      "producer_diversity": 0.9166666666666666,
+      "unique_recommended_producers": 11,
+      "total_producers": 12,
+      "largest_producer_recommendation_share": 0.2388888888888889,
+      "fallback_count": 60,
+      "notes": "Target is future unseen products in synthetic DESD seed data."
+    },
+    "global_popularity_discovery": {
+      "discovery_precision_at_3": 0.10555555555555554,
+      "discovery_recall_at_3": 0.08808261183261185,
+      "discovery_hit_rate_at_3": 0.3,
+      "eligible_customer_count": 60,
+      "novelty_rate": 1.0,
+      "product_coverage": 0.18333333333333332,
+      "producer_diversity": 0.6666666666666666,
+      "unique_recommended_producers": 8,
+      "total_producers": 12,
+      "largest_producer_recommendation_share": 0.3055555555555556,
+      "fallback_count": 60,
+      "notes": "Target is future unseen products in synthetic DESD seed data."
+    }
   }
 }

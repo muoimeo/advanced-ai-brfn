@@ -22,5 +22,8 @@ Key limitations:
 - Producer fairness is measured through coverage and recommendation share, but no automatic fairness re-ranking is applied in v1.
 - Cold-start customers fall back to global popularity, which can over-promote already popular products.
 - Producer demand trends and next-week forecast outputs are descriptive aggregates, not a production forecasting model.
+- The "You may also like" branch is a discovery enhancement, not the core quick-reorder requirement.
+- Discovery is evaluated against future unseen synthetic purchases, not real customer discovery behaviour.
+- Producer diversity is applied as a re-ranking preference, not a hard guarantee, to avoid severely reducing recommendation relevance.
 
 The value of this implementation is the data contract, reusable recommender pipeline, temporal evaluation method, reason codes, and API interface that can later consume real DESD order history.

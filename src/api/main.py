@@ -7,7 +7,6 @@ from uuid import uuid4
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile, status
 
 from src.config import LOGS_DIR
-from src.inference.predictor import get_metadata, get_model, predict_image_bytes
 from src.inference.schemas import (
     FeedbackRequest,
     FeedbackResponse,
@@ -19,6 +18,24 @@ from src.inference.schemas import (
 from src.recommender.data_loader import Task1DataError
 from src.recommender.pipeline import get_reorder_recommendations
 from src.recommender.quick_reorder import METHOD_FREQUENCY_RECENCY, SUPPORTED_METHODS
+
+try:
+    from src.inference.predictor import get_metadata, get_model, predict_image_bytes
+except Exception as predictor_import_error:
+    _PREDICTOR_IMPORT_ERROR = predictor_import_error
+
+    def get_model():
+        raise RuntimeError("Computer-vision predictor is unavailable.") from _PREDICTOR_IMPORT_ERROR
+
+    def predict_image_bytes(image_bytes: bytes) -> dict:
+        raise RuntimeError("Computer-vision predictor is unavailable.") from _PREDICTOR_IMPORT_ERROR
+
+    def get_metadata() -> dict:
+        return {
+            "model_name": None,
+            "predictor_available": False,
+            "error": str(_PREDICTOR_IMPORT_ERROR),
+        }
 
 
 ALLOWED_IMAGE_CONTENT_TYPES = {"image/jpeg", "image/png"}
@@ -120,11 +137,16 @@ def feedback(request: FeedbackRequest) -> FeedbackResponse:
     return FeedbackResponse(status="logged")
 
 
-@app.get("/recommend/reorder", response_model=ReorderResponse)
+@app.get(
+    "/recommend/reorder",
+    response_model=ReorderResponse,
+    response_model_exclude_none=True,
+)
 def recommend_reorder(
     customer_id: str,
     top_k: int = Query(3, ge=1, le=20),
     method: str = METHOD_FREQUENCY_RECENCY,
+    include_discovery: bool = False,
 ) -> ReorderResponse:
     if method not in SUPPORTED_METHODS:
         raise HTTPException(
@@ -137,6 +159,7 @@ def recommend_reorder(
             customer_id=customer_id,
             top_k=top_k,
             method=method,
+            include_discovery=include_discovery,
         )
     except Task1DataError as exc:
         raise HTTPException(

@@ -1,0 +1,4 @@
+method,discovery_precision_at_3,discovery_recall_at_3,discovery_hit_rate_at_3,eligible_customer_count,novelty_rate,product_coverage,producer_diversity,unique_recommended_producers,total_producers,largest_producer_recommendation_share,fallback_count,notes
+co_occurrence_discovery,0.13888888888888884,0.11714285714285716,0.38333333333333336,60,1.0,0.43333333333333335,0.8333333333333334,10,12,0.29444444444444445,0,Target is future unseen products in synthetic DESD seed data.
+segment_popularity_discovery,0.1222222222222222,0.08558982683982683,0.3333333333333333,60,1.0,0.48333333333333334,0.9166666666666666,11,12,0.2388888888888889,60,Target is future unseen products in synthetic DESD seed data.
+global_popularity_discovery,0.10555555555555554,0.08808261183261185,0.3,60,1.0,0.18333333333333332,0.6666666666666666,8,12,0.3055555555555556,60,Target is future unseen products in synthetic DESD seed data.

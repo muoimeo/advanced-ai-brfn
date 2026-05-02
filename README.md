@@ -131,6 +131,16 @@ It answers:
 For this customer, which products should DESD suggest for fast reordering?
 ```
 
+Task 1 now exposes two separate recommendation sections when discovery is requested:
+
+```text
+quick_reorder:
+  frequency + recency recommendations for products the customer is likely to reorder
+
+you_may_also_like:
+  market-basket co-occurrence recommendations for new products the customer may like
+```
+
 Task 1 consumes normalized CSVs exported from DESD:
 
 ```text
@@ -158,6 +168,9 @@ Implemented methods:
 global_popularity
 user_frequency
 frequency_recency
+co_occurrence_discovery
+segment_popularity_discovery
+global_popularity_discovery
 ```
 
 The selected default method is `frequency_recency`, which combines customer frequency, recency, customer-type affinity, and seasonality. Each recommendation includes reason codes such as:
@@ -202,6 +215,12 @@ Task 1 API example:
 
 ```bash
 curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3"
+```
+
+Hybrid quick reorder + discovery example:
+
+```bash
+curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3&include_discovery=true"
 ```
 
 DESD should display the returned product name, producer, score, reason codes, and limitation note. DESD should not calculate these recommendations itself.

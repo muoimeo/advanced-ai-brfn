@@ -11,11 +11,17 @@ from src.recommender.data_loader import (
     load_task1_dataset,
 )
 from src.recommender.evaluation import (
+    evaluate_discovery_recommenders,
     evaluate_recommenders,
     export_task1_outputs,
     producer_next_week_forecast,
     producer_demand_trends,
     temporal_split,
+)
+from src.recommender.discovery import (
+    build_baskets,
+    build_pairwise_cooccurrence,
+    discovery_recommendations,
 )
 from src.recommender.quick_reorder import (
     METHOD_FREQUENCY_RECENCY,
@@ -202,6 +208,73 @@ def test_evaluation_metrics_and_fairness_outputs_are_valid(task1_data_dir):
     assert share.groupby("method")["recommendation_share"].sum().round(6).between(0.999999, 1.000001).all()
 
 
+def test_basket_creation_and_pairwise_cooccurrence(task1_data_dir):
+    dataset = load_task1_dataset(task1_data_dir)
+    order_lines = build_order_lines(dataset)
+
+    baskets = build_baskets(order_lines)
+    cooccurrence = build_pairwise_cooccurrence(order_lines)
+
+    assert baskets["O000001"] == {"P000001", "P000002"}
+    assert cooccurrence["P000001"]["P000002"] == 1
+    assert cooccurrence["P000002"]["P000001"] == 1
+
+
+def test_discovery_excludes_purchased_products_when_possible():
+    products = pd.DataFrame(
+        [
+            {"product_id": "P1", "product_name": "Bread", "category": "bakery", "producer_id": "PR1", "seasonal_start_month": 1, "seasonal_end_month": 12},
+            {"product_id": "P2", "product_name": "Jam", "category": "preserves", "producer_id": "PR2", "seasonal_start_month": 1, "seasonal_end_month": 12},
+            {"product_id": "P3", "product_name": "Cream", "category": "dairy", "producer_id": "PR3", "seasonal_start_month": 1, "seasonal_end_month": 12},
+        ]
+    )
+    order_lines = pd.DataFrame(
+        [
+            {"order_id": "O1", "customer_id": "C1", "customer_type": "family", "product_id": "P1", "quantity": 1, "order_date": pd.Timestamp("2026-01-01"), "category": "bakery"},
+            {"order_id": "O2", "customer_id": "C2", "customer_type": "family", "product_id": "P1", "quantity": 1, "order_date": pd.Timestamp("2026-01-02"), "category": "bakery"},
+            {"order_id": "O2", "customer_id": "C2", "customer_type": "family", "product_id": "P2", "quantity": 1, "order_date": pd.Timestamp("2026-01-02"), "category": "preserves"},
+            {"order_id": "O3", "customer_id": "C3", "customer_type": "family", "product_id": "P1", "quantity": 1, "order_date": pd.Timestamp("2026-01-03"), "category": "bakery"},
+            {"order_id": "O3", "customer_id": "C3", "customer_type": "family", "product_id": "P3", "quantity": 1, "order_date": pd.Timestamp("2026-01-03"), "category": "dairy"},
+        ]
+    )
+
+    recs = discovery_recommendations("C1", order_lines, products, top_k=2)
+
+    assert {item.product_id for item in recs} == {"P2", "P3"}
+    assert all("new_to_customer" in item.reason_codes for item in recs)
+    assert all(item.score_components for item in recs)
+    assert all(item.based_on_product_ids for item in recs)
+
+
+def test_discovery_fallback_can_include_purchased_products_when_needed(task1_data_dir):
+    dataset = load_task1_dataset(task1_data_dir)
+    order_lines = build_order_lines(dataset)
+
+    recs = discovery_recommendations("C000001", order_lines, dataset.products, top_k=3)
+
+    assert len(recs) == 3
+    assert any("insufficient_new_discovery_candidates" in item.reason_codes for item in recs)
+    assert all(item.reason_codes for item in recs)
+
+
+def test_discovery_metrics_are_valid(task1_data_dir):
+    dataset = load_task1_dataset(task1_data_dir)
+    evaluated = evaluate_discovery_recommenders(dataset, top_k=3)
+    metrics = evaluated["discovery_metrics"]
+
+    for column in [
+        "discovery_precision_at_3",
+        "discovery_recall_at_3",
+        "discovery_hit_rate_at_3",
+        "novelty_rate",
+        "product_coverage",
+        "producer_diversity",
+        "largest_producer_recommendation_share",
+    ]:
+        assert metrics[column].between(0, 1).all()
+    assert "eligible_customer_count" in metrics.columns
+
+
 def test_producer_demand_trends_contains_required_fields(task1_data_dir):
     dataset = load_task1_dataset(task1_data_dir)
     trends = producer_demand_trends(dataset)
@@ -247,6 +320,10 @@ def test_export_task1_outputs_writes_report_ready_files(task1_data_dir, tmp_path
         "producer_diversity.csv",
         "product_coverage.csv",
         "recommendation_share_by_producer.csv",
+        "discovery_metrics.csv",
+        "discovery_examples.csv",
+        "discovery_share_by_producer.csv",
+        "discovery_product_coverage.csv",
         "producer_demand_trends.csv",
         "producer_next_week_forecast.csv",
         "task1_summary.json",

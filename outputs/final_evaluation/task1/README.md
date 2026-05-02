@@ -16,6 +16,10 @@ product_coverage.csv
 recommendation_share_by_producer.csv
 producer_demand_trends.csv
 producer_next_week_forecast.csv
+discovery_metrics.csv
+discovery_examples.csv
+discovery_share_by_producer.csv
+discovery_product_coverage.csv
 task1_summary.json
 ```
 

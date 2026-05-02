@@ -6,6 +6,10 @@ import pandas as pd
 
 from src.config import TASK1_DATA_DIR, TASK1_OUTPUT_DIR
 from src.recommender.data_loader import build_order_lines, load_task1_dataset
+from src.recommender.discovery import (
+    METHOD_COOCCURRENCE_DISCOVERY,
+    discovery_recommendations,
+)
 from src.recommender.evaluation import export_task1_outputs
 from src.recommender.quick_reorder import METHOD_FREQUENCY_RECENCY, recommend
 
@@ -20,6 +24,7 @@ def get_reorder_recommendations(
     customer_id: str,
     top_k: int = 3,
     method: str = METHOD_FREQUENCY_RECENCY,
+    include_discovery: bool = False,
     data_dir: Path = TASK1_DATA_DIR,
 ) -> dict:
     dataset = load_task1_dataset(data_dir)
@@ -43,14 +48,32 @@ def get_reorder_recommendations(
         for item in recommendations:
             if item.customer_type is None:
                 item.customer_type = customer_type
-    return {
+    quick_reorder = [item.to_api_dict() for item in recommendations]
+    response = {
         "customer_id": customer_id,
         "recommendation_date": recommendation_date.date().isoformat(),
-        "method": method,
+        "method": "hybrid_reorder_discovery" if include_discovery else method,
         "top_k": top_k,
-        "recommendations": [item.to_api_dict() for item in recommendations],
+        "recommendations": quick_reorder,
         "limitations": TASK1_LIMITATIONS,
     }
+    if include_discovery:
+        discovery = discovery_recommendations(
+            customer_id=customer_id,
+            order_lines=order_lines,
+            products=dataset.products,
+            top_k=top_k,
+            recommendation_date=recommendation_date,
+            method=METHOD_COOCCURRENCE_DISCOVERY,
+        )
+        if not customer_rows.empty:
+            customer_type = str(customer_rows.iloc[0]["customer_type"])
+            for item in discovery:
+                if item.customer_type is None:
+                    item.customer_type = customer_type
+        response["quick_reorder"] = quick_reorder
+        response["you_may_also_like"] = [item.to_api_dict() for item in discovery]
+    return response
 
 
 def run_task1_evaluation(

@@ -24,8 +24,36 @@ outputs/task1_recommender/producer_diversity.csv
 outputs/task1_recommender/recommendation_share_by_producer.csv
 outputs/task1_recommender/producer_demand_trends.csv
 outputs/task1_recommender/producer_next_week_forecast.csv
+outputs/task1_recommender/discovery_metrics.csv
+outputs/task1_recommender/discovery_examples.csv
+outputs/task1_recommender/discovery_share_by_producer.csv
+outputs/task1_recommender/discovery_product_coverage.csv
 outputs/task1_recommender/task1_summary.json
 ```
+
+Example demo evidence:
+
+```text
+docs/task1_demo_customer_C000003.md
+```
+
+Quick reorder and discovery should be reported as separate tasks:
+
+```text
+quick_reorder:
+  core case-study requirement; predicts likely repeat purchases
+
+you_may_also_like:
+  optional UX enhancement; suggests new products from market-basket co-occurrence
+```
+
+Discovery evaluation target:
+
+```text
+future unseen products = products purchased in the test period that were not purchased by the same customer in the train period
+```
+
+Do not merge quick reorder and discovery into a single list in the report. The separation makes the business purpose, metrics, and limitations clearer.
 
 Transparency:
 

@@ -1,0 +1,4 @@
+method,unique_recommended_products,total_products,product_coverage
+co_occurrence_discovery,26,60,0.43333333333333335
+segment_popularity_discovery,29,60,0.48333333333333334
+global_popularity_discovery,11,60,0.18333333333333332

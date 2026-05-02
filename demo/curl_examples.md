@@ -352,6 +352,13 @@ curl.exe -s "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3
   | python -m json.tool
 ```
 
+Hybrid quick reorder + "You may also like" discovery:
+
+```powershell
+curl.exe -s "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3&include_discovery=true" `
+  | python -m json.tool
+```
+
 Optional method comparison:
 
 ```powershell
@@ -389,6 +396,29 @@ Expected response fields:
   "limitations": [
     "recommendations_based_on_synthetic_seed_data",
     "not_production_customer_behaviour"
+  ]
+}
+```
+
+When `include_discovery=true`, the response also contains:
+
+```json
+{
+  "quick_reorder": [],
+  "you_may_also_like": [
+    {
+      "product_id": "P000096",
+      "product_name": "New Season Potatoes",
+      "producer_id": "PR000003",
+      "score_components": {
+        "cooccurrence": 0.82,
+        "seasonality": 0.08,
+        "segment_popularity": 0.073333,
+        "diversity_adjustment": 0.0
+      },
+      "based_on_product_ids": ["P000106", "P000119", "P000097"],
+      "reason_codes": ["commonly_bought_together", "new_to_customer"]
+    }
   ]
 }
 ```

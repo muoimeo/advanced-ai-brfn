@@ -6,6 +6,13 @@ from pathlib import Path
 import pandas as pd
 
 from src.recommender.data_loader import build_order_lines, dataset_summary
+from src.recommender.discovery import (
+    DISCOVERY_METHODS,
+    METHOD_COOCCURRENCE_DISCOVERY,
+    METHOD_GLOBAL_POPULARITY_DISCOVERY,
+    METHOD_SEGMENT_POPULARITY_DISCOVERY,
+    discovery_recommendations,
+)
 from src.recommender.quick_reorder import (
     METHOD_FREQUENCY_RECENCY,
     METHOD_GLOBAL_POPULARITY,
@@ -19,6 +26,12 @@ DEFAULT_METHODS = [
     METHOD_GLOBAL_POPULARITY,
     METHOD_USER_FREQUENCY,
     METHOD_FREQUENCY_RECENCY,
+]
+
+DEFAULT_DISCOVERY_METHODS = [
+    METHOD_COOCCURRENCE_DISCOVERY,
+    METHOD_SEGMENT_POPULARITY_DISCOVERY,
+    METHOD_GLOBAL_POPULARITY_DISCOVERY,
 ]
 
 
@@ -171,6 +184,131 @@ def evaluate_recommenders(
     }
 
 
+def evaluate_discovery_recommenders(
+    dataset: RecommenderDataset,
+    top_k: int = 3,
+    methods: list[str] | None = None,
+) -> dict[str, pd.DataFrame]:
+    methods = methods or DEFAULT_DISCOVERY_METHODS
+    unsupported = set(methods) - DISCOVERY_METHODS
+    if unsupported:
+        raise ValueError(f"Unsupported discovery methods: {sorted(unsupported)}")
+
+    order_lines = build_order_lines(dataset)
+    train, test = temporal_split(order_lines)
+    recommendation_date = order_lines["order_date"].max() + pd.Timedelta(days=1)
+    train_products_by_customer = _test_products_by_customer(train)
+    test_products_by_customer = _test_products_by_customer(test)
+    total_products = dataset.products["product_id"].nunique()
+    total_producers = dataset.producers["producer_id"].nunique()
+
+    metrics_rows = []
+    examples = []
+    share_rows = []
+
+    for method in methods:
+        method_recommendations = []
+        precision_values = []
+        recall_values = []
+        hit_values = []
+        novelty_values = []
+        fallback_count = 0
+        eligible_customer_count = 0
+
+        for customer_id, test_products in test_products_by_customer.items():
+            train_products = train_products_by_customer.get(customer_id, set())
+            future_unseen_products = test_products - train_products
+            if not future_unseen_products:
+                continue
+            eligible_customer_count += 1
+
+            recommendations = discovery_recommendations(
+                customer_id=customer_id,
+                order_lines=train,
+                products=dataset.products,
+                top_k=top_k,
+                recommendation_date=recommendation_date,
+                method=method,
+            )
+            if any(
+                "cold_start_discovery_fallback" in item.reason_codes
+                or "insufficient_new_discovery_candidates" in item.reason_codes
+                for item in recommendations
+            ):
+                fallback_count += 1
+
+            predicted_products = {item.product_id for item in recommendations}
+            hits = len(predicted_products & future_unseen_products)
+            precision_values.append(hits / top_k if top_k else 0.0)
+            recall_values.append(
+                hits / len(future_unseen_products)
+                if future_unseen_products
+                else 0.0
+            )
+            hit_values.append(1.0 if hits > 0 else 0.0)
+            novelty_values.append(
+                len(predicted_products - train_products) / len(predicted_products)
+                if predicted_products
+                else 0.0
+            )
+            method_recommendations.extend(recommendations)
+
+        frame = _recommendations_to_frame(method_recommendations)
+        if not frame.empty:
+            examples.append(frame)
+            producer_counts = frame.groupby("producer_id").size().reset_index(name="recommendation_count")
+            total_recs = float(producer_counts["recommendation_count"].sum())
+            producer_counts["recommendation_share"] = (
+                producer_counts["recommendation_count"] / total_recs if total_recs else 0.0
+            )
+            producer_counts.insert(0, "method", method)
+            share_rows.append(producer_counts)
+            unique_products = frame["product_id"].nunique()
+            unique_producers = frame["producer_id"].nunique()
+            largest_share = float(producer_counts["recommendation_share"].max())
+        else:
+            unique_products = 0
+            unique_producers = 0
+            largest_share = 0.0
+
+        metrics_rows.append(
+            {
+                "method": method,
+                "discovery_precision_at_3": sum(precision_values) / len(precision_values) if precision_values else 0.0,
+                "discovery_recall_at_3": sum(recall_values) / len(recall_values) if recall_values else 0.0,
+                "discovery_hit_rate_at_3": sum(hit_values) / len(hit_values) if hit_values else 0.0,
+                "eligible_customer_count": eligible_customer_count,
+                "novelty_rate": sum(novelty_values) / len(novelty_values) if novelty_values else 0.0,
+                "product_coverage": unique_products / total_products if total_products else 0.0,
+                "producer_diversity": unique_producers / total_producers if total_producers else 0.0,
+                "unique_recommended_producers": unique_producers,
+                "total_producers": total_producers,
+                "largest_producer_recommendation_share": largest_share,
+                "fallback_count": fallback_count,
+                "notes": "Target is future unseen products in synthetic DESD seed data.",
+            }
+        )
+
+    metrics_df = pd.DataFrame(metrics_rows)
+    examples_df = pd.concat(examples, ignore_index=True) if examples else pd.DataFrame()
+    producer_share_df = pd.concat(share_rows, ignore_index=True) if share_rows else pd.DataFrame()
+    product_coverage_df = metrics_df[["method", "product_coverage"]].copy()
+    product_coverage_df["unique_recommended_products"] = (
+        product_coverage_df["product_coverage"] * total_products
+    ).round().astype(int)
+    product_coverage_df["total_products"] = int(total_products)
+    product_coverage_df = product_coverage_df[
+        ["method", "unique_recommended_products", "total_products", "product_coverage"]
+    ]
+
+    return {
+        "discovery_metrics": metrics_df,
+        "discovery_examples": examples_df,
+        "discovery_share_by_producer": producer_share_df,
+        "discovery_product_coverage": product_coverage_df,
+    }
+
+
 def producer_demand_trends(dataset: RecommenderDataset) -> pd.DataFrame:
     order_lines = build_order_lines(dataset)
     if order_lines.empty:
@@ -248,6 +386,7 @@ def export_task1_outputs(
 ) -> dict[str, str]:
     output_dir.mkdir(parents=True, exist_ok=True)
     evaluated = evaluate_recommenders(dataset, top_k=top_k)
+    discovery_evaluated = evaluate_discovery_recommenders(dataset, top_k=top_k)
     written = {}
 
     file_map = {
@@ -261,6 +400,17 @@ def export_task1_outputs(
         path = output_dir / filename
         dataframe = evaluated[key]
         dataframe.to_csv(path, index=False)
+        written[filename] = str(path)
+
+    discovery_file_map = {
+        "discovery_metrics": "discovery_metrics.csv",
+        "discovery_examples": "discovery_examples.csv",
+        "discovery_share_by_producer": "discovery_share_by_producer.csv",
+        "discovery_product_coverage": "discovery_product_coverage.csv",
+    }
+    for key, filename in discovery_file_map.items():
+        path = output_dir / filename
+        discovery_evaluated[key].to_csv(path, index=False)
         written[filename] = str(path)
 
     trends = producer_demand_trends(dataset)
@@ -279,6 +429,11 @@ def export_task1_outputs(
         if not evaluated["metrics"].empty
         else {}
     )
+    discovery_method_metrics = (
+        discovery_evaluated["discovery_metrics"].set_index("method").to_dict(orient="index")
+        if not discovery_evaluated["discovery_metrics"].empty
+        else {}
+    )
     summary.update(
         {
             "selected_method": METHOD_FREQUENCY_RECENCY,
@@ -288,6 +443,8 @@ def export_task1_outputs(
             ),
             "top_k": top_k,
             "method_metrics": method_metrics,
+            "discovery_selected_method": METHOD_COOCCURRENCE_DISCOVERY,
+            "discovery_method_metrics": discovery_method_metrics,
         }
     )
     summary_path = output_dir / "task1_summary.json"
