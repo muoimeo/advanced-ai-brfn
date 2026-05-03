@@ -4,12 +4,12 @@ This repository contains the Advanced AI coursework project for the BRFN case st
 
 It covers two AI workstreams:
 
-- Task 1: transparent quick-reorder recommendations from DESD-style seed transaction CSVs.
-- Tasks 2-4: fruit/vegetable computer-vision classification, quality grading, XAI evidence, and deployment API.
+- Task 1: transparent quick-reorder and optional discovery recommendations from DESD-style seed transaction CSVs.
+- Tasks 2-4: fruit/vegetable computer-vision classification, quality grading, model interaction/refinement support, XAI evidence, and deployment API.
 
 The same FastAPI/Docker service exposes both workstreams. DESD should call this repository over HTTP; it should not import AI code or model files.
 
-The project uses the Kaggle dataset:
+Tasks 2-4 use the Kaggle dataset:
 
 ```text
 muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten
@@ -25,7 +25,7 @@ The project must not claim the model learned supervised Grade A/B/C labels.
 
 ## Current Status
 
-Task 1 quick reorder is implemented as a proof-of-concept recommender using fake/synthetic DESD seed export data in `data/task1/desd_seed_export/`. It compares global popularity, user-frequency, and frequency+recency methods, then exports report-ready evaluation files to `outputs/task1_recommender/`.
+Task 1 is implemented as a proof-of-concept recommender using fake/synthetic DESD seed export data in `data/task1/desd_seed_export/`. It compares global popularity, user-frequency, frequency+recency, co-occurrence discovery, segment-popularity discovery, and global-popularity discovery methods, then exports report-ready evaluation files to `outputs/task1_recommender/`.
 
 The final selected deployment candidate is:
 
@@ -62,6 +62,33 @@ POST /feedback
 GET  /health
 GET  /model-info
 ```
+
+## Repository Map For Assessment
+
+Use this map to distinguish the two assessed workstreams:
+
+```text
+Task 1 intelligent ordering / recommendations:
+  data/task1/desd_seed_export/
+  src/recommender/
+  notebooks/task1_quick_reorder/11_quick_reorder_task1.ipynb
+  outputs/task1_recommender/
+  docs/task1_*.md
+
+Tasks 2-4 computer vision / XAI / deployment:
+  src/inference/
+  src/quality/
+  src/api/
+  src/train/
+  notebooks/01_eda.ipynb to 10_quality_rule_validation.ipynb
+  notebooks/custom_image_test.ipynb
+  outputs/final_evaluation/
+  outputs/quality_rule_eval/
+  outputs/xai_examples/
+  docs/xai_quality_decision_notes.md
+```
+
+The existing root-level CV notebooks are kept in place to avoid breaking paths close to submission. The split is documented through `notebooks/README_TASK1.md` and `notebooks/README_TASK234.md`.
 
 ## Local Workflow
 
@@ -131,7 +158,7 @@ It answers:
 For this customer, which products should DESD suggest for fast reordering?
 ```
 
-Task 1 now exposes two separate recommendation sections when discovery is requested:
+Task 1 exposes two separate recommendation sections when discovery is requested:
 
 ```text
 quick_reorder:
@@ -162,15 +189,18 @@ order lines: 1,794
 date range: 2026-01-10 to 2026-05-01
 ```
 
-Implemented methods:
+Implemented methods and business purpose:
 
 ```text
-global_popularity
-user_frequency
-frequency_recency
-co_occurrence_discovery
-segment_popularity_discovery
-global_popularity_discovery
+quick reorder:
+  global_popularity
+  user_frequency
+  frequency_recency
+
+you may also like / discovery:
+  co_occurrence_discovery
+  segment_popularity_discovery
+  global_popularity_discovery
 ```
 
 The selected default method is `frequency_recency`, which combines customer frequency, recency, customer-type affinity, and seasonality. Each recommendation includes reason codes such as:
@@ -183,6 +213,19 @@ seasonally_available
 cold_start_fallback
 globally_popular_product
 ```
+
+The optional `you_may_also_like` branch uses pairwise market-basket co-occurrence and recommends new products where possible. It is evaluated against future unseen products and returns transparent fields such as `based_on_product_ids`, `score_components`, and discovery-specific reason codes.
+
+Fairness and producer-bias controls are included because a recommender can over-promote already popular producers. The Task 1 evidence exports include product coverage, producer diversity, recommendation share by producer, largest producer recommendation share, and diversity-aware discovery re-ranking.
+
+Producer-facing planning evidence is also exported:
+
+```text
+producer_demand_trends.csv
+producer_next_week_forecast.csv
+```
+
+These files are descriptive proof-of-concept demand trend outputs from synthetic order history. They are not claimed as a production forecasting model.
 
 Run the Task 1 pipeline:
 
@@ -204,6 +247,10 @@ outputs/task1_recommender/recommendation_examples.csv
 outputs/task1_recommender/product_coverage.csv
 outputs/task1_recommender/producer_diversity.csv
 outputs/task1_recommender/recommendation_share_by_producer.csv
+outputs/task1_recommender/discovery_metrics.csv
+outputs/task1_recommender/discovery_examples.csv
+outputs/task1_recommender/discovery_share_by_producer.csv
+outputs/task1_recommender/discovery_product_coverage.csv
 outputs/task1_recommender/producer_demand_trends.csv
 outputs/task1_recommender/producer_next_week_forecast.csv
 outputs/task1_recommender/task1_summary.json
@@ -227,7 +274,7 @@ DESD should display the returned product name, producer, score, reason codes, an
 
 ## Tasks 2-4 Computer Vision
 
-Tasks 2-4 support produce quality inspection and explainable decision support.
+Tasks 2-4 support produce quality inspection, interaction logging, and explainable decision support.
 
 They answer:
 
@@ -235,12 +282,15 @@ They answer:
 What produce is shown in the image, is it healthy/rotten, and what quality action should DESD show?
 ```
 
-The CV pipeline uses the Kaggle healthy-vs-rotten fruit/vegetable dataset as a 28-class image classification task. The final model is EfficientNetB0 fine-tuned, selected using grouped-split metrics, model comparison, high-confidence error review, XAI audit, and deployment risk.
+Task 2 is the computer-vision classifier. The CV pipeline uses the Kaggle healthy-vs-rotten fruit/vegetable dataset as a 28-class image classification task. The final model is EfficientNetB0 fine-tuned, selected using grouped-split metrics, model comparison, high-confidence error review, XAI audit, and deployment risk.
 
 The external quality grading layer in `src/quality/` maps model evidence and image proxy features into:
 
 ```text
 Grade A / B / C / Review
+colour score
+size proxy score
+ripeness score
 recommended action
 inventory status
 discount suggestion
@@ -249,7 +299,24 @@ reason codes
 warnings
 ```
 
-Important limitation: the dataset has healthy/rotten labels, not supervised Grade A/B/C labels. The CNN must not be described as learning grade.
+This layer is the project response to the case-study quality requirements around colour, size, ripeness, and Grade A/B/C. Important limitation: the dataset has healthy/rotten labels, not supervised Grade A/B/C labels. The CNN must not be described as learning grade; Grade A/B/C is a transparent rule-based decision layer.
+
+Task 3 is supported through the API interaction and feedback loop. `POST /feedback` records producer/admin overrides, accepted AI recommendations, predicted grade, override grade, and the quality decision snapshot. This provides the interaction log needed for later model monitoring, audit, and future refinement. The demo does not automatically retrain models.
+
+Task 4 is supported through explainability and FAT evidence:
+
+```text
+Fairness:
+  acknowledge dataset, lighting, background, and producer-image-condition bias
+
+Accountability:
+  prediction_id, model version, feedback logs, and override records
+
+Trust:
+  Grad-CAM attention evidence, quality component scores, reason codes, warnings, and manual-review flags
+```
+
+Grad-CAM is used as report-facing attention evidence, not as segmentation and not as a grading feature.
 
 ## CV Experiment Scope
 
@@ -259,6 +326,8 @@ Preferred comparison set:
 2. MobileNetV2
 3. ResNet50
 4. EfficientNetB0
+
+Report evidence should include grouped-split metrics, confusion matrices, weak-class analysis, high-confidence errors, Grad-CAM examples, custom-image validation, quality-rule evaluation, Docker/API evidence, and FAT limitations.
 
 ## API Contract
 
@@ -290,10 +359,16 @@ Task 1:
   DESD sends customer_id to /recommend/reorder.
   AI returns ranked product suggestions with producer IDs, scores, reason codes, and limitations.
 
-Tasks 2-4:
+Task 2:
   DESD uploads produce image to /predict.
   AI returns class prediction, healthy/rotten status, quality decision, action, warnings, and manual-review flag.
+
+Task 3:
   DESD sends producer/admin overrides to /feedback.
+  AI service logs interaction data for monitoring, audit, and future refinement.
+
+Task 4:
+  DESD displays reason codes, quality component scores, warnings, and manual-review flags as transparent decision support.
 ```
 
 ## Run API Locally
@@ -367,3 +442,25 @@ python -m src.recommender.pipeline
 ```
 
 This writes the recommender evaluation pack to `outputs/task1_recommender/`.
+
+## Generative AI Usage
+
+Generative AI was used as an engineering support tool during the project. It assisted with:
+
+```text
+synthetic data assumptions and Task 1 data-contract planning
+code scaffolding for tests, API payloads, and documentation
+debugging notebook/API/Docker issues
+report structure and critical evaluation wording
+```
+
+GenAI outputs were not accepted blindly. Code and claims were checked against repository tests, notebook outputs, API responses, and the known dataset limitations. Synthetic data assumptions are labelled as fake/seed data and must not be presented as real BRFN customer behaviour.
+
+The report should include a short GenAI reflection covering:
+
+```text
+what tools were used
+where GenAI helped
+where human review corrected or constrained the output
+how hallucination and overclaiming risks were managed
+```
