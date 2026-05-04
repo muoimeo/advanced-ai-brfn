@@ -4,8 +4,8 @@ XAI and Quality Decision Notes
 Purpose
 -------
 
-This project uses XAI in two different ways, and the report/demo should keep
-them separate:
+This project uses XAI in two different ways, with a clear separation between
+model-audit evidence and runtime business explanation:
 
 - Grad-CAM is attention evidence for model audit and model-selection risk.
 - The quality grade/action is produced by the external rule-based layer in
@@ -29,15 +29,15 @@ Use Grad-CAM outputs from `notebooks/07_xai_gradcam.ipynb`,
 - why EfficientNetB0 fine-tuned is selected over ResNet50 fine-tuned despite
   ResNet50 having stronger macro F1.
 
-What Grad-CAM Must Not Claim
-----------------------------
+Grad-CAM Interpretation Boundary
+--------------------------------
 
-Do not claim that Grad-CAM proves defect localization or segmentation-quality
-rotten-area understanding. The dataset has image-level labels only, so there is
-no pixel-level ground truth for defect regions.
+The report does not claim that Grad-CAM proves defect localization or
+segmentation-quality rotten-area understanding. The dataset has image-level
+labels only, so there is no pixel-level ground truth for defect regions.
 
-Do not use Grad-CAM heatmaps as grading features in v1. They are report-facing
-attention references, not runtime quality measurements.
+Grad-CAM heatmaps are report-facing attention references, not runtime grading
+features or quality measurements.
 
 Quality Layer Evidence
 ----------------------

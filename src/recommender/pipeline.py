@@ -11,6 +11,7 @@ from src.recommender.discovery import (
     discovery_recommendations,
 )
 from src.recommender.evaluation import export_task1_outputs
+from src.recommender.fairness import export_producer_fair_reranking_outputs
 from src.recommender.quick_reorder import METHOD_FREQUENCY_RECENCY, recommend
 
 
@@ -82,7 +83,15 @@ def run_task1_evaluation(
     top_k: int = 3,
 ) -> dict[str, str]:
     dataset = load_task1_dataset(data_dir)
-    return export_task1_outputs(dataset, output_dir, top_k=top_k)
+    written = export_task1_outputs(dataset, output_dir, top_k=top_k)
+    written.update(
+        export_producer_fair_reranking_outputs(
+            data_dir=data_dir,
+            output_dir=output_dir,
+            top_k=top_k,
+        )
+    )
+    return written
 
 
 if __name__ == "__main__":

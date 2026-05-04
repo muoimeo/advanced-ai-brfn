@@ -28,11 +28,11 @@ macro-F1 challenger:
 - ResNet50 weighted F1: 0.9715
 - ResNet50 high-confidence errors: 19
 
-The report should explain this tradeoff: EfficientNetB0 is selected for
+The report explains this tradeoff: EfficientNetB0 is selected for
 deployment-risk posture and slightly stronger overall/weighted performance,
 while ResNet50 is stronger on macro F1 and weak rotten-class F1.
 
-The selected model should therefore be presented as a decision-support model,
+The selected model is therefore presented as a decision-support model,
 not an autonomous quality approval system.
 
 Known evidence caveat
@@ -55,13 +55,13 @@ External validation is now exported to:
 
 The current labeled custom-image subset is still small and banana-heavy. Extra
 household photos without manifest labels are useful qualitative domain-shift
-evidence, but they should not be counted as accuracy evidence until
+evidence, but they are not counted as accuracy evidence until
 `expected_class` is added to `docs/report_figures/custom_image_manifest.csv`.
 
 Demo narrative
 --------------
 
-Use the API to show:
+The API demo shows:
 
 - 28-class prediction
 - produce type and freshness status
@@ -82,8 +82,8 @@ Deployment safeguards
 ---------------------
 
 High-confidence errors are more dangerous than low-confidence uncertainty.
-The demo should explicitly show that the system flags low-confidence predictions
-and ambiguous predictions for manual review where appropriate.
+The demo explicitly shows that the system flags low-confidence predictions and
+ambiguous predictions for manual review where appropriate.
 
 Current inference safeguards:
 
@@ -100,7 +100,7 @@ The quality grade is produced by the external rule-based layer in
 produce/freshness evidence; the rule layer combines it with image proxy
 features and transparent thresholds.
 
-Privacy/data governance position: prediction logs should store metadata and
+Privacy/data governance position: prediction logs store metadata and
 model outputs, not unnecessary personal data or raw images.
 
 Monitoring accuracy over time

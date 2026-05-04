@@ -1,7 +1,7 @@
 Custom Image Collection Guide
 =============================
 
-Use this guide to strengthen external validation without overstating the result.
+This guide supports external validation without overstating the result.
 
 Location
 --------
@@ -43,9 +43,9 @@ Rules
 -----
 
 - Prefer real user-collected photos or clearly licensed external photos.
-- Do not use images copied from the training/test dataset.
-- Do not use AI-generated images as robustness evidence. If generated images
-  are ever used, label them as synthetic demo images only.
+- Images copied from the training/test dataset are excluded.
+- AI-generated images are separated from robustness evidence. If generated
+  images are ever used, they are labelled as synthetic demo images only.
 - Keep filenames stable and update `expected_class` in the manifest.
 - Capture one produce type per image.
 - Place the produce close to the camera so it occupies most of the frame.

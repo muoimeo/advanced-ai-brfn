@@ -27,6 +27,8 @@ The deployed system does not treat the classifier as a supervised Grade A/B/C mo
 
 Task 1 is implemented as a proof-of-concept recommender using fake/synthetic DESD seed export data in `data/task1/desd_seed_export/`. It compares global popularity, user-frequency, frequency+recency, co-occurrence discovery, segment-popularity discovery, and global-popularity discovery methods, then exports report-ready evaluation files to `outputs/task1_recommender/`.
 
+The research novelty layer is implemented as evaluation evidence rather than a new production model: cost-sensitive threshold optimisation, quality-score ablation, and producer-fair re-ranking analysis.
+
 The final selected deployment candidate is:
 
 ```text
@@ -156,7 +158,7 @@ Task 1 supports the DESD customer-facing quick reorder feature.
 It answers:
 
 ```text
-For this customer, which products should DESD suggest for fast reordering?
+For this customer, which products does the AI service suggest for fast reordering?
 ```
 
 Task 1 exposes two separate recommendation sections when discovery is requested:
@@ -255,6 +257,9 @@ outputs/task1_recommender/discovery_share_by_producer.csv
 outputs/task1_recommender/discovery_product_coverage.csv
 outputs/task1_recommender/producer_demand_trends.csv
 outputs/task1_recommender/producer_next_week_forecast.csv
+outputs/task1_recommender/producer_fair_reranking_alpha_study.csv
+outputs/task1_recommender/producer_fair_reranking_share_by_producer.csv
+outputs/task1_recommender/producer_fair_reranking_summary.json
 outputs/task1_recommender/task1_summary.json
 ```
 
@@ -281,7 +286,7 @@ Tasks 2-4 support produce quality inspection, interaction logging, and explainab
 They answer:
 
 ```text
-What produce is shown in the image, is it healthy/rotten, and what quality action should DESD show?
+What produce is shown in the image, is it healthy/rotten, and what quality action does the AI service return?
 ```
 
 Task 2 is the computer-vision classifier. The CV pipeline uses the Kaggle healthy-vs-rotten fruit/vegetable dataset as a 28-class image classification task. The final model is EfficientNetB0 fine-tuned, selected using grouped-split metrics, model comparison, high-confidence error review, XAI audit, and deployment risk.
@@ -330,6 +335,24 @@ Preferred comparison set:
 4. EfficientNetB0
 
 Report-ready evidence is maintained for grouped-split metrics, confusion matrices, weak-class analysis, high-confidence errors, Grad-CAM examples, custom-image validation, quality-rule evaluation, Docker/API evidence, and FAT limitations.
+
+Additional novelty evidence:
+
+```text
+cost-sensitive threshold optimisation:
+  outputs/final_evaluation/cost_sensitive_threshold_results.csv
+  outputs/final_evaluation/cost_sensitive_threshold_summary.json
+
+quality-score ablation:
+  outputs/final_evaluation/quality_score_ablation.csv
+  outputs/quality_rule_eval/quality_score_ablation.csv
+
+producer-fair re-ranking:
+  outputs/task1_recommender/producer_fair_reranking_alpha_study.csv
+  outputs/task1_recommender/producer_fair_reranking_summary.json
+```
+
+These are research/evaluation layers. They do not change the selected EfficientNetB0 model or live API defaults.
 
 ## API Contract
 
@@ -462,6 +485,14 @@ outputs/final_evaluation/feedback_accuracy_over_time.csv
 ```
 
 These files report a human-feedback accuracy proxy, not controlled test-set accuracy. They are useful for explaining how accepted recommendations and overrides would be monitored over time after deployment.
+
+For the three novelty evidence layers, run:
+
+```bash
+python -m src.evaluation.cost_sensitive_thresholds
+python -m src.quality.evaluation
+python -m src.recommender.pipeline
+```
 
 ## Generative AI Usage
 

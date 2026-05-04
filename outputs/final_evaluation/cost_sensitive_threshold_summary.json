@@ -1,0 +1,34 @@
+{
+  "experiment_slug": "efficientnetb0_aug_oversampled_finetuned_wsl",
+  "cost_model": {
+    "correct_auto_decision": 0,
+    "manual_review": 1,
+    "wrong_produce_same_condition": 2,
+    "healthy_predicted_rotten": 3,
+    "rotten_predicted_healthy": 10
+  },
+  "selected_operating_point": {
+    "confidence_review_threshold": 0.8,
+    "margin_review_threshold": 0.0,
+    "rotten_auto_block_threshold": 0.7,
+    "expected_operational_cost": 0.111734,
+    "total_operational_cost": 538,
+    "false_fresh_count": 21,
+    "false_rotten_count": 3,
+    "wrong_produce_count": 31,
+    "correct_auto_count": 4503,
+    "manual_review_count": 257,
+    "manual_review_rate": 0.053375,
+    "auto_decision_rate": 0.946625,
+    "evaluated_rows": 4815,
+    "note": "Cost-sensitive deployment proxy; not a retrained model.",
+    "selection_rule": "minimum expected cost; tie-break lower false-fresh count; tie-break lower manual-review rate"
+  },
+  "evaluated_settings": 210,
+  "input_predictions": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\final_evaluation\\all_cv_model_confidence_audit_predictions.csv",
+  "limitations": [
+    "threshold study uses existing test predictions and does not retrain the model",
+    "margin threshold is only active when top1_top2_margin is available",
+    "cost values are explicit coursework assumptions for deployment-risk analysis"
+  ]
+}

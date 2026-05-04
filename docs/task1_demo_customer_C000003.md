@@ -148,5 +148,7 @@ popular_with_similar_customers
 Use careful wording:
 
 ```text
-The example demonstrates recommender behaviour on synthetic DESD-style data. It should not be interpreted as evidence of real customer preference or production recommendation accuracy.
+The example demonstrates recommender behaviour on synthetic DESD-style data. It
+is not evidence of real customer preference or production recommendation
+accuracy.
 ```

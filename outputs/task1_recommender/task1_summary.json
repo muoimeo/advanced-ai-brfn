@@ -32,14 +32,14 @@
       "notes": "Synthetic DESD seed data; proof-of-concept metrics only."
     },
     "user_frequency": {
-      "precision_at_3": 0.11666666666666664,
-      "recall_at_3": 0.052361712361712366,
-      "hit_rate_at_3": 0.3,
+      "precision_at_3": 0.12777777777777774,
+      "recall_at_3": 0.05890933140933141,
+      "hit_rate_at_3": 0.3333333333333333,
       "product_coverage": 0.9333333333333333,
       "producer_diversity": 1.0,
       "unique_recommended_producers": 12,
       "total_producers": 12,
-      "largest_producer_recommendation_share": 0.12222222222222222,
+      "largest_producer_recommendation_share": 0.12777777777777777,
       "cold_start_fallback_count": 0,
       "evaluated_customers": 60,
       "notes": "Synthetic DESD seed data; proof-of-concept metrics only."

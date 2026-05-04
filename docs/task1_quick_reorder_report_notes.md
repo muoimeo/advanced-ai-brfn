@@ -28,6 +28,9 @@ outputs/task1_recommender/discovery_metrics.csv
 outputs/task1_recommender/discovery_examples.csv
 outputs/task1_recommender/discovery_share_by_producer.csv
 outputs/task1_recommender/discovery_product_coverage.csv
+outputs/task1_recommender/producer_fair_reranking_alpha_study.csv
+outputs/task1_recommender/producer_fair_reranking_share_by_producer.csv
+outputs/task1_recommender/producer_fair_reranking_summary.json
 outputs/task1_recommender/task1_summary.json
 ```
 
@@ -37,7 +40,7 @@ Example demo evidence:
 docs/task1_demo_customer_C000003.md
 ```
 
-Quick reorder and discovery should be reported as separate tasks:
+Quick reorder and discovery are reported as separate recommendation tasks:
 
 ```text
 quick_reorder:
@@ -53,10 +56,17 @@ Discovery evaluation target:
 future unseen products = products purchased in the test period that were not purchased by the same customer in the train period
 ```
 
-Do not merge quick reorder and discovery into a single list in the report. The separation makes the business purpose, metrics, and limitations clearer.
+The report keeps quick reorder and discovery as separate lists so the business
+purpose, metrics, and limitations remain clear.
 
 Transparency:
 
 ```text
 Task 1 does not use SHAP/LIME because the selected recommender is intentionally transparent. Each recommendation carries reason codes such as frequently ordered, ordered recently, common for customer type, seasonal availability, or cold-start fallback.
+```
+
+Research novelty / fairness trade-off:
+
+```text
+Producer-fair re-ranking is evaluated as a research layer rather than enabled by default. The alpha study compares recommendation quality against producer concentration using Precision@3, Recall@3, HitRate@3, producer diversity, product coverage and largest producer recommendation share. This formalises the case-study concern that a recommender can over-promote already visible producers.
 ```

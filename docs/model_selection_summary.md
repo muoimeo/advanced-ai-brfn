@@ -33,10 +33,10 @@ External validation is exported through `custom_image_test.ipynb` to
 `docs/report_figures/custom_image_validation_summary.csv`.
 
 The current labeled custom-image subset is still small and banana-heavy, so it
-should be framed as deployment-risk evidence rather than a full robustness
-benchmark. Additional household photos without manifest labels are useful for
-qualitative domain-shift discussion, but they should not be counted as accuracy
-evidence until their `expected_class` values are added to the manifest.
+is framed as deployment-risk evidence rather than a full robustness benchmark.
+Additional household photos without manifest labels support qualitative
+domain-shift discussion, but they are not counted as accuracy evidence until
+their `expected_class` values are added to the manifest.
 
 Assessment framing
 ------------------

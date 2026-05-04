@@ -20,6 +20,9 @@ Interaction and monitoring evidence is also generated under the parent
 ```text
 feedback_monitoring_summary.json
 feedback_accuracy_over_time.csv
+cost_sensitive_threshold_results.csv
+cost_sensitive_threshold_summary.json
+quality_score_ablation.csv
 ```
 
 These files come from:
@@ -32,3 +35,15 @@ GET /monitoring/feedback-summary
 They report human-feedback accuracy proxies over time, including daily class
 accuracy proxy, grade accuracy proxy, override rate and high-confidence override
 count. They are not controlled test-set accuracy.
+
+`cost_sensitive_threshold_results.csv` and
+`cost_sensitive_threshold_summary.json` document the risk-aware threshold study.
+`quality_score_ablation.csv` documents rule-layer ablations as stability/risk
+evidence, not Grade A/B/C accuracy.
+
+Research figures:
+
+```text
+docs/report_figures/research_novelty/cost_sensitive_threshold_tradeoff.png
+docs/report_figures/research_novelty/quality_score_ablation_grade_distribution.png
+```

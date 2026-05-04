@@ -6,9 +6,11 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.config import OUTPUTS_DIR
 from src.inference.postprocess import build_business_prediction
 from src.quality.image_features import extract_image_features
 from src.quality.rules import (
+    DEFAULT_WEIGHTS,
     WEIGHT_SETS,
     build_quality_decision,
     quality_decision_to_dict,
@@ -58,6 +60,55 @@ def build_model_prediction_from_row(row: pd.Series) -> ModelPrediction:
     )
 
 
+QUALITY_ABLATION_WEIGHT_SETS = {
+    "full_default": DEFAULT_WEIGHTS,
+    "model_only": {
+        "model_condition": 1.00,
+        "color": 0.00,
+        "defect_absence": 0.00,
+        "image_quality": 0.00,
+        "size_proxy": 0.00,
+    },
+    "visual_only": {
+        "model_condition": 0.00,
+        "color": 0.40,
+        "defect_absence": 0.30,
+        "image_quality": 0.20,
+        "size_proxy": 0.10,
+    },
+    "no_color": {
+        "model_condition": 0.55,
+        "color": 0.00,
+        "defect_absence": 0.25,
+        "image_quality": 0.15,
+        "size_proxy": 0.05,
+    },
+    "no_defect_absence": {
+        "model_condition": 0.55,
+        "color": 0.30,
+        "defect_absence": 0.00,
+        "image_quality": 0.10,
+        "size_proxy": 0.05,
+    },
+    "no_image_quality": {
+        "model_condition": 0.50,
+        "color": 0.30,
+        "defect_absence": 0.15,
+        "image_quality": 0.00,
+        "size_proxy": 0.05,
+    },
+    "no_size_proxy": {
+        "model_condition": 0.45,
+        "color": 0.25,
+        "defect_absence": 0.15,
+        "image_quality": 0.15,
+        "size_proxy": 0.00,
+    },
+    "more_visual_colour": WEIGHT_SETS["more_visual_colour"],
+    "safer_model_led": WEIGHT_SETS["safer_model_led"],
+}
+
+
 def evaluate_weight_sets(
     predictions_df: pd.DataFrame,
     weight_sets: dict[str, dict[str, float]] | None = None,
@@ -71,6 +122,8 @@ def evaluate_weight_sets(
         rotten_count = 0
         rotten_to_c_or_review_count = 0
         risky_a_b_decisions = 0
+        overall_quality_scores = []
+        action_counts: dict[str, int] = {}
 
         for _, row in predictions_df.iterrows():
             model_prediction = build_model_prediction_from_row(row)
@@ -92,6 +145,9 @@ def evaluate_weight_sets(
             decision_dict = quality_decision_to_dict(decision)
             grade = decision_dict["grade"]
             grade_counts[grade] = grade_counts.get(grade, 0) + 1
+            overall_quality_scores.append(float(decision_dict["overall_quality_score"]))
+            action = str(decision_dict["action"])
+            action_counts[action] = action_counts.get(action, 0) + 1
             if decision_dict["manual_review"]:
                 manual_review_count += 1
 
@@ -128,8 +184,47 @@ def evaluate_weight_sets(
                     else 0.0
                 ),
                 "risky_a_b_decisions": risky_a_b_decisions,
+                "mean_overall_quality_score": (
+                    sum(overall_quality_scores) / total if total else 0.0
+                ),
+                "action_distribution": "|".join(
+                    f"{action}:{count}" for action, count in sorted(action_counts.items())
+                ),
                 "note": "No supervised grade labels; compare consistency and risk controls only.",
             }
         )
 
     return pd.DataFrame(rows)
+
+
+def evaluate_quality_score_ablation(predictions_df: pd.DataFrame) -> pd.DataFrame:
+    return evaluate_weight_sets(predictions_df, weight_sets=QUALITY_ABLATION_WEIGHT_SETS)
+
+
+def export_quality_score_ablation(
+    predictions_csv: Path = OUTPUTS_DIR
+    / "xai_examples"
+    / "custom_image_tests"
+    / "custom_image_predictions.csv",
+    quality_output_dir: Path = OUTPUTS_DIR / "quality_rule_eval",
+    final_output_dir: Path = OUTPUTS_DIR / "final_evaluation",
+) -> dict[str, str]:
+    predictions = pd.read_csv(predictions_csv)
+    result = evaluate_quality_score_ablation(predictions)
+    quality_output_dir.mkdir(parents=True, exist_ok=True)
+    final_output_dir.mkdir(parents=True, exist_ok=True)
+
+    quality_path = quality_output_dir / "quality_score_ablation.csv"
+    final_path = final_output_dir / "quality_score_ablation.csv"
+    result.to_csv(quality_path, index=False)
+    result.to_csv(final_path, index=False)
+    return {
+        "quality_score_ablation.csv": str(quality_path),
+        "final_evaluation/quality_score_ablation.csv": str(final_path),
+    }
+
+
+if __name__ == "__main__":
+    written = export_quality_score_ablation()
+    for filename, path in written.items():
+        print(f"{filename}: {path}")

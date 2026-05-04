@@ -1,8 +1,8 @@
 # AI Service API Contract
 
 This repository exposes the produce freshness model as a standalone FastAPI
-service. DESD should integrate with it over HTTP rather than merging the
-repositories.
+service. The companion marketplace integrates with it over HTTP rather than
+merging repositories.
 
 ## Base URL
 
@@ -143,7 +143,7 @@ Runtime safeguards:
 
 The runtime API cannot know whether a prediction is wrong. High-confidence
 error labels are only valid in evaluation notebooks where ground truth exists.
-The quality grade is rule-based and must not be described as a supervised
+The quality grade is rule-based and is not described as a supervised
 EfficientNetB0 grade prediction.
 
 ### POST /feedback
@@ -234,10 +234,10 @@ Interpretation:
 - `override_rate` tracks how often humans reject or change the AI decision.
 - `high_confidence_override_count` flags potentially dangerous confident mistakes.
 
-This endpoint is the Task 3 monitoring interface. It should not be described as
-controlled test-set accuracy because feedback is sparse, selective and may be
-noisy. Its purpose is to monitor accuracy trends, drift risk, weak classes and
-high-confidence mistakes over time.
+This endpoint is the Task 3 monitoring interface. It is not controlled test-set
+accuracy because feedback is sparse, selective and may be noisy. Its purpose is
+to monitor accuracy trends, drift risk, weak classes and high-confidence
+mistakes over time.
 
 ### GET /recommend/reorder
 
@@ -327,9 +327,9 @@ This endpoint is powered by fake/synthetic DESD seed data. It is suitable for
 demo integration and proof-of-concept evaluation, not production customer
 behaviour claims.
 
-## DESD Integration Pattern
+## Companion Marketplace Integration Pattern
 
-DESD should:
+Integration sequence:
 
 1. receive an image upload from a producer or admin;
 2. send the image to `POST /predict`;
@@ -339,5 +339,4 @@ DESD should:
 6. call `GET /monitoring/feedback-summary` for admin monitoring of feedback-based accuracy proxies.
 7. call `GET /recommend/reorder` to display quick-reorder suggestions for customers.
 
-The model must be presented as decision support, not autonomous quality
-approval.
+The model is presented as decision support, not autonomous quality approval.

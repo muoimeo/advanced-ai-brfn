@@ -105,3 +105,55 @@ def test_evaluate_weight_sets_raises_clear_error_for_missing_image():
 
     with pytest.raises(FileNotFoundError, match="original='/missing/image.jpg'"):
         evaluation.evaluate_weight_sets(predictions)
+
+
+def test_quality_ablation_outputs_required_profiles(monkeypatch, tmp_path):
+    image_path = tmp_path / "sample.jpg"
+    image_path.write_bytes(b"fake-image-bytes")
+    predictions = pd.DataFrame(
+        [
+            {
+                "image_path": str(image_path),
+                "predicted_class": "Apple__Healthy",
+                "confidence": 0.95,
+                "top1_top2_margin": 0.90,
+                "top_predictions": (
+                    '[{"class_name": "Apple__Healthy", "confidence": 0.95}, '
+                    '{"class_name": "Apple__Rotten", "confidence": 0.05}]'
+                ),
+            }
+        ]
+    )
+    monkeypatch.setattr(
+        evaluation,
+        "extract_image_features",
+        lambda image_bytes, product_type: ImageQualityFeatures(
+            image_quality_score=90.0,
+            color_score=90.0,
+            defect_absence_score=90.0,
+            size_proxy_score=90.0,
+            dark_ratio=0.01,
+            accepted_color_ratio=0.90,
+            blur_score=90.0,
+            brightness_score=90.0,
+            foreground_area_ratio=0.42,
+            feature_warnings=[],
+        ),
+    )
+
+    result = evaluation.evaluate_quality_score_ablation(predictions)
+
+    assert set(result["weight_set"]) == {
+        "full_default",
+        "model_only",
+        "visual_only",
+        "no_color",
+        "no_defect_absence",
+        "no_image_quality",
+        "no_size_proxy",
+        "more_visual_colour",
+        "safer_model_led",
+    }
+    assert "mean_overall_quality_score" in result.columns
+    assert "action_distribution" in result.columns
+    assert result["note"].str.contains("No supervised grade labels").all()

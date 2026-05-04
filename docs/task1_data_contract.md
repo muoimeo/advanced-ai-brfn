@@ -29,6 +29,7 @@ orders.csv: order_id, customer_id, order_date, total_amount
 order_items.csv: order_id, product_id, quantity, unit_price
 ```
 
-Privacy rule: `customers.csv` must not include names, emails, phone numbers, or full addresses. The recommender only expects anonymised customer IDs.
+Privacy rule: `customers.csv` excludes names, emails, phone numbers, and full
+addresses. The recommender only expects anonymised customer IDs.
 
 The CSVs are suitable for proof-of-concept evaluation, not production recommender performance claims.

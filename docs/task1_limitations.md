@@ -16,7 +16,7 @@ date_range: 2026-01-10 to 2026-05-01
 Key limitations:
 
 - The data is not real BRFN customer behaviour.
-- Metrics such as Precision@3, Recall@3 and HitRate@3 should not be read as production accuracy.
+- Metrics such as Precision@3, Recall@3 and HitRate@3 are not production accuracy.
 - Customer segment patterns are generated/seeded assumptions.
 - The recommender does not learn long-term behavioural change from real marketplace logs.
 - Producer fairness is measured through coverage and recommendation share, but no automatic fairness re-ranking is applied in v1.

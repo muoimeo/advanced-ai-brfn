@@ -1,7 +1,7 @@
 # Risk Register
 
-This project should be presented as a decision-support system for BRFN
-producer/admin review, not as an autonomous quality authority.
+This project is presented as a decision-support system for BRFN producer/admin
+review, not as an autonomous quality authority.
 
 | Risk | Why it matters | Evidence | Mitigation | Future work |
 |---|---|---|---|---|
@@ -12,6 +12,9 @@ producer/admin review, not as an autonomous quality authority.
 | Single-image assumption | Multi-object or mixed-produce images can confuse the classifier and quality features. | Current model predicts one 28-class label per image. | Capture guide asks for one produce item/type per image. | Add object detection or multi-label handling only if scope expands. |
 | Class imbalance and weak rotten classes | Weak classes can create systematic error for some produce categories. | Final model decision table lists weak rotten classes. | Use macro F1, weak-class tables, and manual review for risky outputs. | Collect more weak-class examples and monitor feedback by class. |
 | High-confidence wrong predictions | High-confidence errors are more dangerous because users may over-trust them. | XAI audit reports high-confidence errors for top models; `/monitoring/feedback-summary` reports high-confidence override count. | Select EfficientNetB0 partly for fewer high-confidence errors; expose confidence and reason codes; monitor accepted/overridden decisions. | Review high-confidence overrides before retraining or threshold changes. |
+| Threshold choice may over-automate risky cases | A single confidence threshold can hide the trade-off between manual review and false-fresh errors. | `cost_sensitive_threshold_results.csv` evaluates explicit cost assumptions across threshold grids. | Select operating thresholds by expected operational cost, with false-fresh count as a tie-breaker. | Validate cost assumptions with BRFN stakeholders before deployment. |
+| Quality rule weights may be arbitrary | Rule-based Grade A/B/C decisions could look subjective without sensitivity analysis. | `quality_score_ablation.csv` compares full/default, model-only, visual-only and leave-one-component-out profiles. | Report grade distribution, manual-review rate and risky A/B decisions, not grade accuracy. | Replace proxies with expert grade labels if available. |
+| Recommendation exposure may favour dominant producers | Popularity and repeat behaviour can concentrate recommendations on already visible producers. | `producer_fair_reranking_alpha_study.csv` compares alpha values against HitRate@3 and largest producer share. | Use fair re-ranking as an evaluated mitigation, not a hidden default change. | Tune alpha with real transaction data and producer policy input. |
 | Domain shift on external images | Household/demo images differ from curated dataset images. | Custom-image validation is small and shows manual-review risk. | Use external validation table, capture guidance, thresholds, and manual review. | Build a larger BRFN-specific validation set. |
 | Producer-specific image conditions may create bias | Some producers may have poorer lighting/cameras/backgrounds, causing more review or rejection. | Quality layer warnings are sensitive to image capture quality. | Present results as decision support and provide capture guidance. | Audit manual-review rates by producer/context if deployed. |
 | Feedback data may be noisy | Human overrides may be inconsistent or incomplete. | `/feedback` accepts producer/admin corrections but does not verify them; monitoring labels are sparse and selective. | Log prediction snapshot, override reason, acceptance flag and quality snapshot; report accuracy proxy with limitations. | Add review workflows and feedback quality checks before retraining. |

@@ -183,23 +183,23 @@ C000003,young_professional,user_frequency,1,P000104,Morning Breakfast Buns,PR000
 C000003,young_professional,user_frequency,2,P000113,Autumn Raspberries,PR000008,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000003,young_professional,user_frequency,3,P000083,Somerset Discovery Apples,PR000002,0.6,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000005,community_group,user_frequency,1,P000095,Midsummer Strawberries,PR000002,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000005,community_group,user_frequency,2,P000102,Curly Green Kale,PR000009,0.916667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000005,community_group,user_frequency,2,P000129,Runner Bean Piccalilli,PR000012,0.916667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000005,community_group,user_frequency,3,P000101,Forced Rhubarb Stems,PR000008,0.916667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000006,restaurant,user_frequency,1,P000140,Apple and Oat Traybake,PR000011,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000006,restaurant,user_frequency,2,P000098,Rosemary Focaccia Slab,PR000005,0.75,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000006,restaurant,user_frequency,3,P000092,Seeded Wholemeal Rolls,PR000011,0.75,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000006,restaurant,user_frequency,3,P000108,Baby Spinach Leaves,PR000003,0.75,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000007,community_group,user_frequency,1,P000117,Red Onion Marmalade,PR000012,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000007,community_group,user_frequency,2,P000140,Apple and Oat Traybake,PR000011,0.952381,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000007,community_group,user_frequency,3,P000112,Fresh Heritage Beans,PR000007,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000007,community_group,user_frequency,3,P000134,Olive and Herb Ciabatta,PR000005,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000008,family,user_frequency,1,P000115,Pouring Cream,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000008,family,user_frequency,2,P000122,Rye and Caraway Boule,PR000005,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000008,family,user_frequency,3,P000092,Seeded Wholemeal Rolls,PR000011,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000008,family,user_frequency,2,P000092,Seeded Wholemeal Rolls,PR000011,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000008,family,user_frequency,3,P000122,Rye and Caraway Boule,PR000005,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000009,young_professional,user_frequency,1,P000133,Buttermilk,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000009,young_professional,user_frequency,2,P000090,Vine-Ripened Salad Tomatoes,PR000009,0.714286,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000009,young_professional,user_frequency,3,P000086,Slow-Fermented Sourdough Loaf,PR000005,0.714286,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000009,young_professional,user_frequency,2,P000086,Slow-Fermented Sourdough Loaf,PR000005,0.714286,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000009,young_professional,user_frequency,3,P000090,Vine-Ripened Salad Tomatoes,PR000009,0.714286,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000010,community_group,user_frequency,1,P000101,Forced Rhubarb Stems,PR000008,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000010,community_group,user_frequency,2,P000130,Nettle and Spinach Soup Mix,PR000013,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000010,community_group,user_frequency,3,P000135,Spiced Pumpkin Preserve,PR000006,0.916667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000010,community_group,user_frequency,3,P000112,Fresh Heritage Beans,PR000007,0.916667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000011,restaurant,user_frequency,1,P000090,Vine-Ripened Salad Tomatoes,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000011,restaurant,user_frequency,2,P000086,Slow-Fermented Sourdough Loaf,PR000005,0.625,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000011,restaurant,user_frequency,3,P000109,Salted Farm Butter,PR000004,0.625,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
@@ -228,14 +228,14 @@ C000020,community_group,user_frequency,1,P000096,New Season Potatoes,PR000003,1.
 C000020,community_group,user_frequency,2,P000117,Red Onion Marmalade,PR000012,0.826087,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000020,community_group,user_frequency,3,P000085,Grass-Fed Whole Milk,PR000004,0.695652,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000021,restaurant,user_frequency,1,P000124,Early Season Pea Shoots,PR000007,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000021,restaurant,user_frequency,2,P000137,Red Gooseberries,PR000008,0.789474,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000021,restaurant,user_frequency,3,P000094,Wild Garlic Leaves,PR000013,0.789474,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000021,restaurant,user_frequency,2,P000094,Wild Garlic Leaves,PR000013,0.789474,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000021,restaurant,user_frequency,3,P000137,Red Gooseberries,PR000008,0.789474,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000022,community_group,user_frequency,1,P000130,Nettle and Spinach Soup Mix,PR000013,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000022,community_group,user_frequency,2,P000096,New Season Potatoes,PR000003,0.869565,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000022,community_group,user_frequency,3,P000097,Aged Farmhouse Cheddar,PR000004,0.73913,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000024,family,user_frequency,1,P000126,Mixed Salad Leaves,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000024,family,user_frequency,2,P000089,Conference Pears,PR000008,0.6,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000024,family,user_frequency,3,P000096,New Season Potatoes,PR000003,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000024,family,user_frequency,3,P000098,Rosemary Focaccia Slab,PR000005,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000026,restaurant,user_frequency,1,P000122,Rye and Caraway Boule,PR000005,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000026,restaurant,user_frequency,2,P000132,Leek and Onion Box,PR000003,0.961538,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000026,restaurant,user_frequency,3,P000115,Pouring Cream,PR000010,0.846154,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
@@ -256,10 +256,10 @@ C000032,community_group,user_frequency,2,P000109,Salted Farm Butter,PR000004,0.6
 C000032,community_group,user_frequency,3,P000092,Seeded Wholemeal Rolls,PR000011,0.548387,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000033,young_professional,user_frequency,1,P000131,Damson Plums,PR000002,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000033,young_professional,user_frequency,2,P000084,Heritage Rainbow Carrots,PR000003,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000033,young_professional,user_frequency,3,P000119,Blackcurrant Punnets,PR000002,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000033,young_professional,user_frequency,3,P000101,Forced Rhubarb Stems,PR000008,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000034,family,user_frequency,1,P000099,Pickled Beetroot Slices,PR000006,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000034,family,user_frequency,2,P000134,Olive and Herb Ciabatta,PR000005,0.545455,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000034,family,user_frequency,3,P000103,Soft Goat Cheese,PR000010,0.454545,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000034,family,user_frequency,3,P000096,New Season Potatoes,PR000003,0.454545,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000037,community_group,user_frequency,1,P000102,Curly Green Kale,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000037,community_group,user_frequency,2,P000132,Leek and Onion Box,PR000003,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000037,community_group,user_frequency,3,P000096,New Season Potatoes,PR000003,0.916667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
@@ -274,7 +274,7 @@ C000042,community_group,user_frequency,2,P000133,Buttermilk,PR000004,0.740741,fr
 C000042,community_group,user_frequency,3,P000097,Aged Farmhouse Cheddar,PR000004,0.518519,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000043,young_professional,user_frequency,1,P000087,Bramley Apple Chutney,PR000006,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000043,young_professional,user_frequency,2,P000098,Rosemary Focaccia Slab,PR000005,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000043,young_professional,user_frequency,3,P000134,Olive and Herb Ciabatta,PR000005,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000043,young_professional,user_frequency,3,P000114,Chestnut Mushrooms,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000045,community_group,user_frequency,1,P000093,Strawberry and Rhubarb Jam,PR000012,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000045,community_group,user_frequency,2,P000130,Nettle and Spinach Soup Mix,PR000013,0.875,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000045,community_group,user_frequency,3,P000095,Midsummer Strawberries,PR000002,0.833333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
@@ -294,32 +294,32 @@ C000052,community_group,user_frequency,1,P000097,Aged Farmhouse Cheddar,PR000004
 C000052,community_group,user_frequency,2,P000126,Mixed Salad Leaves,PR000009,0.75,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000052,community_group,user_frequency,3,P000091,Live Natural Yoghurt,PR000010,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000053,young_professional,user_frequency,1,P000095,Midsummer Strawberries,PR000002,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000053,young_professional,user_frequency,2,P000122,Rye and Caraway Boule,PR000005,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000053,young_professional,user_frequency,3,P000115,Pouring Cream,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000053,young_professional,user_frequency,2,P000115,Pouring Cream,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000053,young_professional,user_frequency,3,P000122,Rye and Caraway Boule,PR000005,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000054,family,user_frequency,1,P000090,Vine-Ripened Salad Tomatoes,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000054,family,user_frequency,2,P000096,New Season Potatoes,PR000003,0.888889,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000054,family,user_frequency,3,P000093,Strawberry and Rhubarb Jam,PR000012,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000055,community_group,user_frequency,1,P000117,Red Onion Marmalade,PR000012,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000055,community_group,user_frequency,2,P000112,Fresh Heritage Beans,PR000007,0.619048,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000055,community_group,user_frequency,3,P000103,Soft Goat Cheese,PR000010,0.571429,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000055,community_group,user_frequency,3,P000128,Multiseed Bagels,PR000011,0.571429,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000056,restaurant,user_frequency,1,P000094,Wild Garlic Leaves,PR000013,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000056,restaurant,user_frequency,2,P000140,Apple and Oat Traybake,PR000011,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000056,restaurant,user_frequency,3,P000110,Stoneground Flatbreads,PR000005,0.761905,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000059,young_professional,user_frequency,1,P000103,Soft Goat Cheese,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000059,young_professional,user_frequency,2,P000126,Mixed Salad Leaves,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000059,young_professional,user_frequency,3,P000133,Buttermilk,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000059,young_professional,user_frequency,1,P000119,Blackcurrant Punnets,PR000002,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000059,young_professional,user_frequency,2,P000133,Buttermilk,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000059,young_professional,user_frequency,3,P000103,Soft Goat Cheese,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000061,restaurant,user_frequency,1,P000103,Soft Goat Cheese,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000061,restaurant,user_frequency,2,P000126,Mixed Salad Leaves,PR000009,0.8,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000061,restaurant,user_frequency,3,P000110,Stoneground Flatbreads,PR000005,0.72,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000062,community_group,user_frequency,1,P000103,Soft Goat Cheese,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000062,community_group,user_frequency,2,P000128,Multiseed Bagels,PR000011,0.538462,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000062,community_group,user_frequency,3,P000125,Bristol Orchard Apple Juice,PR000008,0.538462,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000062,community_group,user_frequency,2,P000125,Bristol Orchard Apple Juice,PR000008,0.538462,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000062,community_group,user_frequency,3,P000128,Multiseed Bagels,PR000011,0.538462,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000064,family,user_frequency,1,P000133,Buttermilk,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000064,family,user_frequency,2,P000127,Smoked Farmhouse Cheese,PR000010,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000064,family,user_frequency,3,P000109,Salted Farm Butter,PR000004,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000064,family,user_frequency,2,P000109,Salted Farm Butter,PR000004,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000064,family,user_frequency,3,P000127,Smoked Farmhouse Cheese,PR000010,0.5,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000066,restaurant,user_frequency,1,P000112,Fresh Heritage Beans,PR000007,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000066,restaurant,user_frequency,2,P000111,Pear and Ginger Preserve,PR000006,0.933333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000066,restaurant,user_frequency,3,P000140,Apple and Oat Traybake,PR000011,0.933333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000066,restaurant,user_frequency,2,P000140,Apple and Oat Traybake,PR000011,0.933333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000066,restaurant,user_frequency,3,P000111,Pear and Ginger Preserve,PR000006,0.933333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000067,community_group,user_frequency,1,P000115,Pouring Cream,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000067,community_group,user_frequency,2,P000132,Leek and Onion Box,PR000003,0.935484,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000067,community_group,user_frequency,3,P000109,Salted Farm Butter,PR000004,0.774194,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
@@ -328,15 +328,15 @@ C000068,family,user_frequency,2,P000122,Rye and Caraway Boule,PR000005,1.0,frequ
 C000068,family,user_frequency,3,P000119,Blackcurrant Punnets,PR000002,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000069,young_professional,user_frequency,1,P000097,Aged Farmhouse Cheddar,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000069,young_professional,user_frequency,2,P000114,Chestnut Mushrooms,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000069,young_professional,user_frequency,3,P000108,Baby Spinach Leaves,PR000003,0.8,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000069,young_professional,user_frequency,3,P000090,Vine-Ripened Salad Tomatoes,PR000009,0.8,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000071,restaurant,user_frequency,1,P000121,Kefir Drinking Yoghurt,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000071,restaurant,user_frequency,2,P000118,New Season Broad Beans,PR000013,0.84375,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000071,restaurant,user_frequency,3,P000130,Nettle and Spinach Soup Mix,PR000013,0.78125,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000072,community_group,user_frequency,1,P000104,Morning Breakfast Buns,PR000011,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000072,community_group,user_frequency,2,P000091,Live Natural Yoghurt,PR000010,0.538462,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000072,community_group,user_frequency,3,P000125,Bristol Orchard Apple Juice,PR000008,0.538462,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000074,family,user_frequency,1,P000103,Soft Goat Cheese,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000074,family,user_frequency,2,P000140,Apple and Oat Traybake,PR000011,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000074,family,user_frequency,1,P000140,Apple and Oat Traybake,PR000011,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000074,family,user_frequency,2,P000103,Soft Goat Cheese,PR000010,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000074,family,user_frequency,3,P000110,Stoneground Flatbreads,PR000005,0.777778,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000075,community_group,user_frequency,1,P000124,Early Season Pea Shoots,PR000007,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000075,community_group,user_frequency,2,P000084,Heritage Rainbow Carrots,PR000003,0.9,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
@@ -348,13 +348,13 @@ C000077,community_group,user_frequency,1,P000133,Buttermilk,PR000004,1.0,frequen
 C000077,community_group,user_frequency,2,P000107,Victoria Plums,PR000002,0.666667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000077,community_group,user_frequency,3,P000134,Olive and Herb Ciabatta,PR000005,0.555556,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000078,family,user_frequency,1,P000135,Spiced Pumpkin Preserve,PR000006,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000078,family,user_frequency,2,P000137,Red Gooseberries,PR000008,0.6,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000078,family,user_frequency,3,P000110,Stoneground Flatbreads,PR000005,0.6,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000078,family,user_frequency,2,P000110,Stoneground Flatbreads,PR000005,0.6,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000078,family,user_frequency,3,P000137,Red Gooseberries,PR000008,0.6,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000079,young_professional,user_frequency,1,P000097,Aged Farmhouse Cheddar,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000079,young_professional,user_frequency,2,P000139,Farmhouse Halloumi,PR000010,0.833333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000079,young_professional,user_frequency,3,P000104,Morning Breakfast Buns,PR000011,0.833333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000080,community_group,user_frequency,1,P000138,Romanesco Cauliflower,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
-C000080,community_group,user_frequency,2,P000133,Buttermilk,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000079,young_professional,user_frequency,2,P000140,Apple and Oat Traybake,PR000011,0.833333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000079,young_professional,user_frequency,3,P000139,Farmhouse Halloumi,PR000010,0.833333,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000080,community_group,user_frequency,1,P000133,Buttermilk,PR000004,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
+C000080,community_group,user_frequency,2,P000138,Romanesco Cauliflower,PR000009,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000080,community_group,user_frequency,3,P000131,Damson Plums,PR000002,0.916667,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000082,community_group,user_frequency,1,P000108,Baby Spinach Leaves,PR000003,1.0,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.
 C000082,community_group,user_frequency,2,P000111,Pear and Ginger Preserve,PR000006,0.92,frequently_ordered_by_customer,Recommended because it is ordered repeatedly by this customer.

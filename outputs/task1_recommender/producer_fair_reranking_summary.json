@@ -1,0 +1,34 @@
+{
+  "selection_rule": "smallest alpha reducing largest producer share without HitRate@3 drop greater than 0.03",
+  "selected": {
+    "discovery": {
+      "branch": "discovery",
+      "alpha": 0.0,
+      "precision_at_3": 0.13888888888888884,
+      "recall_at_3": 0.11714285714285716,
+      "hit_rate_at_3": 0.38333333333333336,
+      "product_coverage": 0.43333333333333335,
+      "producer_diversity": 0.8333333333333334,
+      "largest_producer_recommendation_share": 0.29444444444444445,
+      "mean_producer_exposure_share": 0.1,
+      "recommendation_quality_delta": 0.0
+    },
+    "quick_reorder": {
+      "branch": "quick_reorder",
+      "alpha": 0.05,
+      "precision_at_3": 0.1222222222222222,
+      "recall_at_3": 0.04952380952380952,
+      "hit_rate_at_3": 0.2833333333333333,
+      "product_coverage": 0.9333333333333333,
+      "producer_diversity": 1.0,
+      "largest_producer_recommendation_share": 0.14444444444444443,
+      "mean_producer_exposure_share": 0.08333333333333333,
+      "recommendation_quality_delta": -0.016666666666666663
+    }
+  },
+  "limitations": [
+    "fair re-ranking is evaluated as research evidence",
+    "live recommender defaults are unchanged",
+    "synthetic transaction data is not production customer behaviour"
+  ]
+}

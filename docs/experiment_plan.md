@@ -23,7 +23,7 @@ Local responsibilities:
 - artifact export
 - inference API testing
 
-The raw dataset must not be committed to Git.
+The raw dataset is excluded from Git.
 
 ## Dataset
 
@@ -82,8 +82,8 @@ Current selected split:
 - group key: `source_image_id`
 - purpose: prevent offline-augmented variants of the same source image from crossing train/validation/test
 
-The older `data/splits` artifacts are retained for traceability, but final
-top-model comparison and reporting should use the grouped split.
+The older `data/splits` artifacts are retained for traceability, while final
+top-model comparison and reporting use the grouped split.
 
 ## Model Comparison
 
@@ -99,7 +99,7 @@ Rationale:
 - the baseline CNN provides a simple from-scratch reference
 - transfer learning models provide stronger candidates for limited coursework time
 - the comparison remains broad enough without becoming unmanageable
-- final selection must consider XAI and deployment risk, not accuracy alone
+- final selection considers XAI and deployment risk, not accuracy alone
 
 Current selected final model:
 
@@ -145,7 +145,7 @@ models/class_names.json
 models/model_metadata.json
 ```
 
-`model_metadata.json` should include:
+`model_metadata.json` includes:
 
 - model name
 - dataset slug
