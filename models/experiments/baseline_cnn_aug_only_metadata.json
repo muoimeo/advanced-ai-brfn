@@ -11,11 +11,11 @@
   "learning_rate": 0.001,
   "augmentation": true,
   "class_weighting": null,
-  "trained_at": "2026-04-17T22:15:51",
+  "trained_at": "2026-05-04T15:21:08",
   "metrics": {
-    "test_accuracy": 0.7502276867030966,
-    "macro_f1": 0.6983536044954679,
-    "weighted_f1": 0.7447297105161976
+    "test_accuracy": 0.7503634475597093,
+    "macro_f1": 0.6851896800763219,
+    "weighted_f1": 0.7392267643796517
   },
   "artifacts": {
     "model": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_only.keras",

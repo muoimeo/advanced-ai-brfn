@@ -13,3 +13,22 @@ outputs/final_evaluation/
 ```
 
 This folder signposts the Tasks 2-4 material separately from Task 1.
+
+Interaction and monitoring evidence is also generated under the parent
+`outputs/final_evaluation/` folder:
+
+```text
+feedback_monitoring_summary.json
+feedback_accuracy_over_time.csv
+```
+
+These files come from:
+
+```text
+python -m src.monitoring.feedback_monitoring
+GET /monitoring/feedback-summary
+```
+
+They report human-feedback accuracy proxies over time, including daily class
+accuracy proxy, grade accuracy proxy, override rate and high-confidence override
+count. They are not controlled test-set accuracy.

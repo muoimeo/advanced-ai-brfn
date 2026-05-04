@@ -72,6 +72,7 @@ Use the API to show:
 - reason codes and manual-review flags
 - model metadata from `/model-info`
 - feedback logging for accountability
+- feedback-based accuracy monitoring from `/monitoring/feedback-summary`
 
 Use XAI figures to explain where the model focused, but state the limitation:
 Grad-CAM is not a segmentation mask and does not prove perfect rotten-region
@@ -101,3 +102,18 @@ features and transparent thresholds.
 
 Privacy/data governance position: prediction logs should store metadata and
 model outputs, not unnecessary personal data or raw images.
+
+Monitoring accuracy over time
+-----------------------------
+
+The demo now supports the case-study interaction requirement:
+
+1. `/predict` writes prediction metadata to `outputs/logs/predictions.jsonl`.
+2. `/feedback` writes accepted or overridden human decisions to `outputs/logs/feedback.jsonl`.
+3. `/monitoring/feedback-summary` joins both logs by `prediction_id`.
+4. The monitoring summary reports daily class-accuracy proxy, grade-accuracy proxy,
+   override rate and high-confidence override count.
+
+This is not a replacement for a labelled test set. It is a post-deployment
+interaction signal showing whether real users are accepting, correcting or
+overriding model decisions over time.

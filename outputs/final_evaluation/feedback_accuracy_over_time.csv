@@ -1,0 +1,2 @@
+date,feedback_count,accepted_count,override_count,class_labelled_count,class_correct_count,grade_labelled_count,grade_correct_count,high_confidence_override_count,manual_review_feedback_count,class_accuracy_proxy,grade_accuracy_proxy,acceptance_rate,override_rate
+2026-05-01,1,1,0,1,1,1,1,0,1,1.0,1.0,1.0,0.0

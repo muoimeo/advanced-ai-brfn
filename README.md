@@ -7,7 +7,7 @@ It covers two AI workstreams:
 - Task 1: transparent quick-reorder and optional discovery recommendations from DESD-style seed transaction CSVs.
 - Tasks 2-4: fruit/vegetable computer-vision classification, quality grading, model interaction/refinement support, XAI evidence, and deployment API.
 
-The same FastAPI/Docker service exposes both workstreams. DESD should call this repository over HTTP; it should not import AI code or model files.
+The same FastAPI/Docker service exposes both workstreams. DESD integrates with this repository over HTTP rather than importing AI code or model files.
 
 Tasks 2-4 use the Kaggle dataset:
 
@@ -21,7 +21,7 @@ Quality grading is implemented as a separate rule-based layer outside the CNN.
 EfficientNetB0 predicts product type and healthy/rotten condition; `src/quality/`
 combines that model evidence with transparent image proxy features such as
 colour profile, dark-area ratio, blur, brightness, and foreground coverage.
-The project must not claim the model learned supervised Grade A/B/C labels.
+The deployed system does not treat the classifier as a supervised Grade A/B/C model.
 
 ## Current Status
 
@@ -41,7 +41,7 @@ better deployment-risk tradeoff in the grouped XAI audit.
 
 ## Repository Boundary
 
-Keep the Advanced AI and DESD repositories separate.
+The Advanced AI and DESD repositories are intentionally separate.
 
 ```text
 DESD repo:
@@ -59,13 +59,14 @@ DESD integration points:
 GET  /recommend/reorder?customer_id=C000003&top_k=3
 POST /predict
 POST /feedback
+GET  /monitoring/feedback-summary
 GET  /health
 GET  /model-info
 ```
 
 ## Repository Map For Assessment
 
-Use this map to distinguish the two assessed workstreams:
+The repository is organised around two assessed workstreams:
 
 ```text
 Task 1 intelligent ordering / recommendations:
@@ -92,12 +93,12 @@ The existing root-level CV notebooks are kept in place to avoid breaking paths c
 
 ## Local Workflow
 
-This project now trains and evaluates locally.
+The project can be run locally for evaluation and API testing.
 
 1. Create and activate a virtual environment.
 2. Install dependencies.
 3. Use `data/splits_grouped/` for final comparison and reporting.
-4. Keep the selected model in `models/best_model.keras`.
+4. The selected model artifact is stored in `models/best_model.keras`.
 5. Validate external images with `notebooks/custom_image_test.ipynb`.
 6. Review report-ready outputs in `docs/report_figures/`.
 7. Run the local inference API.
@@ -122,7 +123,7 @@ kagglehub.dataset_download("muhammad0subhan/fruit-and-vegetable-disease-healthy-
 
 Alternatively, manually extract the dataset under `data/raw/` and set `LOCAL_DATASET_PATH` inside `notebooks/01_eda.ipynb`.
 
-Do not commit the full raw dataset.
+The full raw image dataset is excluded from version control.
 
 ## Expected Artifacts
 
@@ -226,6 +227,7 @@ producer_next_week_forecast.csv
 ```
 
 These files are descriptive proof-of-concept demand trend outputs from synthetic order history. They are not claimed as a production forecasting model.
+They support the case-study producer-facing requirement by providing forecast-chart evidence such as product, producer, next forecast week, predicted quantity, trend direction, and a note explaining that the values are based on recent synthetic order trends rather than a production forecasting model.
 
 Run the Task 1 pipeline:
 
@@ -270,7 +272,7 @@ Hybrid quick reorder + discovery example:
 curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3&include_discovery=true"
 ```
 
-DESD should display the returned product name, producer, score, reason codes, and limitation note. DESD should not calculate these recommendations itself.
+DESD displays the returned product name, producer, score, reason codes, and limitation note. Recommendation scoring remains inside this AI service.
 
 ## Tasks 2-4 Computer Vision
 
@@ -299,9 +301,9 @@ reason codes
 warnings
 ```
 
-This layer is the project response to the case-study quality requirements around colour, size, ripeness, and Grade A/B/C. Important limitation: the dataset has healthy/rotten labels, not supervised Grade A/B/C labels. The CNN must not be described as learning grade; Grade A/B/C is a transparent rule-based decision layer.
+This layer is the project response to the case-study quality requirements around colour, size, ripeness, and Grade A/B/C. Important limitation: the dataset has healthy/rotten labels, not supervised Grade A/B/C labels. Grade A/B/C is therefore produced by a transparent rule-based decision layer rather than learned directly by the CNN.
 
-Task 3 is supported through the API interaction and feedback loop. `POST /feedback` records producer/admin overrides, accepted AI recommendations, predicted grade, override grade, and the quality decision snapshot. This provides the interaction log needed for later model monitoring, audit, and future refinement. The demo does not automatically retrain models.
+Task 3 is supported through the API interaction, feedback, and monitoring loop. `POST /feedback` records producer/admin overrides, accepted AI recommendations, predicted grade, override grade, and the quality decision snapshot. `GET /monitoring/feedback-summary` joins feedback with prediction logs by `prediction_id` and reports a human-feedback accuracy proxy over time, including daily class accuracy proxy, grade accuracy proxy, override rate, and high-confidence override count. This provides the interaction evidence needed for model monitoring, audit, and future refinement. The demo does not automatically retrain models because unverified overrides can be noisy.
 
 Task 4 is supported through explainability and FAT evidence:
 
@@ -327,7 +329,7 @@ Preferred comparison set:
 3. ResNet50
 4. EfficientNetB0
 
-Report evidence should include grouped-split metrics, confusion matrices, weak-class analysis, high-confidence errors, Grad-CAM examples, custom-image validation, quality-rule evaluation, Docker/API evidence, and FAT limitations.
+Report-ready evidence is maintained for grouped-split metrics, confusion matrices, weak-class analysis, high-confidence errors, Grad-CAM examples, custom-image validation, quality-rule evaluation, Docker/API evidence, and FAT limitations.
 
 ## API Contract
 
@@ -336,10 +338,11 @@ The service exposes:
 - `GET /health`
 - `POST /predict`
 - `POST /feedback`
+- `GET /monitoring/feedback-summary`
 - `GET /model-info`
 - `GET /recommend/reorder?customer_id=C000012&top_k=3`
 
-The DESD system can later call this API for image inference and quick reorder suggestions. See
+The DESD system can call this API for image inference and quick reorder suggestions. See
 `docs/api_contract.md` for the response schema and integration pattern.
 
 The preferred response contract is nested:
@@ -365,7 +368,7 @@ Task 2:
 
 Task 3:
   DESD sends producer/admin overrides to /feedback.
-  AI service logs interaction data for monitoring, audit, and future refinement.
+  AI service logs interaction data and exposes /monitoring/feedback-summary for accuracy-proxy monitoring over time.
 
 Task 4:
   DESD displays reason codes, quality component scores, warnings, and manual-review flags as transparent decision support.
@@ -384,6 +387,7 @@ Useful checks:
 curl http://localhost:8001/health
 curl http://localhost:8001/model-info
 curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3"
+curl "http://localhost:8001/monitoring/feedback-summary"
 pytest
 ```
 
@@ -420,6 +424,7 @@ Then open:
 http://localhost:8001/health
 http://localhost:8001/model-info
 http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3
+http://localhost:8001/monitoring/feedback-summary
 ```
 
 ## Final Evaluation Pack
@@ -443,9 +448,26 @@ python -m src.recommender.pipeline
 
 This writes the recommender evaluation pack to `outputs/task1_recommender/`.
 
+For feedback-based monitoring evidence, run:
+
+```bash
+python -m src.monitoring.feedback_monitoring
+```
+
+This writes:
+
+```text
+outputs/final_evaluation/feedback_monitoring_summary.json
+outputs/final_evaluation/feedback_accuracy_over_time.csv
+```
+
+These files report a human-feedback accuracy proxy, not controlled test-set accuracy. They are useful for explaining how accepted recommendations and overrides would be monitored over time after deployment.
+
 ## Generative AI Usage
 
-Generative AI was used as an engineering support tool during the project. It assisted with:
+Generative AI was used as an engineering support tool during the project. The usage was limited to support activities rather than replacing evaluation or human technical judgement.
+
+Uses included:
 
 ```text
 synthetic data assumptions and Task 1 data-contract planning
@@ -454,13 +476,21 @@ debugging notebook/API/Docker issues
 report structure and critical evaluation wording
 ```
 
-GenAI outputs were not accepted blindly. Code and claims were checked against repository tests, notebook outputs, API responses, and the known dataset limitations. Synthetic data assumptions are labelled as fake/seed data and must not be presented as real BRFN customer behaviour.
-
-The report should include a short GenAI reflection covering:
+Controls applied:
 
 ```text
-what tools were used
-where GenAI helped
-where human review corrected or constrained the output
-how hallucination and overclaiming risks were managed
+generated code was reviewed before being kept
+claims were checked against notebook outputs, API responses, and tests
+synthetic data assumptions were labelled as fake/seed data
+model and recommender limitations were kept explicit in docs and API responses
+```
+
+Evidence of human verification:
+
+```text
+pytest test suite
+Task 1 recommender output CSVs
+Task 2-4 final evaluation pack
+API curl examples
+Docker run instructions
 ```

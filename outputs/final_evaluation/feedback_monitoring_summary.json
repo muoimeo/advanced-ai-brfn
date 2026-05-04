@@ -1,0 +1,54 @@
+{
+  "monitoring_type": "human_feedback_accuracy_proxy",
+  "limitations": [
+    "feedback_is_sparse_and_may_be_biased",
+    "accepted_or_overridden_feedback_is_not_a_controlled_ground_truth_test_set",
+    "automatic_retraining_is_not_performed"
+  ],
+  "prediction_log_count": 5,
+  "feedback_log_count": 1,
+  "labelled_class_feedback_count": 1,
+  "class_accuracy_proxy": 1.0,
+  "labelled_grade_feedback_count": 1,
+  "grade_accuracy_proxy": 1.0,
+  "accepted_feedback_count": 1,
+  "override_feedback_count": 0,
+  "override_rate": 0.0,
+  "high_confidence_override_count": 0,
+  "daily": [
+    {
+      "date": "2026-05-01",
+      "feedback_count": 1,
+      "accepted_count": 1,
+      "override_count": 0,
+      "class_labelled_count": 1,
+      "class_correct_count": 1,
+      "grade_labelled_count": 1,
+      "grade_correct_count": 1,
+      "high_confidence_override_count": 0,
+      "manual_review_feedback_count": 1,
+      "class_accuracy_proxy": 1.0,
+      "grade_accuracy_proxy": 1.0,
+      "acceptance_rate": 1.0,
+      "override_rate": 0.0
+    }
+  ],
+  "by_predicted_class": [
+    {
+      "predicted_class": "Banana__Healthy",
+      "labelled_count": 1,
+      "correct_count": 1,
+      "override_count": 0,
+      "class_accuracy_proxy": 1.0
+    }
+  ],
+  "by_model": [
+    {
+      "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+      "labelled_count": 1,
+      "correct_count": 1,
+      "override_count": 0,
+      "class_accuracy_proxy": 1.0
+    }
+  ]
+}

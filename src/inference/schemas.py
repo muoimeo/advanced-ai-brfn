@@ -94,6 +94,56 @@ class FeedbackResponse(BaseModel):
     status: str
 
 
+class MonitoringDailyRow(BaseModel):
+    date: str
+    feedback_count: int
+    accepted_count: int = 0
+    override_count: int = 0
+    class_labelled_count: int = 0
+    class_correct_count: int = 0
+    grade_labelled_count: int = 0
+    grade_correct_count: int = 0
+    high_confidence_override_count: int = 0
+    manual_review_feedback_count: int = 0
+    class_accuracy_proxy: float | None = None
+    grade_accuracy_proxy: float | None = None
+    acceptance_rate: float | None = None
+    override_rate: float | None = None
+
+
+class MonitoringBreakdownRow(BaseModel):
+    labelled_count: int
+    correct_count: int
+    override_count: int
+    class_accuracy_proxy: float | None = None
+
+
+class MonitoringClassRow(MonitoringBreakdownRow):
+    predicted_class: str
+
+
+class MonitoringModelRow(MonitoringBreakdownRow):
+    model_name: str
+
+
+class MonitoringSummaryResponse(BaseModel):
+    monitoring_type: str
+    limitations: list[str] = Field(default_factory=list)
+    prediction_log_count: int
+    feedback_log_count: int
+    labelled_class_feedback_count: int
+    class_accuracy_proxy: float | None = None
+    labelled_grade_feedback_count: int
+    grade_accuracy_proxy: float | None = None
+    accepted_feedback_count: int
+    override_feedback_count: int
+    override_rate: float | None = None
+    high_confidence_override_count: int
+    daily: list[MonitoringDailyRow] = Field(default_factory=list)
+    by_predicted_class: list[MonitoringClassRow] = Field(default_factory=list)
+    by_model: list[MonitoringModelRow] = Field(default_factory=list)
+
+
 class ReorderRecommendationResponse(BaseModel):
     customer_id: str
     customer_type: str | None = None

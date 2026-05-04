@@ -12,9 +12,11 @@ from src.inference.schemas import (
     FeedbackResponse,
     HealthResponse,
     ModelInfoResponse,
+    MonitoringSummaryResponse,
     PredictionResponse,
     ReorderResponse,
 )
+from src.monitoring.feedback_monitoring import build_feedback_monitoring_summary
 from src.recommender.data_loader import Task1DataError
 from src.recommender.pipeline import get_reorder_recommendations
 from src.recommender.quick_reorder import METHOD_FREQUENCY_RECENCY, SUPPORTED_METHODS
@@ -135,6 +137,11 @@ def feedback(request: FeedbackRequest) -> FeedbackResponse:
     _append_jsonl("feedback.jsonl", record)
 
     return FeedbackResponse(status="logged")
+
+
+@app.get("/monitoring/feedback-summary", response_model=MonitoringSummaryResponse)
+def feedback_monitoring_summary() -> MonitoringSummaryResponse:
+    return MonitoringSummaryResponse(**build_feedback_monitoring_summary(LOGS_DIR))
 
 
 @app.get(

@@ -149,3 +149,78 @@ def test_feedback_logs_record(monkeypatch, tmp_path):
     assert len(log_records) == 1
     assert json.loads(log_records[0])["prediction_id"] == "pred-1"
     assert json.loads(log_records[0])["producer_override_grade"] == "Review"
+
+
+def test_feedback_monitoring_summary_reports_accuracy_proxy(monkeypatch, tmp_path):
+    monkeypatch.setattr(main, "LOGS_DIR", tmp_path)
+    (tmp_path / "predictions.jsonl").write_text(
+        "\n".join(
+            [
+                json.dumps(
+                    {
+                        "prediction_id": "pred-1",
+                        "created_at": "2026-05-01T10:00:00",
+                        "model_name": "demo_model",
+                        "predicted_class": "Banana__Rotten",
+                        "quality_grade": "C",
+                        "confidence": 0.98,
+                        "manual_review_required": False,
+                    }
+                ),
+                json.dumps(
+                    {
+                        "prediction_id": "pred-2",
+                        "created_at": "2026-05-01T11:00:00",
+                        "model_name": "demo_model",
+                        "predicted_class": "Apple__Healthy",
+                        "quality_grade": "A",
+                        "confidence": 0.91,
+                        "manual_review_required": True,
+                    }
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "feedback.jsonl").write_text(
+        "\n".join(
+            [
+                json.dumps(
+                    {
+                        "prediction_id": "pred-1",
+                        "created_at": "2026-05-01T12:00:00",
+                        "predicted_class": "Banana__Rotten",
+                        "predicted_grade": "C",
+                        "producer_override_class": "Banana__Healthy",
+                        "producer_override_grade": "Review",
+                        "accepted_ai_recommendation": False,
+                    }
+                ),
+                json.dumps(
+                    {
+                        "prediction_id": "pred-2",
+                        "created_at": "2026-05-01T12:05:00",
+                        "predicted_class": "Apple__Healthy",
+                        "predicted_grade": "A",
+                        "accepted_ai_recommendation": True,
+                    }
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    client = TestClient(main.app)
+
+    response = client.get("/monitoring/feedback-summary")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["monitoring_type"] == "human_feedback_accuracy_proxy"
+    assert body["feedback_log_count"] == 2
+    assert body["labelled_class_feedback_count"] == 2
+    assert body["class_accuracy_proxy"] == 0.5
+    assert body["grade_accuracy_proxy"] == 0.5
+    assert body["override_rate"] == 0.5
+    assert body["high_confidence_override_count"] == 1

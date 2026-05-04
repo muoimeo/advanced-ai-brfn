@@ -24,3 +24,9 @@ task1_summary.json
 ```
 
 Use these files for the intelligent ordering / quick reorder section of the report.
+
+`producer_demand_trends.csv` and `producer_next_week_forecast.csv` are the
+producer-facing chart evidence. They can be used to present expected demand
+direction and predicted next-week quantity by producer/product. They are
+descriptive proof-of-concept trend outputs from synthetic data, not a production
+forecasting model.

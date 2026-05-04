@@ -183,6 +183,62 @@ Example response:
 }
 ```
 
+### GET /monitoring/feedback-summary
+
+Returns a post-deployment monitoring summary built from `predictions.jsonl` and
+`feedback.jsonl`. The service joins records by `prediction_id` and calculates a
+human-feedback accuracy proxy over time.
+
+Example request:
+
+```text
+GET /monitoring/feedback-summary
+```
+
+Example response:
+
+```json
+{
+  "monitoring_type": "human_feedback_accuracy_proxy",
+  "prediction_log_count": 5,
+  "feedback_log_count": 1,
+  "labelled_class_feedback_count": 1,
+  "class_accuracy_proxy": 1.0,
+  "labelled_grade_feedback_count": 1,
+  "grade_accuracy_proxy": 1.0,
+  "accepted_feedback_count": 1,
+  "override_feedback_count": 0,
+  "override_rate": 0.0,
+  "high_confidence_override_count": 0,
+  "daily": [
+    {
+      "date": "2026-05-01",
+      "feedback_count": 1,
+      "class_accuracy_proxy": 1.0,
+      "grade_accuracy_proxy": 1.0,
+      "override_rate": 0.0
+    }
+  ],
+  "limitations": [
+    "feedback_is_sparse_and_may_be_biased",
+    "accepted_or_overridden_feedback_is_not_a_controlled_ground_truth_test_set",
+    "automatic_retraining_is_not_performed"
+  ]
+}
+```
+
+Interpretation:
+
+- `class_accuracy_proxy` is based on accepted/corrected class feedback.
+- `grade_accuracy_proxy` is based on accepted/corrected grade feedback.
+- `override_rate` tracks how often humans reject or change the AI decision.
+- `high_confidence_override_count` flags potentially dangerous confident mistakes.
+
+This endpoint is the Task 3 monitoring interface. It should not be described as
+controlled test-set accuracy because feedback is sparse, selective and may be
+noisy. Its purpose is to monitor accuracy trends, drift risk, weak classes and
+high-confidence mistakes over time.
+
 ### GET /recommend/reorder
 
 Returns Task 1 quick-reorder recommendations for a DESD customer ID.
@@ -280,7 +336,8 @@ DESD should:
 3. display prediction, confidence, grade, action, reason codes, and manual-review flag;
 4. store the returned `prediction_id` with the DESD record;
 5. call `POST /feedback` if a human overrides the prediction.
-6. call `GET /recommend/reorder` to display quick-reorder suggestions for customers.
+6. call `GET /monitoring/feedback-summary` for admin monitoring of feedback-based accuracy proxies.
+7. call `GET /recommend/reorder` to display quick-reorder suggestions for customers.
 
 The model must be presented as decision support, not autonomous quality
 approval.

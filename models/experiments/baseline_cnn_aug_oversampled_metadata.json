@@ -15,22 +15,22 @@
     "enabled": true,
     "strategy": "targeted_min_count_with_replacement",
     "target_min_count": 500,
-    "original_train_rows": 20493,
-    "oversampled_train_rows": 24174
+    "original_train_rows": 19674,
+    "oversampled_train_rows": 23590
   },
-  "trained_at": "2026-04-17T23:42:00",
+  "trained_at": "2026-05-04T15:38:18",
   "metrics": {
-    "test_accuracy": 0.7561475409836066,
-    "macro_f1": 0.721685671949272,
-    "weighted_f1": 0.7569128553061722
+    "test_accuracy": 0.7474558670820353,
+    "macro_f1": 0.7145195175913459,
+    "weighted_f1": 0.7421325277616331
   },
   "artifacts": {
-    "model": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_oversampled.keras",
-    "checkpoint": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_oversampled_best.keras",
-    "metadata": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_oversampled_metadata.json",
-    "classification_report": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\baseline_cnn_aug_oversampled_classification_report.csv",
-    "oversampling_summary": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\experiments\\baseline_cnn_aug_oversampled_oversampling_summary.csv",
-    "training_curves": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\baseline_cnn_aug_oversampled_training_curves.png",
-    "confusion_matrix": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\confusion_matrices\\baseline_cnn_aug_oversampled_confusion_matrix.png"
+    "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/baseline_cnn_aug_oversampled.keras",
+    "checkpoint": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/baseline_cnn_aug_oversampled_best.keras",
+    "metadata": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/baseline_cnn_aug_oversampled_metadata.json",
+    "classification_report": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/baseline_cnn_aug_oversampled_classification_report.csv",
+    "oversampling_summary": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/baseline_cnn_aug_oversampled_oversampling_summary.csv",
+    "training_curves": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/baseline_cnn_aug_oversampled_training_curves.png",
+    "confusion_matrix": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/confusion_matrices/baseline_cnn_aug_oversampled_confusion_matrix.png"
   }
 }

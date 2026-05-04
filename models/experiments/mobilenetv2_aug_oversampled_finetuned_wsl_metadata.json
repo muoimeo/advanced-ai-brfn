@@ -16,14 +16,14 @@
     "enabled": true,
     "strategy": "targeted_min_count_with_replacement",
     "target_min_count": 500,
-    "original_train_rows": 20493,
-    "oversampled_train_rows": 24174
+    "original_train_rows": 19674,
+    "oversampled_train_rows": 23590
   },
-  "trained_at": "2026-04-18T03:51:11",
+  "trained_at": "2026-05-04T16:34:28",
   "metrics": {
-    "test_accuracy": 0.9603825136612022,
-    "macro_f1": 0.936829715225382,
-    "weighted_f1": 0.9602434117051563
+    "test_accuracy": 0.959086188992731,
+    "macro_f1": 0.9432168645289208,
+    "weighted_f1": 0.959001041574299
   },
   "artifacts": {
     "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/mobilenetv2_aug_oversampled_finetuned_wsl.keras",
