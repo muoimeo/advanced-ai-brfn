@@ -364,6 +364,10 @@ The service exposes:
 - `GET /monitoring/feedback-summary`
 - `GET /model-info`
 - `GET /recommend/reorder?customer_id=C000012&top_k=3`
+- `POST /catalog/ingest-producer`
+- `POST /catalog/ingest-product`
+- `POST /recommend/ingest-history`
+- `POST /recommend/ingest-order`
 
 The DESD system can call this API for image inference and quick reorder suggestions. See
 `docs/api_contract.md` for the response schema and integration pattern.
@@ -384,6 +388,10 @@ DESD usage by task:
 Task 1:
   DESD sends customer_id to /recommend/reorder.
   AI returns ranked product suggestions with producer IDs, scores, reason codes, and limitations.
+  DESD sends new producer metadata to /catalog/ingest-producer before products reference that producer.
+  DESD sends new product metadata to /catalog/ingest-product before order events reference that product.
+  DESD sends anonymised customer history to /recommend/ingest-history for initial sync or event-store recovery.
+  DESD sends anonymised checkout events to /recommend/ingest-order so later recommendations include new order history.
 
 Task 2:
   DESD uploads produce image to /predict.
@@ -412,6 +420,15 @@ curl http://localhost:8001/model-info
 curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3"
 curl "http://localhost:8001/monitoring/feedback-summary"
 pytest
+```
+
+Task 1 event logs used by the live recommender:
+
+```text
+outputs/logs/catalog_producer_events.jsonl
+outputs/logs/catalog_product_events.jsonl
+outputs/logs/recommender_history_events.jsonl
+outputs/logs/recommender_order_events.jsonl
 ```
 
 Demo request examples are in `demo/demo_requests.http` and

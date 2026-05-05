@@ -26,3 +26,20 @@ outputs/task1_recommender/producer_fair_reranking_summary.json
 
 This producer-fair re-ranking alpha study is report evidence only. It does not
 change the live `/recommend/reorder` default behaviour.
+
+Live demo integration also supports:
+
+```text
+POST /catalog/ingest-producer
+POST /catalog/ingest-product
+POST /recommend/ingest-history
+POST /recommend/ingest-order
+outputs/logs/catalog_producer_events.jsonl
+outputs/logs/catalog_product_events.jsonl
+outputs/logs/recommender_history_events.jsonl
+outputs/logs/recommender_order_events.jsonl
+```
+
+The catalogue endpoints store producer and product metadata events. The history
+and order endpoints store anonymised purchase events. These event logs are used
+as overlays when generating future recommendations.

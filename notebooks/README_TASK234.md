@@ -15,9 +15,6 @@ They cover:
 - formal quality-score ablation
 - feedback logging and monitoring evidence for model interaction/refinement
 
-The notebooks remain in their current locations because their path references
-are already used by the documentation and report evidence. They are referenced
-as Tasks 2-4 evidence, separate from Task 1.
 
 Task 3 monitoring evidence is implemented outside the notebooks in:
 

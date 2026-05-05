@@ -121,3 +121,255 @@ def test_recommend_reorder_rejects_unknown_method():
     )
 
     assert response.status_code == 400
+
+
+def test_recommend_ingest_order_endpoint_accepts_event(monkeypatch):
+    monkeypatch.setattr(
+        main,
+        "ingest_order_event",
+        lambda record: {
+            "status": "ingested",
+            "order_id": record["order_id"],
+            "customer_id": record["customer_id"],
+            "ingested_order_lines": len(record["items"]),
+            "total_orders": 484,
+            "total_order_lines": 1795,
+            "event_log": "outputs/logs/recommender_order_events.jsonl",
+            "limitations": ["advanced_ai_service_does_not_access_desd_database"],
+        },
+    )
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/recommend/ingest-order",
+        json={
+            "order_id": "O-LIVE-001",
+            "customer_id": "C000001",
+            "order_date": "2026-05-05",
+            "items": [
+                {
+                    "product_id": "P000001",
+                    "quantity": 2,
+                    "unit_price": 3.5,
+                }
+            ],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "ingested"
+    assert body["order_id"] == "O-LIVE-001"
+    assert body["ingested_order_lines"] == 1
+
+
+def test_recommend_ingest_order_endpoint_rejects_invalid_event():
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/recommend/ingest-order",
+        json={
+            "order_id": "O-LIVE-001",
+            "customer_id": "C000001",
+            "order_date": "2026-05-05",
+            "items": [],
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_recommend_ingest_history_endpoint_accepts_batch(monkeypatch):
+    monkeypatch.setattr(
+        main,
+        "ingest_history_event",
+        lambda record: {
+            "status": "ingested",
+            "history_batch_id": "HIST-TEST",
+            "customer_id": record["customer_id"],
+            "ingested_orders": len(record["orders"]),
+            "ingested_order_lines": sum(len(order["items"]) for order in record["orders"]),
+            "total_orders": 486,
+            "total_order_lines": 1798,
+            "event_log": "outputs/logs/recommender_history_events.jsonl",
+            "limitations": ["advanced_ai_service_does_not_access_desd_database"],
+        },
+    )
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/recommend/ingest-history",
+        json={
+            "customer_id": "C000001",
+            "customer_type": "family",
+            "postcode_area": "BS1",
+            "source": "desd_history_backfill",
+            "orders": [
+                {
+                    "order_id": "O-HIST-001",
+                    "order_date": "2026-05-05",
+                    "items": [
+                        {
+                            "product_id": "P000001",
+                            "quantity": 2,
+                            "unit_price": 3.5,
+                        }
+                    ],
+                }
+            ],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "ingested"
+    assert body["customer_id"] == "C000001"
+    assert body["ingested_orders"] == 1
+    assert body["ingested_order_lines"] == 1
+
+
+def test_recommend_ingest_history_endpoint_rejects_empty_orders():
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/recommend/ingest-history",
+        json={
+            "customer_id": "C000001",
+            "orders": [],
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_catalog_ingest_producer_endpoint_accepts_event(monkeypatch):
+    monkeypatch.setattr(
+        main,
+        "ingest_producer_event",
+        lambda record: {
+            "status": "ingested",
+            "producer_id": record["producer_id"],
+            "catalog_producers": 13,
+            "event_log": "outputs/logs/catalog_producer_events.jsonl",
+            "limitations": ["catalogue_events_update_metadata_without_model_retraining"],
+        },
+    )
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/catalog/ingest-producer",
+        json={
+            "event_type": "producer_upserted",
+            "producer_id": "PR000020",
+            "producer_name": "New Bristol Bakery",
+            "postcode_area": "BS1",
+            "categories": ["bakery"],
+            "organic_certified": False,
+            "created_at": "2026-05-06T10:30:00Z",
+            "source": "desd_producer_event",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "ingested"
+    assert body["producer_id"] == "PR000020"
+
+
+def test_catalog_ingest_producer_endpoint_rejects_invalid_event_type():
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/catalog/ingest-producer",
+        json={
+            "event_type": "producer_deleted",
+            "producer_id": "PR000020",
+            "producer_name": "New Bristol Bakery",
+            "postcode_area": "BS1",
+            "created_at": "2026-05-06T10:30:00Z",
+            "source": "desd_producer_event",
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_catalog_ingest_product_endpoint_accepts_event(monkeypatch):
+    monkeypatch.setattr(
+        main,
+        "ingest_product_event",
+        lambda record: {
+            "status": "ingested",
+            "product_id": record["product_id"],
+            "producer_id": record["producer_id"],
+            "available": record["available"],
+            "catalog_products": 61,
+            "event_log": "outputs/logs/catalog_product_events.jsonl",
+            "limitations": ["catalogue_events_update_metadata_without_model_retraining"],
+        },
+    )
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/catalog/ingest-product",
+        json={
+            "event_type": "product_upserted",
+            "product_id": "P000001",
+            "producer_id": "PR000001",
+            "product_name": "Organic Tomatoes",
+            "category": "vegetables",
+            "unit": "kg",
+            "price": 3.5,
+            "seasonal": True,
+            "seasonal_start_month": 5,
+            "seasonal_end_month": 10,
+            "available": True,
+            "created_at": "2026-05-06T10:30:00Z",
+            "source": "desd_product_event",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "ingested"
+    assert body["product_id"] == "P000001"
+
+
+def test_catalog_ingest_product_endpoint_rejects_missing_required_field():
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/catalog/ingest-product",
+        json={
+            "event_type": "product_upserted",
+            "product_id": "P000001",
+            "producer_id": "PR000001",
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_catalog_ingest_product_endpoint_rejects_invalid_event_type():
+    client = TestClient(main.app)
+
+    response = client.post(
+        "/catalog/ingest-product",
+        json={
+            "event_type": "product_deleted",
+            "product_id": "P000001",
+            "producer_id": "PR000001",
+            "product_name": "Organic Tomatoes",
+            "category": "vegetables",
+            "unit": "kg",
+            "price": 3.5,
+            "seasonal": True,
+            "seasonal_start_month": 5,
+            "seasonal_end_month": 10,
+            "available": True,
+            "created_at": "2026-05-06T10:30:00Z",
+            "source": "desd_product_event",
+        },
+    )
+
+    assert response.status_code == 422

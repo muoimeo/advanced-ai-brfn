@@ -8,17 +8,31 @@ from fastapi import FastAPI, File, HTTPException, Query, UploadFile, status
 
 from src.config import LOGS_DIR
 from src.inference.schemas import (
+    CatalogProducerIngestRequest,
+    CatalogProducerIngestResponse,
+    CatalogProductIngestRequest,
+    CatalogProductIngestResponse,
     FeedbackRequest,
     FeedbackResponse,
     HealthResponse,
     ModelInfoResponse,
     MonitoringSummaryResponse,
     PredictionResponse,
+    RecommenderHistoryIngestRequest,
+    RecommenderHistoryIngestResponse,
+    RecommenderOrderIngestRequest,
+    RecommenderOrderIngestResponse,
     ReorderResponse,
 )
 from src.monitoring.feedback_monitoring import build_feedback_monitoring_summary
 from src.recommender.data_loader import Task1DataError
-from src.recommender.pipeline import get_reorder_recommendations
+from src.recommender.pipeline import (
+    get_reorder_recommendations,
+    ingest_history_event,
+    ingest_order_event,
+    ingest_producer_event,
+    ingest_product_event,
+)
 from src.recommender.quick_reorder import METHOD_FREQUENCY_RECENCY, SUPPORTED_METHODS
 
 try:
@@ -144,6 +158,42 @@ def feedback_monitoring_summary() -> MonitoringSummaryResponse:
     return MonitoringSummaryResponse(**build_feedback_monitoring_summary(LOGS_DIR))
 
 
+@app.post(
+    "/catalog/ingest-producer",
+    response_model=CatalogProducerIngestResponse,
+)
+def catalog_ingest_producer(
+    request: CatalogProducerIngestRequest,
+) -> CatalogProducerIngestResponse:
+    record = request.model_dump() if hasattr(request, "model_dump") else request.dict()
+    try:
+        response = ingest_producer_event(record)
+    except Task1DataError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    return CatalogProducerIngestResponse(**response)
+
+
+@app.post(
+    "/catalog/ingest-product",
+    response_model=CatalogProductIngestResponse,
+)
+def catalog_ingest_product(
+    request: CatalogProductIngestRequest,
+) -> CatalogProductIngestResponse:
+    record = request.model_dump() if hasattr(request, "model_dump") else request.dict()
+    try:
+        response = ingest_product_event(record)
+    except Task1DataError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    return CatalogProductIngestResponse(**response)
+
+
 @app.get(
     "/recommend/reorder",
     response_model=ReorderResponse,
@@ -175,3 +225,51 @@ def recommend_reorder(
         ) from exc
 
     return ReorderResponse(**response)
+
+
+@app.post(
+    "/recommend/ingest-history",
+    response_model=RecommenderHistoryIngestResponse,
+)
+def recommend_ingest_history(
+    request: RecommenderHistoryIngestRequest,
+) -> RecommenderHistoryIngestResponse:
+    record = request.model_dump() if hasattr(request, "model_dump") else request.dict()
+    record["orders"] = []
+    for order in request.orders:
+        order_record = order.model_dump() if hasattr(order, "model_dump") else order.dict()
+        order_record["items"] = [
+            item.model_dump() if hasattr(item, "model_dump") else item.dict()
+            for item in order.items
+        ]
+        record["orders"].append(order_record)
+    try:
+        response = ingest_history_event(record)
+    except Task1DataError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    return RecommenderHistoryIngestResponse(**response)
+
+
+@app.post(
+    "/recommend/ingest-order",
+    response_model=RecommenderOrderIngestResponse,
+)
+def recommend_ingest_order(
+    request: RecommenderOrderIngestRequest,
+) -> RecommenderOrderIngestResponse:
+    record = request.model_dump() if hasattr(request, "model_dump") else request.dict()
+    record["items"] = [
+        item.model_dump() if hasattr(item, "model_dump") else item.dict()
+        for item in request.items
+    ]
+    try:
+        response = ingest_order_event(record)
+    except Task1DataError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    return RecommenderOrderIngestResponse(**response)

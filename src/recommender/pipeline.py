@@ -5,6 +5,12 @@ from pathlib import Path
 import pandas as pd
 
 from src.config import TASK1_DATA_DIR, TASK1_OUTPUT_DIR
+from src.recommender.catalog_updates import (
+    append_producer_event,
+    append_product_event,
+    apply_catalog_events,
+    available_products,
+)
 from src.recommender.data_loader import build_order_lines, load_task1_dataset
 from src.recommender.discovery import (
     METHOD_COOCCURRENCE_DISCOVERY,
@@ -12,6 +18,13 @@ from src.recommender.discovery import (
 )
 from src.recommender.evaluation import export_task1_outputs
 from src.recommender.fairness import export_producer_fair_reranking_outputs
+from src.recommender.live_updates import (
+    append_history_event,
+    append_order_event,
+    apply_history_events,
+    apply_order_events,
+    load_order_events,
+)
 from src.recommender.quick_reorder import METHOD_FREQUENCY_RECENCY, recommend
 
 
@@ -28,8 +41,11 @@ def get_reorder_recommendations(
     include_discovery: bool = False,
     data_dir: Path = TASK1_DATA_DIR,
 ) -> dict:
-    dataset = load_task1_dataset(data_dir)
+    dataset = apply_catalog_events(load_task1_dataset(data_dir))
+    dataset = apply_history_events(dataset)
+    dataset = apply_order_events(dataset)
     order_lines = build_order_lines(dataset)
+    recommendation_products = available_products(dataset.products)
     recommendation_date = (
         order_lines["order_date"].max() + pd.Timedelta(days=1)
         if not order_lines.empty
@@ -38,7 +54,7 @@ def get_reorder_recommendations(
     recommendations = recommend(
         customer_id=customer_id,
         order_lines=order_lines,
-        products=dataset.products,
+        products=recommendation_products,
         method=method,
         top_k=top_k,
         recommendation_date=recommendation_date,
@@ -62,7 +78,7 @@ def get_reorder_recommendations(
         discovery = discovery_recommendations(
             customer_id=customer_id,
             order_lines=order_lines,
-            products=dataset.products,
+            products=recommendation_products,
             top_k=top_k,
             recommendation_date=recommendation_date,
             method=METHOD_COOCCURRENCE_DISCOVERY,
@@ -75,6 +91,66 @@ def get_reorder_recommendations(
         response["quick_reorder"] = quick_reorder
         response["you_may_also_like"] = [item.to_api_dict() for item in discovery]
     return response
+
+
+def ingest_order_event(
+    event: dict,
+    data_dir: Path = TASK1_DATA_DIR,
+) -> dict:
+    dataset = apply_catalog_events(load_task1_dataset(data_dir))
+    dataset = apply_history_events(dataset)
+    result = append_order_event(dataset, event)
+    updated_dataset = apply_order_events(dataset, load_order_events())
+    order_lines = build_order_lines(updated_dataset)
+    result.update(
+        {
+            "total_orders": int(updated_dataset.orders["order_id"].nunique()),
+            "total_order_lines": int(len(order_lines)),
+            "limitations": [
+                "ingested_order_events_are_anonymised_overlay_data",
+                "advanced_ai_service_does_not_access_desd_database",
+            ],
+        }
+    )
+    return result
+
+
+def ingest_history_event(
+    event: dict,
+    data_dir: Path = TASK1_DATA_DIR,
+) -> dict:
+    dataset = apply_catalog_events(load_task1_dataset(data_dir))
+    result = append_history_event(dataset, event)
+    dataset = apply_history_events(dataset)
+    updated_dataset = apply_order_events(dataset, load_order_events())
+    order_lines = build_order_lines(updated_dataset)
+    result.update(
+        {
+            "total_orders": int(updated_dataset.orders["order_id"].nunique()),
+            "total_order_lines": int(len(order_lines)),
+            "limitations": [
+                "ingested_history_events_are_anonymised_overlay_data",
+                "advanced_ai_service_does_not_access_desd_database",
+            ],
+        }
+    )
+    return result
+
+
+def ingest_producer_event(
+    event: dict,
+    data_dir: Path = TASK1_DATA_DIR,
+) -> dict:
+    dataset = load_task1_dataset(data_dir)
+    return append_producer_event(dataset, event)
+
+
+def ingest_product_event(
+    event: dict,
+    data_dir: Path = TASK1_DATA_DIR,
+) -> dict:
+    dataset = load_task1_dataset(data_dir)
+    return append_product_event(dataset, event)
 
 
 def run_task1_evaluation(

@@ -327,6 +327,223 @@ This endpoint is powered by fake/synthetic DESD seed data. It is suitable for
 demo integration and proof-of-concept evaluation, not production customer
 behaviour claims.
 
+### POST /recommend/ingest-history
+
+Accepts an anonymised order-history backfill for one customer. The AI service
+appends the batch to `outputs/logs/recommender_history_events.jsonl` and uses it
+as an overlay before live checkout events. This endpoint is useful when a user
+first opens the marketplace, when the AI event store has been reset, or when an
+admin runs a history sync.
+
+Example request:
+
+```json
+{
+  "customer_id": "C000003",
+  "customer_type": "family",
+  "postcode_area": "BS1",
+  "source": "desd_history_backfill",
+  "orders": [
+    {
+      "order_id": "O-HIST-001",
+      "order_date": "2026-05-05",
+      "items": [
+        {
+          "product_id": "P000113",
+          "quantity": 2,
+          "unit_price": 4.5
+        }
+      ]
+    }
+  ]
+}
+```
+
+Example response:
+
+```json
+{
+  "status": "ingested",
+  "history_batch_id": "HIST-20260506103000",
+  "customer_id": "C000003",
+  "ingested_orders": 1,
+  "ingested_order_lines": 1,
+  "total_orders": 484,
+  "total_order_lines": 1795,
+  "event_log": "outputs/logs/recommender_history_events.jsonl",
+  "limitations": [
+    "ingested_history_events_are_anonymised_overlay_data",
+    "advanced_ai_service_does_not_access_desd_database"
+  ]
+}
+```
+
+Validation:
+
+- duplicate `order_id` values are rejected;
+- unknown `product_id` values are rejected;
+- unknown `customer_id` values require `customer_type`;
+- the endpoint records history as anonymised overlay data, not direct database access.
+
+### POST /recommend/ingest-order
+
+Accepts an anonymised order event from the companion marketplace after checkout.
+The AI service appends the event to `outputs/logs/recommender_order_events.jsonl`
+and overlays it on top of the CSV seed export when generating future
+recommendations. This allows `/recommend/reorder` to reflect new order history
+without the AI service reading the marketplace database directly.
+
+Example request:
+
+```json
+{
+  "order_id": "O-LIVE-001",
+  "customer_id": "C000003",
+  "order_date": "2026-05-05",
+  "items": [
+    {
+      "product_id": "P000113",
+      "quantity": 2,
+      "unit_price": 4.5
+    }
+  ],
+  "source": "desd_order_event"
+}
+```
+
+Optional fields for a new anonymised customer:
+
+```json
+{
+  "customer_type": "family",
+  "postcode_area": "BS1"
+}
+```
+
+Example response:
+
+```json
+{
+  "status": "ingested",
+  "order_id": "O-LIVE-001",
+  "customer_id": "C000003",
+  "ingested_order_lines": 1,
+  "total_orders": 484,
+  "total_order_lines": 1795,
+  "event_log": "outputs/logs/recommender_order_events.jsonl",
+  "limitations": [
+    "ingested_order_events_are_anonymised_overlay_data",
+    "advanced_ai_service_does_not_access_desd_database"
+  ]
+}
+```
+
+Validation:
+
+- duplicate `order_id` values are rejected;
+- unknown `product_id` values are rejected;
+- unknown `customer_id` values require `customer_type`;
+- order events contain anonymised IDs and product/order fields only.
+
+### POST /catalog/ingest-producer
+
+Accepts a producer catalogue upsert event. Product events can reference producers
+from the base CSV catalogue or from this producer overlay.
+
+Example request:
+
+```json
+{
+  "event_type": "producer_upserted",
+  "producer_id": "PR000020",
+  "producer_name": "New Bristol Bakery",
+  "postcode_area": "BS1",
+  "categories": ["bakery"],
+  "organic_certified": false,
+  "created_at": "2026-05-06T10:30:00Z",
+  "source": "desd_producer_event"
+}
+```
+
+Example response:
+
+```json
+{
+  "status": "ingested",
+  "producer_id": "PR000020",
+  "catalog_producers": 13,
+  "event_log": "outputs/logs/catalog_producer_events.jsonl",
+  "limitations": [
+    "catalogue_events_update_metadata_without_model_retraining",
+    "advanced_ai_service_does_not_access_desd_database"
+  ]
+}
+```
+
+### POST /catalog/ingest-product
+
+Accepts a product catalogue upsert event from the companion marketplace. This is
+used when DESD creates or updates a product that is not yet present in the AI
+catalogue. The endpoint updates metadata only; it does not retrain the
+recommender.
+
+Example request:
+
+```json
+{
+  "event_type": "product_upserted",
+  "product_id": "P000001",
+  "producer_id": "PR000020",
+  "product_name": "Organic Tomatoes",
+  "category": "vegetables",
+  "unit": "kg",
+  "price": 3.5,
+  "seasonal": true,
+  "seasonal_start_month": 5,
+  "seasonal_end_month": 10,
+  "available": true,
+  "created_at": "2026-05-06T10:30:00Z",
+  "source": "desd_product_event"
+}
+```
+
+Example response:
+
+```json
+{
+  "status": "ingested",
+  "product_id": "P000001",
+  "producer_id": "PR000020",
+  "available": true,
+  "catalog_products": 61,
+  "event_log": "outputs/logs/catalog_product_events.jsonl",
+  "limitations": [
+    "catalogue_events_update_metadata_without_model_retraining",
+    "advanced_ai_service_does_not_access_desd_database"
+  ]
+}
+```
+
+Validation:
+
+- `event_type` must be `product_upserted`;
+- `price` must be greater than or equal to zero;
+- seasonal months must be between `1` and `12` when `seasonal=true`;
+- `seasonal=false` is normalised to full-year availability, months `1-12`;
+- `producer_id` must exist in either the base producer catalogue or producer event overlay;
+- duplicate product upserts are allowed and the latest `created_at` wins;
+- `available=false` keeps metadata but excludes the product from recommendation candidates.
+
+Recommended DESD flow for a new product:
+
+```text
+POST /catalog/ingest-producer
+POST /catalog/ingest-product
+POST /recommend/ingest-history
+POST /recommend/ingest-order
+GET  /recommend/reorder
+```
+
 ## Companion Marketplace Integration Pattern
 
 Integration sequence:
@@ -338,5 +555,9 @@ Integration sequence:
 5. call `POST /feedback` if a human overrides the prediction.
 6. call `GET /monitoring/feedback-summary` for admin monitoring of feedback-based accuracy proxies.
 7. call `GET /recommend/reorder` to display quick-reorder suggestions for customers.
+8. call `POST /catalog/ingest-producer` when a new producer is created or updated.
+9. call `POST /catalog/ingest-product` before order ingest when a checkout includes a newly created product.
+10. call `POST /recommend/ingest-history` for initial customer-history backfill or event-store recovery.
+11. call `POST /recommend/ingest-order` after checkout so future recommendations include the new anonymised order event.
 
 The model is presented as decision support, not autonomous quality approval.

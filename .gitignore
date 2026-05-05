@@ -34,7 +34,7 @@ dist/
 logs/
 outputs/logs/
 
-# Local data - do not commit large datasets
+# Local data
 data/raw/
 data/processed/
 data/splits/*.tmp
@@ -78,3 +78,6 @@ AGENTS.md
 
 # Draft report
 docs/draft_report.txt
+
+# Notebooks - stats collceting purpose
+notebooks/10B_all_cv_model_confidence_audit.ipynb

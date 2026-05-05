@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime
+from typing import Literal
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -180,4 +182,104 @@ class ReorderResponse(BaseModel):
     recommendations: list[ReorderRecommendationResponse] = Field(default_factory=list)
     quick_reorder: list[ReorderRecommendationResponse] | None = None
     you_may_also_like: list[DiscoveryRecommendationResponse] | None = None
+    limitations: list[str] = Field(default_factory=list)
+
+
+class RecommenderOrderItemIngest(BaseModel):
+    product_id: str
+    quantity: float = Field(gt=0)
+    unit_price: float = Field(ge=0)
+
+
+class RecommenderOrderIngestRequest(BaseModel):
+    order_id: str
+    customer_id: str
+    order_date: str
+    items: list[RecommenderOrderItemIngest] = Field(min_items=1)
+    total_amount: float | None = None
+    customer_type: str | None = None
+    postcode_area: str | None = None
+    source: str = "desd_order_event"
+
+
+class RecommenderOrderIngestResponse(BaseModel):
+    status: str
+    order_id: str
+    customer_id: str
+    ingested_order_lines: int
+    total_orders: int
+    total_order_lines: int
+    event_log: str
+    limitations: list[str] = Field(default_factory=list)
+
+
+class RecommenderHistoryOrderIngest(BaseModel):
+    order_id: str
+    order_date: str
+    items: list[RecommenderOrderItemIngest] = Field(min_items=1)
+    total_amount: float | None = None
+
+
+class RecommenderHistoryIngestRequest(BaseModel):
+    customer_id: str
+    orders: list[RecommenderHistoryOrderIngest] = Field(min_items=1)
+    customer_type: str | None = None
+    postcode_area: str | None = None
+    source: str = "desd_history_backfill"
+
+
+class RecommenderHistoryIngestResponse(BaseModel):
+    status: str
+    history_batch_id: str
+    customer_id: str
+    ingested_orders: int
+    ingested_order_lines: int
+    total_orders: int
+    total_order_lines: int
+    event_log: str
+    limitations: list[str] = Field(default_factory=list)
+
+
+class CatalogProducerIngestRequest(BaseModel):
+    event_type: Literal["producer_upserted"]
+    producer_id: str
+    producer_name: str
+    postcode_area: str
+    categories: list[str] = Field(default_factory=list)
+    organic_certified: bool | None = None
+    created_at: datetime
+    source: str
+
+
+class CatalogProducerIngestResponse(BaseModel):
+    status: str
+    producer_id: str
+    catalog_producers: int
+    event_log: str
+    limitations: list[str] = Field(default_factory=list)
+
+
+class CatalogProductIngestRequest(BaseModel):
+    event_type: Literal["product_upserted"]
+    product_id: str
+    producer_id: str
+    product_name: str
+    category: str
+    unit: str
+    price: float = Field(ge=0)
+    seasonal: bool
+    seasonal_start_month: int | None = None
+    seasonal_end_month: int | None = None
+    available: bool
+    created_at: datetime
+    source: str
+
+
+class CatalogProductIngestResponse(BaseModel):
+    status: str
+    product_id: str
+    producer_id: str
+    available: bool
+    catalog_products: int
+    event_log: str
     limitations: list[str] = Field(default_factory=list)
