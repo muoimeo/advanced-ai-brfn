@@ -1,22 +1,44 @@
 {
-  "model_name": "baseline_cnn",
-  "dataset": "muhammad0subhan/fruit-and-vegetable-disease-healthy-vs-rotten",
+  "model_name": "efficientnetb0_aug_oversampled_finetuned_wsl",
+  "source_model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled.keras",
+  "base_model_family": "EfficientNetB0",
   "num_classes": 28,
   "image_size": [
     224,
     224
   ],
-  "epochs_requested": 10,
-  "learning_rate": 0.001,
-  "trained_at": "2026-05-04T14:40:15",
+  "fine_tune_epochs_requested": 3,
+  "fine_tune_learning_rate": 1e-05,
+  "fine_tune_layers": 30,
+  "augmentation": true,
+  "class_weighting": null,
+  "oversampling": {
+    "enabled": true,
+    "strategy": "targeted_min_count_with_replacement",
+    "target_min_count": 500,
+    "original_train_rows": 19674,
+    "oversampled_train_rows": 23590
+  },
+  "trained_at": "2026-04-29T15:45:22",
   "metrics": {
-    "test_accuracy": 0.7302180685358255,
-    "macro_f1": 0.673705728395583
+    "test_accuracy": 0.9719626168224299,
+    "macro_f1": 0.9612978974472393,
+    "weighted_f1": 0.9718550099623252
   },
   "artifacts": {
-    "final_model": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\best_model.keras",
-    "checkpoint": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\models\\baseline_cnn_best.keras",
-    "training_curves": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\figures\\baseline_cnn_training_curves.png",
-    "confusion_matrix": "D:\\UWE\\3rd Year\\2nd semester\\advanced_ai\\ai_system\\outputs\\confusion_matrices\\baseline_cnn_confusion_matrix.png"
+    "model": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl.keras",
+    "checkpoint": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl_best.keras",
+    "metadata": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl_metadata.json",
+    "classification_report": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_aug_oversampled_finetuned_wsl_classification_report.csv",
+    "oversampling_summary": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/models/experiments/efficientnetb0_aug_oversampled_finetuned_wsl_oversampling_summary.csv",
+    "training_curves": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/figures/efficientnetb0_aug_oversampled_finetuned_wsl_training_curves.png",
+    "confusion_matrix": "/mnt/d/UWE/3rd Year/2nd semester/advanced_ai/ai_system/outputs/confusion_matrices/efficientnetb0_aug_oversampled_finetuned_wsl_confusion_matrix.png"
+  },
+  "split_strategy": "grouped_source_image_split",
+  "split_dir": "data/splits_grouped",
+  "leakage_prevention": {
+    "group_column": "source_image_id",
+    "offline_augmented_variants_cross_splits": false,
+    "audit_summary": "data/splits_grouped/grouped_split_summary.json"
   }
 }
