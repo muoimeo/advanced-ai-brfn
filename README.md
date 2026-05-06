@@ -129,16 +129,21 @@ The full raw image dataset is excluded from version control.
 
 ## Expected Artifacts
 
-Generated locally:
+Tracked in Git:
 
 ```text
 data/task1/desd_seed_export/
+models/class_names.json
+models/model_metadata.json
+```
+
+External/local artifacts:
+
+```text
+models/best_model.keras
 data/splits_grouped/train.csv
 data/splits_grouped/val.csv
 data/splits_grouped/test.csv
-models/class_names.json
-models/best_model.keras
-models/model_metadata.json
 outputs/eda/
 outputs/figures/
 outputs/confusion_matrices/
@@ -150,6 +155,27 @@ docs/report_figures/custom_image_validation.csv
 docs/report_figures/custom_image_validation_summary.csv
 docs/xai_quality_decision_notes.md
 ```
+
+`models/best_model.keras` is the deployment alias used by `/predict` and the
+Docker image. For this submission it must be the selected
+`efficientnetb0_aug_oversampled_finetuned_wsl` artifact, not the earlier
+baseline CNN. The Keras binary is not committed because model binaries are
+ignored. Download it from the project artifact link and place it at:
+
+```text
+models/best_model.keras
+```
+
+Project artifact link:
+
+```text
+<ADD_GOOGLE_DRIVE_OR_RELEASE_LINK_FOR_best_model.keras>
+```
+
+Task 1 recommender APIs do not need the raw image dataset. Training notebooks
+need the raw Kaggle images and split files, but API inference only needs the
+final model artifact, metadata files, source code, requirements, and the tracked
+Task 1 CSV seed export.
 
 ## Task 1 Quick Reorder
 
@@ -364,6 +390,7 @@ The service exposes:
 - `GET /monitoring/feedback-summary`
 - `GET /model-info`
 - `GET /recommend/reorder?customer_id=C000012&top_k=3`
+- `GET /producer/forecast?producer_id=PR000003&top_k=5`
 - `POST /catalog/ingest-producer`
 - `POST /catalog/ingest-product`
 - `POST /recommend/ingest-history`
@@ -392,6 +419,7 @@ Task 1:
   DESD sends new product metadata to /catalog/ingest-product before order events reference that product.
   DESD sends anonymised customer history to /recommend/ingest-history for initial sync or event-store recovery.
   DESD sends anonymised checkout events to /recommend/ingest-order so later recommendations include new order history.
+  DESD can call /producer/forecast for producer-facing next-week demand trend cards.
 
 Task 2:
   DESD uploads produce image to /predict.
@@ -418,6 +446,7 @@ Useful checks:
 curl http://localhost:8001/health
 curl http://localhost:8001/model-info
 curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3"
+curl "http://localhost:8001/producer/forecast?producer_id=PR000003&top_k=5"
 curl "http://localhost:8001/monitoring/feedback-summary"
 pytest
 ```
