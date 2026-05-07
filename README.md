@@ -169,7 +169,7 @@ models/best_model.keras
 Project artifact link:
 
 ```text
-<ADD_GOOGLE_DRIVE_OR_RELEASE_LINK_FOR_best_model.keras>
+https://drive.google.com/drive/folders/1BQTZ-bq_snnZrv-GvLquuPVgoWPnMfMe?usp=sharing
 ```
 
 Task 1 recommender APIs do not need the raw image dataset. Training notebooks
@@ -390,7 +390,6 @@ The service exposes:
 - `GET /monitoring/feedback-summary`
 - `GET /model-info`
 - `GET /recommend/reorder?customer_id=C000012&top_k=3`
-- `GET /producer/forecast?producer_id=PR000003&top_k=5`
 - `POST /catalog/ingest-producer`
 - `POST /catalog/ingest-product`
 - `POST /recommend/ingest-history`
@@ -419,7 +418,6 @@ Task 1:
   DESD sends new product metadata to /catalog/ingest-product before order events reference that product.
   DESD sends anonymised customer history to /recommend/ingest-history for initial sync or event-store recovery.
   DESD sends anonymised checkout events to /recommend/ingest-order so later recommendations include new order history.
-  DESD can call /producer/forecast for producer-facing next-week demand trend cards.
 
 Task 2:
   DESD uploads produce image to /predict.
@@ -446,7 +444,6 @@ Useful checks:
 curl http://localhost:8001/health
 curl http://localhost:8001/model-info
 curl "http://localhost:8001/recommend/reorder?customer_id=C000003&top_k=3"
-curl "http://localhost:8001/producer/forecast?producer_id=PR000003&top_k=5"
 curl "http://localhost:8001/monitoring/feedback-summary"
 pytest
 ```
