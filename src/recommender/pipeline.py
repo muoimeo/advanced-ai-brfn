@@ -11,12 +11,12 @@ from src.recommender.catalog_updates import (
     apply_catalog_events,
     available_products,
 )
-from src.recommender.data_loader import build_order_lines, load_task1_dataset
+from src.recommender.data_loader import Task1DataError, build_order_lines, load_task1_dataset
 from src.recommender.discovery import (
     METHOD_COOCCURRENCE_DISCOVERY,
     discovery_recommendations,
 )
-from src.recommender.evaluation import export_task1_outputs
+from src.recommender.evaluation import export_task1_outputs, producer_next_week_forecast
 from src.recommender.fairness import export_producer_fair_reranking_outputs
 from src.recommender.live_updates import (
     append_history_event,
@@ -33,6 +33,18 @@ TASK1_LIMITATIONS = [
     "not_production_customer_behaviour",
 ]
 
+FORECAST_LIMITATIONS = [
+    "descriptive_trend_forecast_from_synthetic_seed_data",
+    "not_production_forecasting_model",
+    "feature_refresh_not_model_retraining",
+]
+
+
+def _live_task1_dataset(data_dir: Path = TASK1_DATA_DIR):
+    dataset = apply_catalog_events(load_task1_dataset(data_dir))
+    dataset = apply_history_events(dataset)
+    return apply_order_events(dataset)
+
 
 def get_reorder_recommendations(
     customer_id: str,
@@ -41,9 +53,7 @@ def get_reorder_recommendations(
     include_discovery: bool = False,
     data_dir: Path = TASK1_DATA_DIR,
 ) -> dict:
-    dataset = apply_catalog_events(load_task1_dataset(data_dir))
-    dataset = apply_history_events(dataset)
-    dataset = apply_order_events(dataset)
+    dataset = _live_task1_dataset(data_dir)
     order_lines = build_order_lines(dataset)
     recommendation_products = available_products(dataset.products)
     recommendation_date = (
@@ -91,6 +101,51 @@ def get_reorder_recommendations(
         response["quick_reorder"] = quick_reorder
         response["you_may_also_like"] = [item.to_api_dict() for item in discovery]
     return response
+
+
+def get_producer_forecast(
+    producer_id: str,
+    top_k: int = 5,
+    data_dir: Path = TASK1_DATA_DIR,
+) -> dict:
+    dataset = _live_task1_dataset(data_dir)
+    producer_ids = set(dataset.producers["producer_id"].astype(str))
+    if producer_id not in producer_ids:
+        raise Task1DataError(f"Unknown producer_id: {producer_id}")
+
+    forecast = producer_next_week_forecast(dataset)
+    producer_rows = forecast[forecast["producer_id"].astype(str) == producer_id].head(top_k)
+    items = []
+    for row in producer_rows.to_dict(orient="records"):
+        trend = str(row["trend_direction"])
+        if trend == "up":
+            alert_prefix = "High demand expected"
+        elif trend == "down":
+            alert_prefix = "Lower demand expected"
+        else:
+            alert_prefix = "Stable demand expected"
+        items.append(
+            {
+                "product_id": str(row["product_id"]),
+                "product_name": str(row["product_name"]),
+                "forecast_week_start": str(row["forecast_week_start"]),
+                "predicted_quantity_next_week": float(row["predicted_quantity_next_week"]),
+                "trend_direction": trend,
+                "basis": str(row["basis"]),
+                "alert_text": (
+                    f"{alert_prefix} for {row['product_name']} next week "
+                    "based on recent order trends."
+                ),
+            }
+        )
+
+    return {
+        "producer_id": producer_id,
+        "forecast_method": "latest_3_week_moving_average",
+        "top_k": top_k,
+        "items": items,
+        "limitations": FORECAST_LIMITATIONS,
+    }
 
 
 def ingest_order_event(

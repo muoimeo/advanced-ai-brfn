@@ -185,6 +185,24 @@ class ReorderResponse(BaseModel):
     limitations: list[str] = Field(default_factory=list)
 
 
+class ProducerForecastItemResponse(BaseModel):
+    product_id: str
+    product_name: str
+    forecast_week_start: str
+    predicted_quantity_next_week: float
+    trend_direction: str
+    basis: str
+    alert_text: str
+
+
+class ProducerForecastResponse(BaseModel):
+    producer_id: str
+    forecast_method: str
+    top_k: int
+    items: list[ProducerForecastItemResponse] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+
+
 class RecommenderOrderItemIngest(BaseModel):
     product_id: str
     quantity: float = Field(gt=0)

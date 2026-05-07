@@ -28,12 +28,12 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
-def load_product_events(path: Path = PRODUCT_EVENT_LOG) -> list[dict[str, Any]]:
-    return _read_jsonl(path)
+def load_product_events(path: Path | None = None) -> list[dict[str, Any]]:
+    return _read_jsonl(path or PRODUCT_EVENT_LOG)
 
 
-def load_producer_events(path: Path = PRODUCER_EVENT_LOG) -> list[dict[str, Any]]:
-    return _read_jsonl(path)
+def load_producer_events(path: Path | None = None) -> list[dict[str, Any]]:
+    return _read_jsonl(path or PRODUCER_EVENT_LOG)
 
 
 def _latest_by_id(events: list[dict[str, Any]], id_field: str) -> dict[str, dict[str, Any]]:
@@ -123,8 +123,9 @@ def _normalise_product_event(event: dict[str, Any]) -> dict[str, Any]:
 def append_producer_event(
     dataset: RecommenderDataset,
     event: dict[str, Any],
-    producer_event_path: Path = PRODUCER_EVENT_LOG,
+    producer_event_path: Path | None = None,
 ) -> dict[str, Any]:
+    producer_event_path = producer_event_path or PRODUCER_EVENT_LOG
     normalised = _normalise_producer_event(event)
 
     producer_event_path.parent.mkdir(parents=True, exist_ok=True)
@@ -151,9 +152,11 @@ def append_producer_event(
 def append_product_event(
     dataset: RecommenderDataset,
     event: dict[str, Any],
-    product_event_path: Path = PRODUCT_EVENT_LOG,
-    producer_event_path: Path = PRODUCER_EVENT_LOG,
+    product_event_path: Path | None = None,
+    producer_event_path: Path | None = None,
 ) -> dict[str, Any]:
+    product_event_path = product_event_path or PRODUCT_EVENT_LOG
+    producer_event_path = producer_event_path or PRODUCER_EVENT_LOG
     normalised = _normalise_product_event(event)
     producer_dataset = apply_producer_events(
         dataset,

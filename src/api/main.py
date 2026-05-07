@@ -18,6 +18,7 @@ from src.inference.schemas import (
     ModelInfoResponse,
     MonitoringSummaryResponse,
     PredictionResponse,
+    ProducerForecastResponse,
     RecommenderHistoryIngestRequest,
     RecommenderHistoryIngestResponse,
     RecommenderOrderIngestRequest,
@@ -28,6 +29,7 @@ from src.monitoring.feedback_monitoring import build_feedback_monitoring_summary
 from src.recommender.data_loader import Task1DataError
 from src.recommender.pipeline import (
     get_reorder_recommendations,
+    get_producer_forecast,
     ingest_history_event,
     ingest_order_event,
     ingest_producer_event,
@@ -225,6 +227,24 @@ def recommend_reorder(
         ) from exc
 
     return ReorderResponse(**response)
+
+
+@app.get(
+    "/producer/forecast",
+    response_model=ProducerForecastResponse,
+)
+def producer_forecast(
+    producer_id: str,
+    top_k: int = Query(5, ge=1, le=20),
+) -> ProducerForecastResponse:
+    try:
+        response = get_producer_forecast(producer_id=producer_id, top_k=top_k)
+    except Task1DataError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+    return ProducerForecastResponse(**response)
 
 
 @app.post(

@@ -123,6 +123,63 @@ def test_recommend_reorder_rejects_unknown_method():
     assert response.status_code == 400
 
 
+def test_producer_forecast_endpoint_returns_rows(monkeypatch):
+    monkeypatch.setattr(
+        main,
+        "get_producer_forecast",
+        lambda producer_id, top_k: {
+            "producer_id": producer_id,
+            "forecast_method": "latest_3_week_moving_average",
+            "top_k": top_k,
+            "items": [
+                {
+                    "product_id": "P000084",
+                    "product_name": "Heritage Rainbow Carrots",
+                    "forecast_week_start": "2026-05-04",
+                    "predicted_quantity_next_week": 29.0,
+                    "trend_direction": "up",
+                    "basis": "latest_3_week_moving_average",
+                    "alert_text": "High demand expected for Heritage Rainbow Carrots next week based on recent order trends.",
+                }
+            ][:top_k],
+            "limitations": ["feature_refresh_not_model_retraining"],
+        },
+    )
+    client = TestClient(main.app)
+
+    response = client.get("/producer/forecast?producer_id=PR000003&top_k=1")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["producer_id"] == "PR000003"
+    assert body["forecast_method"] == "latest_3_week_moving_average"
+    assert body["items"][0]["trend_direction"] == "up"
+    assert body["items"][0]["alert_text"]
+
+
+def test_producer_forecast_endpoint_rejects_invalid_top_k():
+    client = TestClient(main.app)
+
+    response = client.get("/producer/forecast?producer_id=PR000003&top_k=0")
+
+    assert response.status_code == 422
+
+
+def test_producer_forecast_endpoint_returns_404_for_unknown_producer(monkeypatch):
+    def _raise_unknown(producer_id, top_k):
+        from src.recommender.data_loader import Task1DataError
+
+        raise Task1DataError(f"Unknown producer_id: {producer_id}")
+
+    monkeypatch.setattr(main, "get_producer_forecast", _raise_unknown)
+    client = TestClient(main.app)
+
+    response = client.get("/producer/forecast?producer_id=PR999999")
+
+    assert response.status_code == 404
+    assert "Unknown producer_id" in response.json()["detail"]
+
+
 def test_recommend_ingest_order_endpoint_accepts_event(monkeypatch):
     monkeypatch.setattr(
         main,

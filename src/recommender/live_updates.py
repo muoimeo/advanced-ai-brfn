@@ -28,12 +28,12 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     return events
 
 
-def load_order_events(path: Path = ORDER_EVENT_LOG) -> list[dict[str, Any]]:
-    return _read_jsonl(path)
+def load_order_events(path: Path | None = None) -> list[dict[str, Any]]:
+    return _read_jsonl(path or ORDER_EVENT_LOG)
 
 
-def load_history_events(path: Path = HISTORY_EVENT_LOG) -> list[dict[str, Any]]:
-    return _read_jsonl(path)
+def load_history_events(path: Path | None = None) -> list[dict[str, Any]]:
+    return _read_jsonl(path or HISTORY_EVENT_LOG)
 
 
 def flatten_history_events(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -106,8 +106,9 @@ def _validate_order_event(dataset: RecommenderDataset, event: dict[str, Any], ev
 def append_order_event(
     dataset: RecommenderDataset,
     event: dict[str, Any],
-    path: Path = ORDER_EVENT_LOG,
+    path: Path | None = None,
 ) -> dict[str, Any]:
+    path = path or ORDER_EVENT_LOG
     path.parent.mkdir(parents=True, exist_ok=True)
     existing_events = load_order_events(path)
     _validate_order_event(dataset, event, existing_events)
@@ -226,8 +227,9 @@ def _normalise_history_event(dataset: RecommenderDataset, event: dict[str, Any],
 def append_history_event(
     dataset: RecommenderDataset,
     event: dict[str, Any],
-    path: Path = HISTORY_EVENT_LOG,
+    path: Path | None = None,
 ) -> dict[str, Any]:
+    path = path or HISTORY_EVENT_LOG
     path.parent.mkdir(parents=True, exist_ok=True)
     existing_events = load_history_events(path)
     normalised = _normalise_history_event(dataset, event, existing_events)
