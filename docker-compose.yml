@@ -8,6 +8,7 @@ services:
       PORT: 8001
     volumes:
       - ./outputs/logs:/app/outputs/logs
+      - ./data:/app/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health', timeout=10)"]
       interval: 30s
